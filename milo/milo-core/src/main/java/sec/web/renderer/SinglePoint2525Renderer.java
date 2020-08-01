@@ -16,6 +16,7 @@ import ArmyC2.C2SD.Utilities.ImageInfo;
 import ArmyC2.C2SD.Utilities.MilStdAttributes;
 import ArmyC2.C2SD.Utilities.MilStdSymbol;
 import ArmyC2.C2SD.Utilities.PointConversionDummy;
+import ArmyC2.C2SD.Utilities.RendererException;
 import ArmyC2.C2SD.Utilities.RendererSettings;
 import ArmyC2.C2SD.Utilities.SymbolDef;
 import ArmyC2.C2SD.Utilities.SymbolDefTable;
@@ -172,7 +173,7 @@ public class SinglePoint2525Renderer implements ISinglePointRenderer {
             //ImageInfo ii = jr.RenderSinglePointAsImageInfo(symbolID, params, ms.getUnitSize(), ms.getKeepUnitRatio());
             spi = new SinglePointInfo(ii.getImage(), ii.getSymbolCenterPoint(), ii.getSymbolBounds());
         }
-        catch(Exception exc)
+        catch(RendererException | NumberFormatException exc)
         {
             ErrorLogger.LogException("SinglePoint2525Renderer", "render", exc, Level.WARNING, Boolean.FALSE);
         }

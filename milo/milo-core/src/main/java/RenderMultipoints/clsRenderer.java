@@ -191,7 +191,7 @@ public final class clsRenderer {
             }
 
             tg.set_LineType(linetype);
-        } catch (Exception exc) {
+        } catch (NumberFormatException exc) {
             ErrorLogger.LogException("clsRenderer", "setRevDLinetype",
                     new RendererException("Failed in setRevDLinetype ", exc));
         }
