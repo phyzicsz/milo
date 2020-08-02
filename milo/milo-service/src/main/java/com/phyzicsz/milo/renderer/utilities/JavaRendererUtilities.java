@@ -415,7 +415,7 @@ public class JavaRendererUtilities {
                 }
                 if(isMultiPoint==false)
                 {
-                    if(JavaRenderer.getInstance().CanRender(symbolID, null,symbol.getSymbologyStandard())==false)
+                    if(JavaRenderer.getInstance().canRender(symbolID, null,symbol.getSymbologyStandard())==false)
                     {
                        symbolID = SymbolUtilities.reconcileSymbolID(symbolID,isMultiPoint);
                        symbol.setSymbolID(symbolID);

@@ -102,7 +102,7 @@ public interface IJavaRenderer {
      * @param symbol
      * @return true if symbol can be rendered based on provided information
      */
-    public Boolean CanRender(MilStdSymbol symbol);
+    public Boolean canRender(MilStdSymbol symbol);
 
     /**
      * Checks if the Renderer can build the symbol with the given information
@@ -111,7 +111,7 @@ public interface IJavaRenderer {
      * @param coords
      * @return true if symbol can be rendered based on provided information
      */
-    public Boolean CanRender(String symbolCode, ArrayList<Point2D.Double> coords);
+    public Boolean canRender(String symbolCode, ArrayList<Point2D.Double> coords);
 
     /**
      * Checks if the Renderer can build the symbol with the given information
@@ -121,7 +121,7 @@ public interface IJavaRenderer {
      * @param symStd Like RendererSettings.Symbology_2525C
      * @return true if symbol can be rendered based on provided information
      */
-    public Boolean CanRender(String symbolCode, ArrayList<Point2D.Double> coords, int symStd);
+    public Boolean canRender(String symbolCode, ArrayList<Point2D.Double> coords, int symStd);
 
     /**
      * Takes a MilStdSymbol populated with the symbol code, coordinates, and

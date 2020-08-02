@@ -6,7 +6,6 @@ package com.phyzicsz.milo.renderer;
 
 import com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer;
 import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;

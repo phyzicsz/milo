@@ -16,7 +16,6 @@
 package com.phyzicsz.milo;
 
 import com.phyzicsz.milo.renderer.common.RendererException;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
 import com.phyzicsz.milo.renderer.common.PointConversionDummy;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
@@ -30,12 +29,13 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.print.DocFlavor.BYTE_ARRAY;
 import com.phyzicsz.milo.renderer.SinglePoint2525Renderer;
 import com.phyzicsz.milo.renderer.SinglePointRendererService;
 import com.phyzicsz.milo.renderer.utilities.JavaRendererUtilities;
 import com.phyzicsz.milo.renderer.info.PNGInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main rendering service.
@@ -43,7 +43,8 @@ import com.phyzicsz.milo.renderer.info.PNGInfo;
  * @author phyzicsz <phyzics.z@gmail.com>
  */
 public class MiloRenderService {
-
+    private static final Logger logger = LoggerFactory.getLogger(MiloRenderService.class);
+    
     private SinglePointRendererService sprs = null;
     private IJavaRenderer jr = null;
 
@@ -62,62 +63,6 @@ public class MiloRenderService {
         RendererSettings.getInstance().setSymbologyStandard(symStd);
     }
 
-    /**
-     * \ Set minimum level at which an item can be logged. In descending order:
-     * OFF = Integer.MAX_VALUE Severe = 1000 Warning = 900 Info = 800 Config =
-     * 700 Fine = 500 Finer = 400 Finest = 300 All = Integer.MIN_VALUE Use like
-     * SECRenderer.setLoggingLevel(Level.INFO); or Use like
-     * SECRenderer.setLoggingLevel(800);
-     *
-     * @param level java.util.logging.level
-     */
-    public void setLoggingLevel(Level level) {
-        try {
-            ErrorLogger.setLevel(level, true);
-            ErrorLogger.LogMessage("SECRenderer", "setLoggingLevel(Level)", "Logging level set to: "
-                    + ErrorLogger.getLevel().getName(), Level.CONFIG);
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "setLoggingLevel(Level)", exc, Level.INFO);
-        }
-    }
-
-    /**
-     * \ Set minimum level at which an item can be logged. In descending order:
-     * OFF = Integer.MAX_VALUE Severe = 1000 Warning = 900 Info = 800 Config =
-     * 700 Fine = 500 Finer = 400 Finest = 300 All = Integer.MIN_VALUE Use like
-     * SECRenderer.setLoggingLevel(Level.INFO); or Use like
-     * SECRenderer.setLoggingLevel(800);
-     *
-     * @param level int
-     */
-    public void setLoggingLevel(int level) {
-        try {
-            if (level > 1000) {
-                ErrorLogger.setLevel(Level.OFF, true);
-            } else if (level > 900) {
-                ErrorLogger.setLevel(Level.SEVERE, true);
-            } else if (level > 800) {
-                ErrorLogger.setLevel(Level.WARNING, true);
-            } else if (level > 700) {
-                ErrorLogger.setLevel(Level.INFO, true);
-            } else if (level > 500) {
-                ErrorLogger.setLevel(Level.CONFIG, true);
-            } else if (level > 400) {
-                ErrorLogger.setLevel(Level.FINE, true);
-            } else if (level > 300) {
-                ErrorLogger.setLevel(Level.FINER, true);
-            } else if (level > Integer.MIN_VALUE) {
-                ErrorLogger.setLevel(Level.FINEST, true);
-            } else {
-                ErrorLogger.setLevel(Level.ALL, true);
-            }
-
-            ErrorLogger.LogMessage("SECRenderer", "setLoggingLevel(int)", "Logging level set to: "
-                    + ErrorLogger.getLevel().getName(), Level.CONFIG);
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "setLoggingLevel(int)", exc, Level.INFO);
-        }
-    }
 
     /**
      * Determines size of the symbol assuming no pixel size is specified
@@ -148,8 +93,8 @@ public class MiloRenderService {
         try {
             SinglePointRendererService.getInstance().AddRenderersToPath(url);
             // SinglePointRendererService.getInstance().LoadSPRendererServices();
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "loadDefaultPlugins", exc);
+        } catch (Exception ex) {
+            logger.error("error loading plugins,", ex);
         }
     }
 
@@ -163,8 +108,8 @@ public class MiloRenderService {
         try {
             SinglePointRendererService.getInstance().AddRenderersToPathByFile(file);
             // SinglePointRendererService.getInstance().LoadSPRendererServices();
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "loadDefaultPlugins", exc);
+        } catch (Exception ex) {
+            logger.error("error loading plugins,", ex);
         }
     }
 
@@ -179,8 +124,8 @@ public class MiloRenderService {
         try {
             SinglePointRendererService.getInstance().AddRenderersToPathByDirectory(directory);
             //SinglePointRendererService.getInstance().LoadSPRendererServices();
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "loadDefaultPlugins", exc);
+        } catch (Exception ex) {
+            logger.error("error loading plugins", ex);
         }
     }
 
@@ -215,8 +160,8 @@ public class MiloRenderService {
         try {
             String symbolID = (url.startsWith("/") ? url.substring(url.lastIndexOf("/") + 1) : url);
             ms = JavaRendererUtilities.createMilstdSymbol(symbolID);
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "getMilStdSymbolImageFromURL", exc);
+        } catch (Exception ex) {
+            logger.error("error rendering symbol", ex);
         }
 
         if (ms != null) {
@@ -250,12 +195,12 @@ public class MiloRenderService {
         ImageInfo ii = null;
         PNGInfo pi = null;
         try {
-            if (jr.CanRender(ms)) {
+            if (jr.canRender(ms)) {
                 jr.Render(ms, ipc, null);
                 ii = ms.toImageInfo();
             }
-        } catch (RendererException exc) {
-            ErrorLogger.LogException("SECRenderer", "getMilStdSymbolImage(MilStdSymbol)", exc);
+        } catch (RendererException ex) {
+            logger.error("error rendering symbol", ex);
         }
         if (ii != null) {
             pi = new PNGInfo(ii);
@@ -285,8 +230,8 @@ public class MiloRenderService {
             if (questionIndex != -1) {
                 symbolID = java.net.URLDecoder.decode(symbolID.substring(0, questionIndex), "UTF-8");
             }
-        } catch (UnsupportedEncodingException exc) {
-            ErrorLogger.LogException("SECRenderer", "getSymbolImageFromURL", exc);
+        } catch (UnsupportedEncodingException ex) {
+            logger.error("unsupported encoding", ex);
         }
         return getSymbolImage(symbolID, params);
     }
@@ -330,12 +275,11 @@ public class MiloRenderService {
                     pi = new PNGInfo(spi);
                 }
             } else {
-                String message = "Lookup for 2525 renderer plugin failed.";
-                ErrorLogger.LogMessage("SECRenderer", "getSymbolImage", message, Level.WARNING);
+                logger.error("Lookup for 2525 renderer plugin failed");
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "getSymbolImage", exc);
+        } catch (Exception ex) {
+            logger.error("error getting symbol image", ex);
         }
 
         return pi;

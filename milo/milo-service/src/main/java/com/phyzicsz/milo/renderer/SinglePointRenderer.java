@@ -4,7 +4,6 @@
  */
 package com.phyzicsz.milo.renderer;
 
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
 import com.phyzicsz.milo.renderer.common.MilStdAttributes;
 import com.phyzicsz.milo.renderer.common.MilStdSymbol;

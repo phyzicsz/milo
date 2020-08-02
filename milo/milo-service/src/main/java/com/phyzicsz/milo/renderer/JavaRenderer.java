@@ -17,7 +17,6 @@ package com.phyzicsz.milo.renderer;
 
 import com.phyzicsz.milo.renderer.common.UnitDef;
 import com.phyzicsz.milo.renderer.common.RendererException;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.SymbolDefTable;
 import com.phyzicsz.milo.renderer.common.PointConversionDummy;
 import com.phyzicsz.milo.renderer.common.ModifiersTG;
@@ -39,7 +38,8 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.logging.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Rendering service.
@@ -47,6 +47,8 @@ import java.util.logging.Level;
  * @author phyzicsz <phyzics.z@gmail.com>
  */
 public class JavaRenderer implements IJavaRenderer {
+
+    private static final Logger logger = LoggerFactory.getLogger(JavaRenderer.class);
 
     private static JavaRenderer _instance = null;
     private static String _className = "";
@@ -132,14 +134,16 @@ public class JavaRenderer implements IJavaRenderer {
      * @param symbol
      * @return true if symbol can be rendered based on provided information
      */
-    public Boolean CanRender(MilStdSymbol symbol) {
+    @Override
+    public Boolean canRender(MilStdSymbol symbol) {
         //String basicSymbolID =  symbol.getSymbolID();
-        return CanRender(symbol.getSymbolID(), symbol.getCoordinates(), symbol.getSymbologyStandard());
+        return canRender(symbol.getSymbolID(), symbol.getCoordinates(), symbol.getSymbologyStandard());
     }
 
-    public Boolean CanRender(String symbolCode,
+    @Override
+    public Boolean canRender(String symbolCode,
             ArrayList<Point2D.Double> coords) {
-        return CanRender(symbolCode,
+        return canRender(symbolCode,
                 coords,
                 RendererSettings.getInstance().getSymbologyStandard());
     }
@@ -150,10 +154,10 @@ public class JavaRenderer implements IJavaRenderer {
      *
      * @param symbolCode
      * @param coords
-     * @param symbologyStandard like RendererSettings.Symbology_2525C
      * @return true if symbol can be rendered based on provided information
      */
-    public Boolean CanRender(String symbolCode,
+    @Override
+    public Boolean canRender(String symbolCode,
             ArrayList<Point2D.Double> coords,
             int symStd) {
         String message = null;
@@ -177,8 +181,7 @@ public class JavaRenderer implements IJavaRenderer {
                     int dc = sd.getDrawCategory();
                     if (dc == SymbolDef.DRAW_CATEGORY_POINT)//make sure we can find the character in the font.
                     {
-                        int index = -1;
-                        index = SinglePointLookup.getInstance().getCharCodeFromSymbol(symbolCode, symStd);
+                        int index = SinglePointLookup.getInstance().getCharCodeFromSymbol(symbolCode, symStd);
                         if (index > 0) {
                             return true;
                         } else {
@@ -218,12 +221,7 @@ public class JavaRenderer implements IJavaRenderer {
             }
 
             if (message != null && !message.equals("")) {
-                ErrorLogger.LogMessage(this.getClass().getName(), "CanRender()", message, Level.FINE);
-                //System.err.println(message);
-                //System.out.println("");
-                //System.out.println("INFO: CanRender - " + message);
-                //Exception foo = new Exception("Stack?");
-                //foo.printStackTrace();
+                logger.error(message);
             }
         } catch (Exception exc) {
             System.err.println(String.valueOf(message));
@@ -242,6 +240,7 @@ public class JavaRenderer implements IJavaRenderer {
      * @return drawable symbol populated with shape data
      * @throws RendererException
      */
+    @Override
     public MilStdSymbol Render(MilStdSymbol symbol, IPointConversion converter, Rectangle2D clipBounds) throws RendererException {
         ProcessSymbolGeometry(symbol, converter, clipBounds);
         return symbol;
@@ -255,8 +254,8 @@ public class JavaRenderer implements IJavaRenderer {
      * coordinates.
      * @param clipBounds dimensions of drawing surface. needed to do clipping.
      * @return drawable symbols populated with shape data
-     * @throws TBCRendererException
      */
+    @Override
     public ArrayList<MilStdSymbol> Render(ArrayList<MilStdSymbol> symbols, IPointConversion converter, Rectangle2D clipBounds) throws RendererException {
         ProcessSymbolGeometryBulk(symbols, converter, clipBounds);
         return symbols;
@@ -273,8 +272,8 @@ public class JavaRenderer implements IJavaRenderer {
      * coordinates.
      * @param clipBounds dimensions of drawing surface. needed to do clipping.
      * @return drawable symbol populated with shape data
-     * @throws TBCRendererException
      */
+    @Override
     public MilStdSymbol Render(String symbolCode, String UUID, ArrayList<Point2D.Double> coords, Map<String, String> Modifiers, IPointConversion converter, Rectangle2D clipBounds) throws RendererException {
         MilStdSymbol symbol = null;
         //try
@@ -290,6 +289,7 @@ public class JavaRenderer implements IJavaRenderer {
         return symbol;
     }
 
+    @Override
     public ImageInfo RenderSinglePointAsImageInfo(String symbolCode, Map<String, String> Modifiers, int unitSize, boolean keepUnitRatio) {
         return RenderSinglePointAsImageInfo(symbolCode, Modifiers, unitSize, keepUnitRatio, RendererSettings.getInstance().getSymbologyStandard());
     }
@@ -306,13 +306,14 @@ public class JavaRenderer implements IJavaRenderer {
      * will be drawn with respect to each other. Unknown unit is the all around
      * biggest, neutral unit is the smallest. if size is 35, neutral would be
      * (35/1.5)*1.1=25.7
+     * @param symStd
      * @return ImageInfo, which has the image and all the information needed to
      * position it properly.
      */
     public ImageInfo RenderSinglePointAsImageInfo(String symbolCode, Map<String, String> Modifiers, int unitSize, boolean keepUnitRatio, int symStd) {
         ImageInfo returnVal = null;
         try {
-            ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
+            ArrayList<Point2D.Double> points = new ArrayList<>();
             //fake point.  cpof knows where they want to render so they don't 
             //give us a valid point.
             points.add(new Point2D.Double(0, 0));
@@ -336,9 +337,8 @@ public class JavaRenderer implements IJavaRenderer {
 
             ProcessSymbolGeometry(symbol, ipc, null);
             returnVal = symbol.toImageInfo();
-        } catch (Exception exc) {
-            // ErrorLogger.LogException("JavaRenderer", "RenderSinglePointAsImageInfo(MilStdSymbol)", exc);
-            System.err.println(exc.getMessage());
+        } catch (RendererException exc) {
+                        logger.error("error rendering symbol",exc);
         }
         return returnVal;
     }
@@ -360,9 +360,8 @@ public class JavaRenderer implements IJavaRenderer {
             MilStdSymbol symbol = new MilStdSymbol(symbolCode, UUID, coords, Modifiers);
             ProcessSymbolGeometry(symbol, converter, clipBounds);
             returnVal = symbol.toImageInfo();
-        } catch (Exception exc) {
-            //ErrorLogger.LogException("JavaRenderer", "RenderMilStdSymbolAsImageInfo", exc);
-            System.err.println(exc.getMessage());
+        } catch (RendererException exc) {
+            logger.error("error rendering symbol",exc);
         }
         return returnVal;
     }
@@ -380,9 +379,8 @@ public class JavaRenderer implements IJavaRenderer {
         try {
             ProcessSymbolGeometry(symbol, converter, clipBounds);
             returnVal = symbol.toImageInfo();
-        } catch (Exception exc) {
-            //ErrorLogger.LogException("JavaRenderer", "RenderSinglePointAsImageInfo", exc);
-            System.err.println(exc.getMessage());
+        } catch (RendererException exc) {
+            logger.error("error rendering symbol",exc);
         }
         return returnVal;
     }
@@ -397,6 +395,7 @@ public class JavaRenderer implements IJavaRenderer {
      * @param showDisplayModifiers
      * @return
      */
+    @Override
     public BufferedImage RenderMilStdSymbolAsIcon(String symbolID, int iconSize,
             Boolean showDisplayModifiers) {
         return RenderMilStdSymbolAsIcon(symbolID, iconSize, showDisplayModifiers,
@@ -417,9 +416,9 @@ public class JavaRenderer implements IJavaRenderer {
         try {
             ImageInfo ii = null;
             SymbolDef sd = null;
-            Map<String, String> Modifiers = new HashMap<String, String>();
+            Map<String, String> Modifiers = new HashMap<>();
 
-            ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
+            ArrayList<Point2D.Double> points = new ArrayList<>();
             points.add(new Point2D.Double(0, 0));
 
             MilStdSymbol symbol = null;
@@ -504,8 +503,9 @@ public class JavaRenderer implements IJavaRenderer {
      * area.
      * @throws RendererException
      */
+    @Override
     public void DrawDB(MilStdSymbol symbol, Graphics2D destination, Rectangle clip) throws RendererException {
-        ArrayList<MilStdSymbol> symbols = new ArrayList<MilStdSymbol>();
+        ArrayList<MilStdSymbol> symbols = new ArrayList<>();
         symbols.add(symbol);
         DrawDB(symbols, destination, clip);
     }
@@ -528,6 +528,7 @@ public class JavaRenderer implements IJavaRenderer {
      * area.
      * @throws RendererException
      */
+    @Override
     public void DrawDB(ArrayList<MilStdSymbol> symbols, Graphics2D destination, Rectangle clip) throws RendererException {
         try {
 
@@ -570,11 +571,11 @@ public class JavaRenderer implements IJavaRenderer {
                 }
 
                 RendererException re = new RendererException(badValues, null);
-                ErrorLogger.LogException(this.getClass().getName(), "DrawDB()", re);
+                logger.error("Error", re);
                 throw re;
             }
 
-        } catch (Exception exc) {
+        } catch (RendererException exc) {
             RendererException re2 = new RendererException("Draw Operation Failed", exc);
             //ErrorLogger.LogException(this.getClass().getName() ,"DrawDB()",re2);
             System.err.println(exc.getMessage());
@@ -590,8 +591,9 @@ public class JavaRenderer implements IJavaRenderer {
      * @param destination surface to draw to
      * @throws RendererException
      */
+    @Override
     public void Draw(MilStdSymbol symbol, Graphics2D destination) throws RendererException {
-        ArrayList<MilStdSymbol> symbols = new ArrayList<MilStdSymbol>();
+        ArrayList<MilStdSymbol> symbols = new ArrayList<>();
         symbols.add(symbol);
         Draw(symbols, destination, 0, 0);
     }
@@ -604,6 +606,7 @@ public class JavaRenderer implements IJavaRenderer {
      * @param destination surface to draw to
      * @throws RendererException
      */
+    @Override
     public void Draw(ArrayList<MilStdSymbol> symbols, Graphics2D destination) throws RendererException {
         Draw(symbols, destination, 0, 0);
     }
@@ -643,9 +646,9 @@ public class JavaRenderer implements IJavaRenderer {
 
             }
 
-        } catch (Exception exc) {
-            RendererException re2 = new RendererException("Draw Operation Failed", exc);
-            ErrorLogger.LogException(this.getClass().getName(), "Draw()", re2);
+        } catch (RendererException ex) {
+            RendererException re2 = new RendererException("Draw Operation Failed", ex);
+            logger.error("render exception", re2);
             throw re2;
         }
     }
@@ -664,13 +667,11 @@ public class JavaRenderer implements IJavaRenderer {
      *
      * @return a Map of SymbolDefs keyed by symbol code.
      */
+    @Override
     public Map<String, SymbolDef> getSupportedTGTypes(int symStd) {
 
-        Map<String, SymbolDef> types;
-
+        Map<String, SymbolDef> types = new HashMap<>();
         Map<String, SymbolDef> defs = SymbolDefTable.getInstance().GetAllSymbolDefs(symStd);
-
-        types = new HashMap<String, SymbolDef>();
 
         Collection<SymbolDef> symbols = defs.values();
         Iterator<SymbolDef> itr = symbols.iterator();
@@ -685,38 +686,21 @@ public class JavaRenderer implements IJavaRenderer {
         return types;
     }
 
-    /**
-     *
-     * @param arg0
-     * @deprecated
-     */
-    public void initialize(Map<String, String> arg0) {
-        // TODO Auto-generated method stub
-        //JOptionPane.showMessageDialog(null, "Oh yeah!!!", "Initializing", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    /**
-     * Set minimum level at which an item can be logged. In descending order:
-     * Severe Warning Info Config Fine Finer Finest
-     *
-     * @param newLevel
-     */
-    public static void setLoggingLevel(Level newLevel) {
-        ErrorLogger.setLevel(newLevel);
-    }
-
     public int getSinglePointTGSymbolSize() {
         return _SPR.getSinglePointTGSymbolSize();
     }
 
+    @Override
     public int getUnitSymbolSize() {
         return _SPR.getUnitSymbolSize();
     }
 
+    @Override
     public void setSinglePointTGSymbolSize(int size) {
         _SPR.setSinglePointTGSymbolSize(size);
     }
 
+    @Override
     public void setUnitSymbolSize(int size) {
         _SPR.setUnitSymbolSize(size);
     }
@@ -729,6 +713,7 @@ public class JavaRenderer implements IJavaRenderer {
      * @param type like Font.BOLD
      * @param size like 12
      */
+    @Override
     public void setModifierFont(String name, int type, int size) {
         RendererSettings.getInstance().setLabelFont(name, type, size);
         _SPR.RefreshModifierFont();
@@ -743,6 +728,7 @@ public class JavaRenderer implements IJavaRenderer {
      * @param tracking like TextAttribute.TRACKING_LOOSE (0.04f)
      * @param kerning default false.
      */
+    @Override
     public void setModifierFont(String name, int type, int size, float tracking, Boolean kerning) {
         RendererSettings.getInstance().setLabelFont(name, type, size, kerning, tracking);
         _SPR.RefreshModifierFont();
@@ -757,7 +743,7 @@ public class JavaRenderer implements IJavaRenderer {
      * @param clipBounds dimensions of drawing surface. needed to do clipping.
      */
     private void ProcessSymbolGeometry(MilStdSymbol symbol, IPointConversion converter, Rectangle2D clipBounds) throws RendererException {
-        ArrayList<MilStdSymbol> symbols = new ArrayList<MilStdSymbol>();
+        ArrayList<MilStdSymbol> symbols = new ArrayList<>();
         symbols.add(symbol);
         ProcessSymbolGeometryBulk(symbols, converter, clipBounds);
 
