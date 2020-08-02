@@ -92,8 +92,8 @@ public class UnitFontLookup {
 
   private void xmlLoaded()
   {
-      String xmlPathB = "XML/UnitFontMappingsB.xml";
-      String xmlPathC = "XML/UnitFontMappingsC.xml";
+      String xmlPathB = "xml/unitfontmappingsb.xml";
+      String xmlPathC = "xml/unitfontmappingsc.xml";
         
       
     InputStream xmlStreamB = this.getClass().getClassLoader().getResourceAsStream(xmlPathB);

@@ -10,11 +10,11 @@
 /home/pborawski/development/milo/milo/milo-core/src/main/java/sec/geo/shape/IArc.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/sec/web/renderer/utilities/TextInfo.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/RenderMultipoints/clsClipPolygon2.java
+/home/pborawski/development/milo/milo/milo-core/src/main/java/com/phyzicsz/milo/core/MiloRenderService.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/sec/geo/shape/Radarc.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/sec/web/json/utilities/JSONException.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/JavaLineArray/DISMSupport.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/ArmyC2/C2SD/Utilities/SymbolDisplayProperties.java
-/home/pborawski/development/milo/milo/milo-core/src/main/java/sec/web/renderer/UrlTester.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/sec/web/renderer/portable/RendererSystemTray.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/sec/geo/kml/XsltCoordinateWrapper.java
 /home/pborawski/development/milo/milo/milo-core/src/main/java/JavaLineArray/CELineArray.java

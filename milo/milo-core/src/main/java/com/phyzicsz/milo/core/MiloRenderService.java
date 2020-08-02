@@ -16,14 +16,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import javax.print.DocFlavor.BYTE_ARRAY;
 import sec.web.renderer.MultiPointHandler;
-import sec.web.renderer.MultiPointServer;
 import sec.web.renderer.SECWebRenderer;
 import sec.web.renderer.SinglePoint2525Renderer;
 import sec.web.renderer.SinglePointRendererService;
-import sec.web.renderer.SinglePointServer;
 import sec.web.renderer.utilities.JavaRendererUtilities;
 import sec.web.renderer.utilities.PNGInfo;
-import sec.web.renderer.utilities.SinglePointServerTester;
 
 /**
  *
@@ -38,24 +35,15 @@ import sec.web.renderer.utilities.SinglePointServerTester;
  */
 public class MiloRenderService {
 
-    private SinglePointServer sps = null;
-    private MultiPointServer mps = null;
-    private SinglePointServerTester spst = null;
+//    private SinglePointServer sps = null;
+//    private MultiPointServer mps = null;
+//    private SinglePointServerTester spst = null;
     private SinglePointRendererService sprs = null;
     private IJavaRenderer jr = null;
-    private static MiloRenderService renderer = null;
 
-    private MiloRenderService() {
+    public MiloRenderService() {
         jr = JavaRenderer.getInstance();
         sprs = SinglePointRendererService.getInstance();
-    }
-
-    public static synchronized MiloRenderService getInstance() {
-        if (renderer == null) {
-            renderer = new MiloRenderService();
-        }
-
-        return renderer;
     }
 
     /**
@@ -143,173 +131,6 @@ public class MiloRenderService {
         jr.setSinglePointTGSymbolSize(size);
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Single Point Server Functions">
-
-    /*
-	 * Starts the single point server. Uses default port # of 6789.
-     */
-    public void startSinglePointServer() {
-        startSinglePointServer(6789);
-    }
-
-    /**
-     * Starts single point server on specified port number
-     *
-     * @param port
-     */
-    public void startSinglePointServer(int port) {
-        // 0 for backlog means use system default value.
-        startSinglePointServer(port, 0);
-    }
-
-    /**
-     * Starts single point server on specified port number
-     *
-     * @param port
-     * @param backlog An integer value of '0' means use the system default
-     */
-    public void startSinglePointServer(int port, int backlog) {
-        try {
-            if (sps == null) {
-                // START SINGLE POINT SERVER /////////////////////////////////////////
-                sps = new SinglePointServer(port, backlog);
-                sps.start();
-
-                spst = new SinglePointServerTester(sps);
-                Thread thr1 = new Thread(spst);
-                thr1.start();
-                // STARTED SINGLE POINT SERVER /////////////////////////////////////////
-            } else {
-                System.out.println("Single Point Server already started.");
-            }
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "startSinglePointServer", exc);
-        }
-    }
-
-    /**
-     * Gets the port # the single point server is currently using.
-     *
-     * @return
-     */
-    public int getSinglePointServerPort() {
-        if (sps != null) {
-            return sps.getPortNumber();
-        } else {
-            return -1;
-        }
-    }
-
-    /**
-     * Checks if the SinglePointServer is running
-     *
-     * @return
-     */
-    public Boolean isSinglePointServerRunning() {
-        if (spst != null) {
-            return spst.isRunning();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Stops the single point server
-     */
-    public void stopSinglePointServer() {
-        if (sps != null) {
-            sps.stop();
-        }
-        sps = null;
-        spst = null;
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Multi Point Server Functions">
-
-    /*
-	 * Starts the multi point server. Uses default port # of 6790.
-     */
-    public void startMultiPointServer() {
-        startSinglePointServer(6790);
-    }
-
-    /**
-     * Starts multi point server on specified port number
-     *
-     * @param port
-     */
-    public void startMultiPointServer(int port) {
-        // 0 for backlog means use system default value.
-        startSinglePointServer(port, 0);
-    }
-
-    /**
-     * Starts multi point server on specified port number
-     *
-     * @param port
-     * @param backlog An integer value of '0' means use the system default
-     */
-    public void startMultiPointServer(int port, int backlog) {
-        try {
-            if (mps == null) {
-                // START MULTI POINT SERVER /////////////////////////////////////////
-                mps = new MultiPointServer(port, backlog);
-                mps.start();
-
-                /*spst = new SinglePointServerTester(sps);
-				Thread thr1 = new Thread(spst);
-				thr1.start();*/
-                // STARTED MULTI POINT SERVER /////////////////////////////////////////
-            } else {
-                System.out.println("Multi Point Server already started.");
-            }
-        } catch (Exception exc) {
-            ErrorLogger.LogException("SECRenderer", "startMultiPointServer", exc);
-        }
-    }
-
-    /**
-     * Gets the port # the multi point server is currently using.
-     *
-     * @return
-     */
-    public int getMultiPointServerPort() {
-        if (mps != null) {
-            return mps.getPortNumber();
-        } else {
-            return -1;
-        }
-    }
-
-    /**
-     * Checks if the MultiPointServer is running
-     *
-     * @return
-     */
-    public Boolean isMultiPointServerRunning() {
-        /*if (spst != null) {
-            return spst.isRunning();
-            } else {
-            return false;
-            }//*/
-        return mps != null;
-    }
-
-    /**
-     * Stops the multi point server
-     */
-    public void stopMultiPointServer() {
-        if (mps != null) {
-            mps.stop();
-        }
-        mps = null;
-        //spst = null;
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Plugin Functions">
     /**
      * Will attempt to download and load a plugin given a specific url Call
      * refreshPlugins() after you've loaded all the plugins you want the service

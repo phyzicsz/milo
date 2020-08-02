@@ -38,6 +38,7 @@ sec/web/renderer/PointConverter.class
 sec/geo/GeoEllipse.class
 ArmyC2/C2SD/Utilities/UnitDefTable.class
 sec/web/json/utilities/JSONObject.class
+com/phyzicsz/milo/core/MiloRenderService.class
 JavaLineArray/CChannelPoints2.class
 sec/geo/shape/Track.class
 ArmyC2/C2SD/Utilities/ErrorLogger.class
@@ -115,7 +116,6 @@ sec/geo/shape/Line.class
 ArmyC2/C2SD/Utilities/FileHandler.class
 JavaLineArray/DISMSupport.class
 sec/geo/shape/APivot.class
-sec/web/renderer/UrlTester.class
 ArmyC2/C2SD/Utilities/SymbolUtilities.class
 org/gavaghan/geodesy/GlobalCoordinates.class
 sec/geo/shape/Radarc.class

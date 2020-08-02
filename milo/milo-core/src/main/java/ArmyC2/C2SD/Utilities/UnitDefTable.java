@@ -66,9 +66,9 @@ public class UnitDefTable {
         _UnitDefinitionsC = new HashMap<String, UnitDef>();
         _UnitDefDupsC = new ArrayList<UnitDef>();
           
-        String xmlPathB = "XML/UnitConstantsB.xml";
+        String xmlPathB = "xml/unitconstantsb.xml";
       
-        String xmlPathC = "XML/UnitConstantsC.xml";
+        String xmlPathC = "xml/unitconstantsc.xml";
       
       
     InputStream xmlStreamB = this.getClass().getClassLoader().getResourceAsStream(xmlPathB);

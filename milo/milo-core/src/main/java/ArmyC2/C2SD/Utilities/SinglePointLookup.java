@@ -70,8 +70,8 @@ public class SinglePointLookup {
    */
   private void xmlLoaded()
   {
-        String xmlPathB = "XML/SinglePointB.xml";
-        String xmlPathC = "XML/SinglePointC.xml";
+        String xmlPathB = "xml/singlepointb.xml";
+        String xmlPathC = "xml/singlepointc.xml";
         
         InputStream xmlStreamB = this.getClass().getClassLoader().getResourceAsStream(xmlPathB);
         InputStream xmlStreamC = this.getClass().getClassLoader().getResourceAsStream(xmlPathC);

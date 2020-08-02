@@ -32,8 +32,6 @@ public class SinglePointFont {
         if(_instance == null)
         {
             _instance = new SinglePointFont();
-           // _unitFontStream = _instance.getClass().getClassLoader().getResourceAsStream("FONTS/UnitFont.ttf");
-           // _spFontStream = _instance.getClass().getClassLoader().getResourceAsStream("FONTS/SinglePoint.ttf");
         }
 
 
@@ -48,7 +46,7 @@ public class SinglePointFont {
     public Font getUnitFont(float size)
     {
         //load font from resource
-        InputStream fontStream = _instance.getClass().getClassLoader().getResourceAsStream("FONTS/UnitFont.ttf");
+        InputStream fontStream = _instance.getClass().getClassLoader().getResourceAsStream("fonts/UnitFont.ttf");
         //InputStream fontStream = _unitFontStream;
 
         Font newFont = null;
@@ -88,7 +86,7 @@ public class SinglePointFont {
     public Font getSPFont(float size)
     {
         //load font from resource
-        InputStream fontStream = _instance.getClass().getClassLoader().getResourceAsStream("FONTS/SinglePoint.ttf");
+        InputStream fontStream = _instance.getClass().getClassLoader().getResourceAsStream("fonts/SinglePoint.ttf");
         //InputStream fontStream = _spFontStream;
 
         Font newFont = null;
@@ -128,7 +126,7 @@ public class SinglePointFont {
     public Font getTGFont(float size)
     {
         //load font from resource
-        InputStream fontStream = _instance.getClass().getClassLoader().getResourceAsStream("FONTS/TacticalGraphics.ttf");
+        InputStream fontStream = _instance.getClass().getClassLoader().getResourceAsStream("fonts/TacticalGraphics.ttf");
         //InputStream fontStream = _spFontStream;
 
         Font newFont = null;

@@ -74,8 +74,8 @@ public class SymbolDefTable {
         _SymbolDefinitionsC = new HashMap<String, SymbolDef>();
         _SymbolDefDupsC = new ArrayList<SymbolDef>();
         
-        String xmlPathB = "XML/SymbolConstantsB.xml";
-        String xmlPathC = "XML/SymbolConstantsC.xml";
+        String xmlPathB = "xml/symbolconstantsb.xml";
+        String xmlPathC = "xml/symbolconstantsc.xml";
 
         InputStream xmlStreamB = this.getClass().getClassLoader().getResourceAsStream(xmlPathB);
         String lookupXmlB = FileHandler.InputStreamToString(xmlStreamB);
