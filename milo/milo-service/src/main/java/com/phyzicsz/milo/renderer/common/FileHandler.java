@@ -2,14 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.phyzicsz.milo.renderer.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
-
-
 
 /**
  *
@@ -17,64 +16,46 @@ import java.io.InputStream;
  */
 public class FileHandler {
 
-    static public String fileToString(String inFile)
-  {
-    return new String(fileToBytes(inFile));
-  }
-
-  static public byte[] fileToBytes(String inFile)
-  {
-    FileInputStream fis = null;
-    try
-    {
-      fis = new FileInputStream(inFile);
+    static public String fileToString(String inFile) {
+        return new String(fileToBytes(inFile));
     }
-    catch(Throwable thrown)
-    {
-    }
-    return inputStreamToBytes(fis);
-  }
 
-  static public String InputStreamToString(InputStream inFile)
-  {
-      return new String(InputStreamToBytes(inFile));
-  }
-
-  static public byte[] InputStreamToBytes(InputStream inFile)
-  {
-      return inputStreamToBytes(inFile);
-  }
-
-  static public byte[] inputStreamToBytes(InputStream is)
-  {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    try
-    {
-      byte[] bytes = new byte[8192];
-      int size = is.read(bytes);
-      while(size > 0)
-      {
-        baos.write(bytes, 0, size);
-        size = is.read(bytes);
-      }
-    }
-    catch(Throwable thrown)
-    {
-    }
-    finally
-    {
-      if(is != null)
-      {
-        try
-        {
-          is.close();
+    static public byte[] fileToBytes(String inFile) {
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(inFile);
+        } catch (FileNotFoundException thrown) {
         }
-        catch(Throwable thrown)
-        {
-        }
-      }
+        return inputStreamToBytes(fis);
     }
-    return (baos.toByteArray());
-  }
+
+    static public String InputStreamToString(InputStream inFile) {
+        return new String(InputStreamToBytes(inFile));
+    }
+
+    static public byte[] InputStreamToBytes(InputStream inFile) {
+        return inputStreamToBytes(inFile);
+    }
+
+    static public byte[] inputStreamToBytes(InputStream is) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            byte[] bytes = new byte[8192];
+            int size = is.read(bytes);
+            while (size > 0) {
+                baos.write(bytes, 0, size);
+                size = is.read(bytes);
+            }
+        } catch (IOException thrown) {
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException thrown) {
+                }
+            }
+        }
+        return (baos.toByteArray());
+    }
 
 }
