@@ -5,10 +5,8 @@
 package com.phyzicsz.milo;
 
 import com.phyzicsz.milo.renderer.common.RendererException;
-import com.phyzicsz.milo.renderer.common.SymbolDefTable;
 import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
-import com.phyzicsz.milo.renderer.common.SymbolUtilities;
 import com.phyzicsz.milo.renderer.common.PointConversionDummy;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import com.phyzicsz.milo.renderer.common.ImageInfo;
@@ -351,33 +349,4 @@ public class MiloRenderService {
         return jr.RenderMilStdSymbolAsIcon(symbolID, iconSize, showDisplayModifiers);
     }
 
-    /**
-     * Google likes to resize icons. Based on patterns I've recognized, I tried
-     * to compensate.
-     *
-     * @param width
-     * @param height
-     * @return
-     */
-    private double getIconScale(double width, double height) {
-        double scale1 = 28;
-        double scale2 = 30;
-        double iconScale;
-        if (width == height) {
-            iconScale = width / scale1;
-        } else if (width > height) {
-            if (height <= scale2) {
-                iconScale = width / 28;
-            } else {
-                iconScale = height / 28;
-            }
-        } else {
-            if (width <= scale2) {
-                iconScale = height / 28;
-            } else {
-                iconScale = width / 28;
-            }
-        }
-        return iconScale;
-    }
 }

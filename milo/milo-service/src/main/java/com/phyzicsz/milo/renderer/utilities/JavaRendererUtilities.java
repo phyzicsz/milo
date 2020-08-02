@@ -2,10 +2,8 @@ package com.phyzicsz.milo.renderer.utilities;
 
 import com.phyzicsz.milo.renderer.JavaRenderer;
 import com.phyzicsz.milo.renderer.TacticalGraphicIconRenderer;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.MilStdAttributes;
 import com.phyzicsz.milo.renderer.common.MilStdSymbol;
-import com.phyzicsz.milo.renderer.common.ModifiersUnits;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import com.phyzicsz.milo.renderer.common.SymbolDef;
 import com.phyzicsz.milo.renderer.common.SymbolDefTable;
@@ -19,9 +17,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import com.phyzicsz.milo.json.utilities.JSONArray;
-import com.phyzicsz.milo.json.utilities.JSONException;
-import com.phyzicsz.milo.json.utilities.JSONObject;
 
 /**
  *
@@ -717,115 +712,6 @@ public class JavaRendererUtilities {
             return sb.toString();
             
         }
-        
-    /**
-     * Checks symbolID and if the relevant modifiers are present
-     * @param symbolCode
-     * @param modifiers
-     * @return 
-     */
-    public static boolean is3dSymbol(String symbolCode, String modifiers)
-    {
-        boolean returnValue = false;
-        
-        try 
-        {
-            String symbolId = symbolCode.substring(4, 10);
-
-            if (symbolId.equals("ACAI--") || // Airspace Coordination Area Irregular
-                symbolId.equals("ACAR--") || // Airspace Coordination Area Rectangular
-                symbolId.equals("ACAC--") || // Airspace Coordination Area Circular
-                symbolId.equals("AKPC--") || // Kill box circular
-                symbolId.equals("AKPR--") || // Kill box rectangular
-                symbolId.equals("AKPI--") || // Kill box irregular
-                symbolId.equals("ALC---") || // Air corridor
-                symbolId.equals("ALM---") || // 
-                symbolId.equals("ALS---") || // SAAFR
-                symbolId.equals("ALU---") || // UAV
-                symbolId.equals("ALL---") || // Low level transit route
-                symbolId.equals("AAR---") ||
-                symbolId.equals("AAF---") ||
-                symbolId.equals("AAH---") ||
-                symbolId.equals("AAM---") || // MEZ
-                symbolId.equals("AAML--") || // LOMEZ
-                symbolId.equals("AAMH--"))
-            {                        
-
-                try {
-                    JSONObject jsonModifiersString = null;
-                    JSONObject jsonModifiersArray = null;
-                    if (modifiers != null && modifiers.equals("") == false) {
-                        jsonModifiersString = new JSONObject(modifiers);
-                        if (jsonModifiersString.has("modifiers"))
-                        {
-                            jsonModifiersArray = jsonModifiersString.getJSONObject("modifiers");
-                        }
-                        else
-                        {
-                            jsonModifiersArray = jsonModifiersString;
-                        }
-                    }
-                    
-                    if(jsonModifiersArray != null){
-                        
-                        JSONArray jsonAltitudeArray = null;
-                        // These guys store array values.  Put in appropriate data strucutre
-                        // for MilStdSymbol.
-                        if (jsonModifiersArray.has("altitudeDepth") && !jsonModifiersArray.isNull("altitudeDepth")) {
-                            jsonAltitudeArray = jsonModifiersArray.getJSONArray("altitudeDepth");
-                        }
-                        else if (jsonModifiersArray.has("X") && !jsonModifiersArray.isNull("X")) {
-                            jsonAltitudeArray = jsonModifiersArray.getJSONArray("X");
-                        }
-                        if(jsonAltitudeArray != null){
-                            if (jsonAltitudeArray.length() < 2)
-                            {
-                                if((jsonAltitudeArray.length() == 1) && (symbolId.equals("AKPC--") || // Kill box circular
-                                    symbolId.equals("AKPR--") || // Kill box rectangular
-                                    symbolId.equals("AKPI--"))) // Kill box irregular)
-                                {
-                                    returnValue = true;
-                                }
-                                else
-                                {
-                                    returnValue = false;                                    
-                                }
-                                
-                            }
-                            else 
-                            {
-                                returnValue = true;
-                            }
-                        }
-                        /*else if (jsonModifiersArray.has("additionalInfo1") && !jsonModifiersArray.isNull("additionalInfo1") &&
-                                jsonModifiersArray.has("additionalInfo2") && !jsonModifiersArray.isNull("additionalInfo2") ) 
-                        {
-                            returnValue = true;
-                        }//*/
-                        else if (jsonModifiersArray.has("additionalInfo1") && !jsonModifiersArray.isNull("additionalInfo1")) 
-                        {
-
-                            if((symbolId.equals("AKPC--") || // Kill box circular
-                                symbolId.equals("AKPR--") || // Kill box rectangular
-                                symbolId.equals("AKPI--"))) // Kill box irregular)
-                            {
-                                returnValue = true;
-                            }
-                        }
-                    }
-                } catch (JSONException je) {
-                    //ErrorLogger.LogException(this.getName(), "is3DSymbol()", je);// je.printStackTrace();
-                    System.err.println(je.getMessage());
-                }                       
-            }
-        }
-        catch(Exception e)
-        {
-            //ErrorLogger.LogException(this.getName(), "is3DSymbol()", e);// e.printStackTrace();
-            System.err.println(e.getMessage());
-        }
-        return returnValue;
-    }
     
     /**
     * Determines if a String represents a valid number

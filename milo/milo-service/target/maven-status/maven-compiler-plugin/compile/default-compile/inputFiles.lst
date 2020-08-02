@@ -1,5 +1,3 @@
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/exceptions/InvalidNumberOfPointsException.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/json/utilities/JSONArray.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/IPointConversion.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/ModifiersTG.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/AffiliationColors.java
@@ -8,14 +6,12 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/ShapeInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/flot.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/SinglePoint2525Renderer.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/GeoPixelConversion.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/CELineArray.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/RendererSettings.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SymbolDraw.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/SinglePointRendererService.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/multipoint/clsRenderer2.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/RendererException.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/json/utilities/JSONObject.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/plugin/ISinglePointInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SymbolDefTable.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/SinglePointRenderer.java
@@ -24,10 +20,8 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/MilStdSymbol.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/Channels.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/UnitFontLookup.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/json/utilities/JSONString.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/MultiPointRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/PointConversionDummy.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/json/utilities/HTTPTokener.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SymbolDisplayProperties.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/TGLight.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/MilStdAttributes.java
@@ -35,7 +29,6 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/IMultiPointRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/multipoint/clsRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/DISMSupport.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/GeoPixelConversion3D.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/UnitFontLookupInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/multipoint/clsUtilityGE.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/countsupport.java
@@ -58,12 +51,10 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/ModifiersUnits.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/PNGInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/TacticalGraphicLookup.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/PointConverter3D.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/TextInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/TacticalGraphicIconRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/ErrorLogger.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/TBCRendererException.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/json/utilities/JSONException.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/SymbolInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/IJavaRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/LineInfo.java
@@ -77,10 +68,7 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SinglePointLookup.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/P1.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SinglePointFont.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/json/utilities/JSONTokener.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/AreaSymbolFill.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/ImageInfo.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/PointConverter.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/lineutility.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/multipoint/clsUtilityCPOF.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/multipoint/clsClipPolygon2.java
