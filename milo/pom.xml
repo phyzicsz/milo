@@ -145,6 +145,6 @@
         </plugins>
     </build>
     <modules>
-        <module>milo-core</module>
+        <module>milo-service</module>
     </modules>
 </project>
