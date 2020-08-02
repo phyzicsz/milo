@@ -4,6 +4,9 @@
  */
 package com.phyzicsz.milo.renderer;
 
+import com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer;
+import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -14,8 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
-import ArmyC2.C2SD.RendererPluginInterface.*;
-import ArmyC2.C2SD.Utilities.*;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
@@ -38,7 +39,7 @@ public class SinglePointRendererService {
 			// ErrorLogger.Entering("SinglePointRendererService",
 			// "SinglePointRendererService");
 			// AddRenderersToPath();
-			loader = ServiceLoader.load(ArmyC2.C2SD.RendererPluginInterface.ISinglePointRenderer.class);
+			loader = ServiceLoader.load(com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer.class);
 			// LoadSPRendererServices();
 			// ErrorLogger.Exiting("SinglePointRendererService",
 			// "SinglePointRendererService");

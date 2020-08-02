@@ -1,11 +1,10 @@
 package com.phyzicsz.milo.renderer;
 
-import ArmyC2.C2SD.RendererPluginInterface.ISinglePointInfo;
-import ArmyC2.C2SD.RendererPluginInterface.ISinglePointRenderer;
-import ArmyC2.C2SD.RendererPluginInterface.SinglePointInfo;
-import ArmyC2.C2SD.Rendering.JavaRenderer;
-import ArmyC2.C2SD.Utilities.ImageInfo;
-import ArmyC2.C2SD.Utilities.MilStdAttributes;
+import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer;
+import com.phyzicsz.milo.renderer.plugin.SinglePointInfo;
+import com.phyzicsz.milo.renderer.common.ImageInfo;
+import com.phyzicsz.milo.renderer.common.MilStdAttributes;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.geom.Path2D;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import RenderMultipoints.clsClipPolygon2;
+import com.phyzicsz.milo.renderer.multipoint.clsClipPolygon2;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;

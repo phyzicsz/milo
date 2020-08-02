@@ -1,16 +1,15 @@
 package com.phyzicsz.milo.renderer.utilities;
 
-import ArmyC2.C2SD.Rendering.JavaRenderer;
-import ArmyC2.C2SD.Rendering.TacticalGraphicIconRenderer;
-import ArmyC2.C2SD.Utilities.ErrorLogger;
-import ArmyC2.C2SD.Utilities.MilStdAttributes;
-import ArmyC2.C2SD.Utilities.MilStdSymbol;
-import ArmyC2.C2SD.Utilities.ModifiersUnits;
-//import ArmyC2.C2SD.Utilities.MilStdAttributes;
-import ArmyC2.C2SD.Utilities.RendererSettings;
-import ArmyC2.C2SD.Utilities.SymbolDef;
-import ArmyC2.C2SD.Utilities.SymbolDefTable;
-import ArmyC2.C2SD.Utilities.SymbolUtilities;
+import com.phyzicsz.milo.renderer.JavaRenderer;
+import com.phyzicsz.milo.renderer.TacticalGraphicIconRenderer;
+import com.phyzicsz.milo.renderer.common.ErrorLogger;
+import com.phyzicsz.milo.renderer.common.MilStdAttributes;
+import com.phyzicsz.milo.renderer.common.MilStdSymbol;
+import com.phyzicsz.milo.renderer.common.ModifiersUnits;
+import com.phyzicsz.milo.renderer.common.RendererSettings;
+import com.phyzicsz.milo.renderer.common.SymbolDef;
+import com.phyzicsz.milo.renderer.common.SymbolDefTable;
+import com.phyzicsz.milo.renderer.common.SymbolUtilities;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;

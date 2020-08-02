@@ -1,7 +1,7 @@
 package com.phyzicsz.milo.geo;
 
-import com.phyzics.milo.geodesy.GeodeticCurve;
-import com.phyzics.milo.geodesy.GlobalCoordinates;
+import com.phyzicsz.milo.geodesy.GeodeticCurve;
+import com.phyzicsz.milo.geodesy.GlobalCoordinates;
 
 public class GeoBlock extends GeoPath {
 	public GeoBlock(GeoPoint p1, GeoPoint p2, double widthMeters, double maxDistanceMeters,

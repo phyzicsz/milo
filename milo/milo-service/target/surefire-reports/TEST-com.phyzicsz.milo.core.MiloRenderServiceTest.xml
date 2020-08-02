@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.phyzicsz.milo.core.MiloRenderServiceTest" time="0.538" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.phyzicsz.milo.core.MiloRenderServiceTest" time="0.507" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="14"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/home/pborawski/.sdkman/candidates/java/14.0.1-open/lib"/>
-    <property name="sun.java.command" value="/home/pborawski/development/milo/milo/milo-service/target/surefire/surefirebooter161615737870004373.jar /home/pborawski/development/milo/milo/milo-service/target/surefire 2020-08-01T19-33-08_950-jvmRun1 surefire16210239377629051613tmp surefire_016261628451124095322tmp"/>
+    <property name="sun.java.command" value="/home/pborawski/development/milo/milo/milo-service/target/surefire/surefirebooter2324833765386340099.jar /home/pborawski/development/milo/milo/milo-service/target/surefire 2020-08-01T20-21-23_371-jvmRun1 surefire12055211909624969308tmp surefire_010972465096542080164tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/pborawski/development/milo/milo/milo-service/target/test-classes:/home/pborawski/development/milo/milo/milo-service/target/classes:/home/pborawski/.m2/repository/org/slf4j/slf4j-api/1.7.29/slf4j-api-1.7.29.jar:/home/pborawski/.m2/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar:/home/pborawski/.m2/repository/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar:/home/pborawski/.m2/repository/org/junit/jupiter/junit-jupiter/5.7.0-M1/junit-jupiter-5.7.0-M1.jar:/home/pborawski/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.7.0-M1/junit-jupiter-api-5.7.0-M1.jar:/home/pborawski/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/pborawski/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/pborawski/.m2/repository/org/junit/platform/junit-platform-commons/1.7.0-M1/junit-platform-commons-1.7.0-M1.jar:/home/pborawski/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.7.0-M1/junit-jupiter-params-5.7.0-M1.jar:/home/pborawski/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.7.0-M1/junit-jupiter-engine-5.7.0-M1.jar:/home/pborawski/.m2/repository/org/junit/platform/junit-platform-engine/1.7.0-M1/junit-platform-engine-1.7.0-M1.jar:/home/pborawski/.m2/repository/org/assertj/assertj-core/3.16.1/assertj-core-3.16.1.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -29,7 +29,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/pborawski/development/milo/milo/milo-service/target/surefire/surefirebooter161615737870004373.jar"/>
+    <property name="surefire.real.class.path" value="/home/pborawski/development/milo/milo/milo-service/target/surefire/surefirebooter2324833765386340099.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="14.0.1+7"/>
     <property name="user.name" value="pborawski"/>
@@ -53,5 +53,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="58.0"/>
   </properties>
-  <testcase name="testSetDefaultSymbologyStandard" classname="com.phyzicsz.milo.core.MiloRenderServiceTest" time="0.522"/>
+  <testcase name="testSetDefaultSymbologyStandard" classname="com.phyzicsz.milo.core.MiloRenderServiceTest" time="0.491"/>
 </testsuite>

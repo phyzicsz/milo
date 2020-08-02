@@ -4,23 +4,20 @@
  */
 package com.phyzicsz.milo.renderer;
 
-import ArmyC2.C2SD.RendererPluginInterface.ISinglePointInfo;
-import ArmyC2.C2SD.RendererPluginInterface.ISinglePointRenderer;
-import ArmyC2.C2SD.RendererPluginInterface.SinglePointInfo;
-import ArmyC2.C2SD.Rendering.IJavaRenderer;
-import ArmyC2.C2SD.Rendering.JavaRenderer;
-import ArmyC2.C2SD.Rendering.TacticalGraphicIconRenderer;
-import ArmyC2.C2SD.Utilities.ErrorLogger;
-import ArmyC2.C2SD.Utilities.IPointConversion;
-import ArmyC2.C2SD.Utilities.ImageInfo;
-import ArmyC2.C2SD.Utilities.MilStdAttributes;
-import ArmyC2.C2SD.Utilities.MilStdSymbol;
-import ArmyC2.C2SD.Utilities.PointConversionDummy;
-import ArmyC2.C2SD.Utilities.RendererException;
-import ArmyC2.C2SD.Utilities.RendererSettings;
-import ArmyC2.C2SD.Utilities.SymbolDef;
-import ArmyC2.C2SD.Utilities.SymbolDefTable;
-import ArmyC2.C2SD.Utilities.SymbolUtilities;
+import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer;
+import com.phyzicsz.milo.renderer.plugin.SinglePointInfo;
+import com.phyzicsz.milo.renderer.common.ErrorLogger;
+import com.phyzicsz.milo.renderer.common.IPointConversion;
+import com.phyzicsz.milo.renderer.common.ImageInfo;
+import com.phyzicsz.milo.renderer.common.MilStdAttributes;
+import com.phyzicsz.milo.renderer.common.MilStdSymbol;
+import com.phyzicsz.milo.renderer.common.PointConversionDummy;
+import com.phyzicsz.milo.renderer.common.RendererException;
+import com.phyzicsz.milo.renderer.common.RendererSettings;
+import com.phyzicsz.milo.renderer.common.SymbolDef;
+import com.phyzicsz.milo.renderer.common.SymbolDefTable;
+import com.phyzicsz.milo.renderer.common.SymbolUtilities;
 import java.awt.Color;
 import java.util.Map;
 import java.util.logging.Level;

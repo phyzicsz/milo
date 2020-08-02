@@ -4,7 +4,7 @@
  */
 
 package com.phyzicsz.milo.renderer;
-import ArmyC2.C2SD.Utilities.IPointConversion;
+import com.phyzicsz.milo.renderer.common.IPointConversion;
 //import sec.web.renderer.GeoPixelConversion;
 import java.awt.geom.Point2D;
 import java.awt.Point;

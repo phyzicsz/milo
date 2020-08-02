@@ -1,7 +1,7 @@
 package com.phyzicsz.milo.geo;
 
-import com.phyzics.milo.geodesy.GeodeticCurve;
-import com.phyzics.milo.geodesy.GlobalCoordinates;
+import com.phyzicsz.milo.geodesy.GeodeticCurve;
+import com.phyzicsz.milo.geodesy.GlobalCoordinates;
 import static com.phyzicsz.milo.geo.GeoPath.REFERENCE_ELLIPSOID;
 
 public class GeoBlock2 extends GeoPath {

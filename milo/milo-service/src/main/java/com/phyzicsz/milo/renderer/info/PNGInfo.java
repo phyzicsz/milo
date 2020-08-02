@@ -26,9 +26,9 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Node;
 
-import ArmyC2.C2SD.RendererPluginInterface.ISinglePointInfo;
-import ArmyC2.C2SD.Utilities.ErrorLogger;
-import ArmyC2.C2SD.Utilities.ImageInfo;
+import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.common.ErrorLogger;
+import com.phyzicsz.milo.renderer.common.ImageInfo;
 import java.util.Arrays;
 import java.util.Base64;
 

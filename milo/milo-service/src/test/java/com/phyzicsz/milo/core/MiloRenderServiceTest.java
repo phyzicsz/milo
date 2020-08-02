@@ -16,23 +16,17 @@
 package com.phyzicsz.milo.core;
 
 import com.phyzicsz.milo.MiloRenderService;
-import ArmyC2.C2SD.Utilities.MilStdAttributes;
-import ArmyC2.C2SD.Utilities.MilStdSymbol;
-import ArmyC2.C2SD.Utilities.RendererSettings;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import com.phyzicsz.milo.renderer.common.MilStdAttributes;
+import com.phyzicsz.milo.renderer.common.RendererSettings;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import com.phyzicsz.milo.renderer.info.PNGInfo;
 
 /**

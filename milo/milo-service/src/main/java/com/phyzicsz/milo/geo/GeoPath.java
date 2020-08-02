@@ -12,11 +12,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.phyzics.milo.geodesy.Angle;
-import com.phyzics.milo.geodesy.Ellipsoid;
-import com.phyzics.milo.geodesy.GeodeticCalculator;
-import com.phyzics.milo.geodesy.GeodeticCurve;
-import com.phyzics.milo.geodesy.GlobalCoordinates;
+import com.phyzicsz.milo.geodesy.Angle;
+import com.phyzicsz.milo.geodesy.Ellipsoid;
+import com.phyzicsz.milo.geodesy.GeodeticCalculator;
+import com.phyzicsz.milo.geodesy.GeodeticCurve;
+import com.phyzicsz.milo.geodesy.GlobalCoordinates;
 
 public class GeoPath implements Shape {
 

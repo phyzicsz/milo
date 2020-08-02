@@ -1,6 +1,6 @@
 package com.phyzicsz.milo.geo.shape;
 
-import com.phyzics.milo.geodesy.GlobalPosition;
+import com.phyzicsz.milo.geodesy.GlobalPosition;
 
 public class Point {
 
