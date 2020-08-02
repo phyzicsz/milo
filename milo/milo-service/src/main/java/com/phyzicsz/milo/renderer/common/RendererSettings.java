@@ -127,10 +127,6 @@ public class RendererSettings {
     private boolean _scaleEchelon = false;
     private boolean _DrawAffiliationModifierAsLabel = true;
 
-    private static String _MPModifierFontName = "arial";
-    private static int _MPModifierFontType = Font.BOLD;
-    private static int _MPModifierFontSize = 12;
-    private static float _KMLLabelScale = 1.0f;
 
     private static int _DPI = 90;
 
@@ -594,23 +590,9 @@ public class RendererSettings {
         _ModifierFontTracking = TextAttribute.TRACKING_LOOSE;
     }
 
-    public void setMPLabelFont(String name, int type, int size) {
-        _MPModifierFontName = name;
-        _MPModifierFontType = type;
-        _MPModifierFontSize = size;
-        _KMLLabelScale = 1.0f;
-        //_MPModifierFontKerning = 0;
-        //_MPModifierFontTracking = TextAttribute.TRACKING_LOOSE;
-    }
+   
 
-    public void setMPLabelFont(String name, int type, int size, float kmlScale) {
-        _MPModifierFontName = name;
-        _MPModifierFontType = type;
-        _MPModifierFontSize = Math.round(size * kmlScale);
-        _KMLLabelScale = kmlScale;
-        //_MPModifierFontKerning = 0;
-        //_MPModifierFontTracking = TextAttribute.TRACKING_LOOSE;
-    }
+  
 
     /**
      *
@@ -725,34 +707,7 @@ public class RendererSettings {
         }
     }
 
-    /**
-     * get font object used for labels
-     *
-     * @return Font object
-     */
-    public Font getMPLabelFont() {
-        try {
-            Map<TextAttribute, Object> map = new HashMap<TextAttribute, Object>();
-//            map.put(TextAttribute.FONT, _ModifierFontName);
-//            map.put(TextAttribute.SIZE, _ModifierFontSize);
-//            map.put(TextAttribute.WEIGHT, _ModifierFontType);
-            //map.put(TextAttribute.KERNING, _ModifierFontKerning);
-            //map.put(TextAttribute.TRACKING, _ModifierFontTracking);
-
-            Font temp = new Font(_MPModifierFontName, _MPModifierFontType, _MPModifierFontSize);
-
-            return temp;//.deriveFont(map);
-        } catch (Exception ex) {
-            String message = "font creation error, returning \"" + _MPModifierFontName + "\" font, " + _MPModifierFontSize + "pt. Check font name and type.";
-            logger.error(message, ex);
-            return new Font("arial", Font.BOLD, 12);
-        }
-    }
-
-    public float getKMLLabelScale() {
-        return _KMLLabelScale;
-    }
-
+   
     /**
      ** Get a boolean indicating between the use of ENY labels in all segments
      * (false) or to only set 2 labels one at the north and the other one at the

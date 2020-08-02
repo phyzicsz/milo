@@ -35,7 +35,6 @@ com/phyzicsz/milo/renderer/common/SinglePointFont.class
 com/phyzicsz/milo/renderer/common/MilStdSymbol.class
 com/phyzicsz/milo/renderer/tactical/TacticalGraphicText.class
 com/phyzicsz/milo/renderer/common/ShapeInfo.class
-com/phyzicsz/milo/renderer/common/IMultiPointRenderer.class
 com/phyzicsz/milo/renderer/line/Channels.class
 com/phyzicsz/milo/renderer/tactical/clsUtility.class
 com/phyzicsz/milo/renderer/utilities/JavaRendererUtilities.class

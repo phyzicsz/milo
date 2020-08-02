@@ -79,24 +79,8 @@ public class MilStdAttributes {
     
     public static final String Renderer = "RENDERER";
     
-    public static final String LookAtTag = "LOOKAT";
     
-    /**
-     * AGL or MSL typically
-     */
-    public static final String AltitudeMode = "ALTMODE";
-    
-    /**
-     * If false, the renderer will create a bunch of little lines to create
-     * the "dash" effect (expensive but necessary for KML).  
-     * If true, it will be on the user to create the dash effect using the
-     * DashArray from the Stroke object from the ShapeInfo object.
-     */
-    public static final String UseDashArray = "USEDASHARRAY";
-    
-    public static final String UsePatternFill = "USEPATTERNFILL";
-    
-    public static final String PatternFillType = "PATTERNFILLTYPE";
+   
     
     
     /**
@@ -104,23 +88,5 @@ public class MilStdAttributes {
      * will just get the core symbol.
      */
     public static final String DrawAsIcon = "ICON";
-    
-    public static final String HideOptionalLabels = "HIDEOPTIONALLABELS";
-    
-    public static ArrayList<String> GetModifierList()
-    {
-        ArrayList<String> list = new ArrayList<String>();
-        
-        list.add(LineColor);
-        list.add(FillColor);
-        list.add(PixelSize);
-        list.add(Scale);
-        list.add(KeepUnitRatio);
-        list.add(Alpha);
-        list.add(OutlineSymbol);
-        list.add(OutlineColor);
-        list.add(SymbologyStandard);
-        
-        return list;
-    }
+
 }

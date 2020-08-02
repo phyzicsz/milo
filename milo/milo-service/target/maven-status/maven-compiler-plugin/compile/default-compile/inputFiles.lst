@@ -24,7 +24,6 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/TGLight.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/MilStdAttributes.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/XMLUtil.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/IMultiPointRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/DISMSupport.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/UnitFontLookupInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/countsupport.java

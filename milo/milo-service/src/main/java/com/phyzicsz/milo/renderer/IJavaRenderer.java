@@ -169,8 +169,7 @@ public interface IJavaRenderer {
     public MilStdSymbol Render(String symbolCode, String UUID, ArrayList<Point2D.Double> coords, Map<String, String> Modifiers, IPointConversion converter, Rectangle2D clipBounds) throws RendererException;
 
     /**
-     * Returns an icon representing a milstd symbol. Useful for adding icons in
-     * tree controls. Does not work for multipoints currently.
+     * Returns an icon representing a milstd symbol. 
      *
      * @param symbolID 15 character symbol ID
      * @param iconSize if 15, returned icon will be sized for 15x15 pixels

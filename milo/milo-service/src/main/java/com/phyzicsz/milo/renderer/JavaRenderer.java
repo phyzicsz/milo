@@ -22,7 +22,6 @@ import com.phyzicsz.milo.renderer.common.PointConversionDummy;
 import com.phyzicsz.milo.renderer.common.ModifiersTG;
 import com.phyzicsz.milo.renderer.common.SymbolDraw;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
-import com.phyzicsz.milo.renderer.common.IMultiPointRenderer;
 import com.phyzicsz.milo.renderer.common.ImageInfo;
 import com.phyzicsz.milo.renderer.common.UnitFontLookupInfo;
 import com.phyzicsz.milo.renderer.common.UnitDefTable;
@@ -53,7 +52,7 @@ public class JavaRenderer implements IJavaRenderer {
     private static JavaRenderer _instance = null;
     private static String _className = "";
     private static SinglePointRenderer _SPR = null;
-    private static IMultiPointRenderer _MPR = null;
+//    private static IMultiPointRenderer _MPR = null;
     private static TacticalGraphicIconRenderer _TGIR = null;
 
     private SymbolDefTable _SymbolDefTable = null;
@@ -812,7 +811,7 @@ public class JavaRenderer implements IJavaRenderer {
                             _SPR.ProcessSPSymbol(symbol, converter);
                         } else {
                             //send to multipointRendering
-                            _MPR.render(symbol, converter, clipBounds);
+//                            _MPR.render(symbol, converter, clipBounds);
                             //ProcessTGSymbol(symbol, converter,clipBounds);
                         }
                     } else {
