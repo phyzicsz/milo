@@ -2,31 +2,43 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.phyzicsz.milo.renderer.line;
+
+import com.phyzicsz.milo.renderer.common.MilStdSymbol;
 import java.util.ArrayList;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * A class for the interface between the points calculation CELineArray and
- * the tactical renderer.
+ * A class for the interface between the points calculation CELineArray and the
+ * tactical renderer.
  *
  * @author Michael Deutch
  */
 public final class CELineArray {
-    private static final String _className="CELineArray";
+
+    private static final Logger logger = LoggerFactory.getLogger(MilStdSymbol.class);
+
+    private static final String _className = "CELineArray";
+
     /**
      * Client interface function, called by tactical renderer clsChannelUtility
-     * @param lpsaUpperVBPoints the client points as an array of 2-tuples: x pixels, y pixels
+     *
+     * @param lpsaUpperVBPoints the client points as an array of 2-tuples: x
+     * pixels, y pixels
      * @param lpsaLowerVBPoints generally the same as the upper points
-     * @param resultVBPoints calculated points to return as 3 tuples: x,y,linestyle
+     * @param resultVBPoints calculated points to return as 3 tuples:
+     * x,y,linestyle
      * @param vblUpperCounter the number of client points
      * @param vblLowerCounter the number of client points
      * @param vbiDrawThis the line type as a hierarchy
      * @param vblChannelWidth the channel width in pixels
-     * @param usePtr currently being used as the distance from the this to the back of the arrowhead
-     * @param shapes ShapeInfo object to return which will contain the GeneralPath for the line
+     * @param usePtr currently being used as the distance from the this to the
+     * back of the arrowhead
+     * @param shapes ShapeInfo object to return which will contain the
+     * GeneralPath for the line
      * @return the point count for the return array
      */
     public static int CGetChannel2Double(double[] lpsaUpperVBPoints,
@@ -37,9 +49,8 @@ public final class CELineArray {
             int vbiDrawThis,
             int vblChannelWidth,
             int usePtr,
-            ArrayList<Shape2>shapes,
-            int rev) throws Exception
-    {
+            ArrayList<Shape2> shapes,
+            int rev) throws Exception {
         int lResult = -1;
 
         try {
@@ -55,23 +66,23 @@ public final class CELineArray {
                     rev);
 
             //GC.Collect();
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CGetChannel2Double",
-                    new RendererException("Failed inside CGetChannel2Double " + Integer.toString(vbiDrawThis), exc));
+        } catch (Exception ex) {
+            logger.error("failed to convert channel", ex);
         }
         return lResult;
     }
+
     /**
-    * public function to return the line count required for all of the symbols
-    *
-    * @param plArrayOfLongs the client points as an array of POINT2 in pixels.
-    * @param lElements the number of client points.
-    * @param lineType the line type
-    * @param ChannelWdith the chanel width in pixels
-    * @param rev the Mil-Standard-2525 revision 
-    *
-    * @return the number of points which will be required for the symbol.
-    */
+     * public function to return the line count required for all of the symbols
+     *
+     * @param plArrayOfLongs the client points as an array of POINT2 in pixels.
+     * @param lElements the number of client points.
+     * @param lineType the line type
+     * @param ChannelWdith the chanel width in pixels
+     * @param rev the Mil-Standard-2525 revision
+     *
+     * @return the number of points which will be required for the symbol.
+     */
     public static int CGetLineCountDouble(double[] plArrayOfLongs,
             int lElements, //number of points
             int lineType,
@@ -143,10 +154,9 @@ public final class CELineArray {
                     break;
                 default:
                     //call GetCountersDouble for the remaining line types.
-                    lResult = countsupport.GetCountersDouble(lineType, lElements, pLinePoints, null,rev);
+                    lResult = countsupport.GetCountersDouble(lineType, lElements, pLinePoints, null, rev);
                     break;
             }
-
 
             //clean up
             //pvblCounters = null;
@@ -155,704 +165,995 @@ public final class CELineArray {
             pUpperLinePoints = null;
             pUpperLowerLinePoints = null;
             //GC.Collect();
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CGetLineCountDouble",
-                    new RendererException("Failed inside CGetLineCount " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("failed to get line count", ex);
         }
         return (lResult);
     }
+
     /**
-     * Return the line type as a hierarchy from the 15 character Mil-Standard-2525 symbol code
+     * Return the line type as a hierarchy from the 15 character
+     * Mil-Standard-2525 symbol code
+     *
      * @param strLine
      * @param rev the Mil-Standard-2525 revision
      * @return
      */
     public static int CGetLinetypeFromString(String strLine,
-            int rev)
-    {
-        try
-        {
+            int rev) {
+        try {
             //added this section so the SEC tester can test from generic names
             //these strings will not be used by the CPOF client            
-            if(strLine.length()<15)
-            {
-                if(rev==RendererSettings.Symbology_2525C)
-                {
-                    if(strLine.equalsIgnoreCase("SCREEN"))
+            if (strLine.length() < 15) {
+                if (rev == RendererSettings.Symbology_2525C) {
+                    if (strLine.equalsIgnoreCase("SCREEN")) {
                         return TacticalLines.SCREEN_REVC;
-                    if(strLine.equalsIgnoreCase("COVER"))
+                    }
+                    if (strLine.equalsIgnoreCase("COVER")) {
                         return TacticalLines.COVER_REVC;
-                    if(strLine.equalsIgnoreCase("GUARD"))
-                        return TacticalLines.GUARD_REVC;                    
-                    if(strLine.equalsIgnoreCase("SEIZE"))
-                        return TacticalLines.SEIZE_REVC;                    
+                    }
+                    if (strLine.equalsIgnoreCase("GUARD")) {
+                        return TacticalLines.GUARD_REVC;
+                    }
+                    if (strLine.equalsIgnoreCase("SEIZE")) {
+                        return TacticalLines.SEIZE_REVC;
+                    }
                 }
-                if(strLine.equalsIgnoreCase("BS_LINE"))
+                if (strLine.equalsIgnoreCase("BS_LINE")) {
                     return TacticalLines.BS_LINE;
-                if(strLine.equalsIgnoreCase("BS_AREA"))
+                }
+                if (strLine.equalsIgnoreCase("BS_AREA")) {
                     return TacticalLines.BS_AREA;
-                if(strLine.equalsIgnoreCase("BS_CROSS"))
+                }
+                if (strLine.equalsIgnoreCase("BS_CROSS")) {
                     return TacticalLines.BS_CROSS;
-                if(strLine.equalsIgnoreCase("BS_RECTANGLE"))
+                }
+                if (strLine.equalsIgnoreCase("BS_RECTANGLE")) {
                     return TacticalLines.BS_RECTANGLE;
-                if(strLine.equalsIgnoreCase("PBS_RECTANGLE"))
+                }
+                if (strLine.equalsIgnoreCase("PBS_RECTANGLE")) {
                     return TacticalLines.PBS_RECTANGLE;
-                if(strLine.equalsIgnoreCase("PBS_SQUARE"))
+                }
+                if (strLine.equalsIgnoreCase("PBS_SQUARE")) {
                     return TacticalLines.PBS_SQUARE;
+                }
                 //buffered lines
-                if(strLine.equalsIgnoreCase("BBS_LINE"))
+                if (strLine.equalsIgnoreCase("BBS_LINE")) {
                     return TacticalLines.BBS_LINE;
-                if(strLine.equalsIgnoreCase("BBS_AREA"))
+                }
+                if (strLine.equalsIgnoreCase("BBS_AREA")) {
                     return TacticalLines.BBS_AREA;
-                if(strLine.equalsIgnoreCase("BBS_POINT"))
+                }
+                if (strLine.equalsIgnoreCase("BBS_POINT")) {
                     return TacticalLines.BBS_POINT;
-                if(strLine.equalsIgnoreCase("BBS_RECTANGLE"))
+                }
+                if (strLine.equalsIgnoreCase("BBS_RECTANGLE")) {
                     return TacticalLines.BBS_RECTANGLE;
-                if(strLine.equalsIgnoreCase("BS_BBOX"))
+                }
+                if (strLine.equalsIgnoreCase("BS_BBOX")) {
                     return TacticalLines.BS_BBOX;
-                
-                if(strLine.equalsIgnoreCase("BS_ELLIPSE"))
+                }
+
+                if (strLine.equalsIgnoreCase("BS_ELLIPSE")) {
                     return TacticalLines.BS_ELLIPSE;
-                if(strLine.equalsIgnoreCase("PBS_ELLIPSE"))
+                }
+                if (strLine.equalsIgnoreCase("PBS_ELLIPSE")) {
                     return TacticalLines.PBS_ELLIPSE;
-                if(strLine.equalsIgnoreCase("PBS_CIRCLE"))
+                }
+                if (strLine.equalsIgnoreCase("PBS_CIRCLE")) {
                     return TacticalLines.PBS_CIRCLE;
-                if(strLine.equalsIgnoreCase("OVERHEAD_WIRE"))
+                }
+                if (strLine.equalsIgnoreCase("OVERHEAD_WIRE")) {
                     return TacticalLines.OVERHEAD_WIRE;
-                if(strLine.equalsIgnoreCase("CORDONSEARCH"))
+                }
+                if (strLine.equalsIgnoreCase("CORDONSEARCH")) {
                     return TacticalLines.CORDONSEARCH;
-                if(strLine.equalsIgnoreCase("CORDONKNOCK"))
+                }
+                if (strLine.equalsIgnoreCase("CORDONKNOCK")) {
                     return TacticalLines.CORDONKNOCK;
-                if(strLine.equalsIgnoreCase("NAVIGATION"))
+                }
+                if (strLine.equalsIgnoreCase("NAVIGATION")) {
                     return TacticalLines.NAVIGATION;
-                if(strLine.equalsIgnoreCase("BLOCK"))
+                }
+                if (strLine.equalsIgnoreCase("BLOCK")) {
                     return TacticalLines.BLOCK;
-                if(strLine.equalsIgnoreCase("BREACH"))
+                }
+                if (strLine.equalsIgnoreCase("BREACH")) {
                     return TacticalLines.BREACH;
-                if(strLine.equalsIgnoreCase("BYPASS"))
+                }
+                if (strLine.equalsIgnoreCase("BYPASS")) {
                     return TacticalLines.BYPASS;
-                if(strLine.equalsIgnoreCase("CANALIZE"))
+                }
+                if (strLine.equalsIgnoreCase("CANALIZE")) {
                     return TacticalLines.CANALIZE;
-                if(strLine.equalsIgnoreCase("CLEAR"))
+                }
+                if (strLine.equalsIgnoreCase("CLEAR")) {
                     return TacticalLines.CLEAR;
-                if(strLine.equalsIgnoreCase("CONTAIN"))
+                }
+                if (strLine.equalsIgnoreCase("CONTAIN")) {
                     return TacticalLines.CONTAIN;
-                if(strLine.equalsIgnoreCase("CATK"))
+                }
+                if (strLine.equalsIgnoreCase("CATK")) {
                     return TacticalLines.CATK;
-                if(strLine.equalsIgnoreCase("CATKBYFIRE"))
+                }
+                if (strLine.equalsIgnoreCase("CATKBYFIRE")) {
                     return TacticalLines.CATKBYFIRE;
-                if(strLine.equalsIgnoreCase("DELAY"))
+                }
+                if (strLine.equalsIgnoreCase("DELAY")) {
                     return TacticalLines.DELAY;
-                if(strLine.equalsIgnoreCase("DISRUPT"))
+                }
+                if (strLine.equalsIgnoreCase("DISRUPT")) {
                     return TacticalLines.DISRUPT;
-                if(strLine.equalsIgnoreCase("FIX"))
+                }
+                if (strLine.equalsIgnoreCase("FIX")) {
                     return TacticalLines.FIX;
-                if(strLine.equalsIgnoreCase("FOLLA"))
+                }
+                if (strLine.equalsIgnoreCase("FOLLA")) {
                     return TacticalLines.FOLLA;
-                if(strLine.equalsIgnoreCase("FOLSP"))
+                }
+                if (strLine.equalsIgnoreCase("FOLSP")) {
                     return TacticalLines.FOLSP;
-                if(strLine.equalsIgnoreCase("ISOLATE"))
+                }
+                if (strLine.equalsIgnoreCase("ISOLATE")) {
                     return TacticalLines.ISOLATE;
-                if(strLine.equalsIgnoreCase("OCCUPY"))
+                }
+                if (strLine.equalsIgnoreCase("OCCUPY")) {
                     return TacticalLines.OCCUPY;
-                if(strLine.equalsIgnoreCase("RIP"))
+                }
+                if (strLine.equalsIgnoreCase("RIP")) {
                     return TacticalLines.RIP;
-                if(strLine.equalsIgnoreCase("RETAIN"))
+                }
+                if (strLine.equalsIgnoreCase("RETAIN")) {
                     return TacticalLines.RETAIN;
-                if(strLine.equalsIgnoreCase("RETIRE"))
+                }
+                if (strLine.equalsIgnoreCase("RETIRE")) {
                     return TacticalLines.RETIRE;
-                if(strLine.equalsIgnoreCase("SECURE"))
+                }
+                if (strLine.equalsIgnoreCase("SECURE")) {
                     return TacticalLines.SECURE;
-                if(strLine.equalsIgnoreCase("SCREEN"))
+                }
+                if (strLine.equalsIgnoreCase("SCREEN")) {
                     return TacticalLines.SCREEN;
-                if(strLine.equalsIgnoreCase("COVER"))
+                }
+                if (strLine.equalsIgnoreCase("COVER")) {
                     return TacticalLines.COVER;
-                if(strLine.equalsIgnoreCase("GUARD"))
+                }
+                if (strLine.equalsIgnoreCase("GUARD")) {
                     return TacticalLines.GUARD;
-                if(strLine.equalsIgnoreCase("SEZIE"))
+                }
+                if (strLine.equalsIgnoreCase("SEZIE")) {
                     return TacticalLines.SEIZE;
-                if(strLine.equalsIgnoreCase("WITHDRAW"))
+                }
+                if (strLine.equalsIgnoreCase("WITHDRAW")) {
                     return TacticalLines.WITHDRAW;
-                if(strLine.equalsIgnoreCase("WDRAWUP"))
+                }
+                if (strLine.equalsIgnoreCase("WDRAWUP")) {
                     return TacticalLines.WDRAWUP;
+                }
 
-                if(strLine.equalsIgnoreCase("BOUNDARY"))
+                if (strLine.equalsIgnoreCase("BOUNDARY")) {
                     return TacticalLines.BOUNDARY;
-                if(strLine.equalsIgnoreCase("FLOT"))
+                }
+                if (strLine.equalsIgnoreCase("FLOT")) {
                     return TacticalLines.FLOT;
-                if(strLine.equalsIgnoreCase("LC"))
+                }
+                if (strLine.equalsIgnoreCase("LC")) {
                     return TacticalLines.LC;
-                if(strLine.equalsIgnoreCase("PL"))
+                }
+                if (strLine.equalsIgnoreCase("PL")) {
                     return TacticalLines.PL;
-                if(strLine.equalsIgnoreCase("LL"))
+                }
+                if (strLine.equalsIgnoreCase("LL")) {
                     return TacticalLines.LL;
-                if(strLine.equalsIgnoreCase("GENERAL"))
+                }
+                if (strLine.equalsIgnoreCase("GENERAL")) {
                     return TacticalLines.GENERAL;
-                if(strLine.equalsIgnoreCase("GENERIC"))
+                }
+                if (strLine.equalsIgnoreCase("GENERIC")) {
                     return TacticalLines.GENERIC;
-                if(strLine.equalsIgnoreCase("ASSY"))
+                }
+                if (strLine.equalsIgnoreCase("ASSY")) {
                     return TacticalLines.ASSY;
-                if(strLine.equalsIgnoreCase("EA"))
+                }
+                if (strLine.equalsIgnoreCase("EA")) {
                     return TacticalLines.EA;
-                if(strLine.equalsIgnoreCase("FORT"))
+                }
+                if (strLine.equalsIgnoreCase("FORT")) {
                     return TacticalLines.FORT;
-                if(strLine.equalsIgnoreCase("DZ"))
+                }
+                if (strLine.equalsIgnoreCase("DZ")) {
                     return TacticalLines.DZ;
-                if(strLine.equalsIgnoreCase("EZ"))
+                }
+                if (strLine.equalsIgnoreCase("EZ")) {
                     return TacticalLines.EZ;
-                if(strLine.equalsIgnoreCase("LZ"))
+                }
+                if (strLine.equalsIgnoreCase("LZ")) {
                     return TacticalLines.LZ;
-                if(strLine.equalsIgnoreCase("PZ"))
+                }
+                if (strLine.equalsIgnoreCase("PZ")) {
                     return TacticalLines.PZ;
-                if(strLine.equalsIgnoreCase("SARA"))
+                }
+                if (strLine.equalsIgnoreCase("SARA")) {
                     return TacticalLines.SARA;
-                if(strLine.equalsIgnoreCase("LAA"))
+                }
+                if (strLine.equalsIgnoreCase("LAA")) {
                     return TacticalLines.LAA;
-                if(strLine.equalsIgnoreCase("AIRFIELD"))
+                }
+                if (strLine.equalsIgnoreCase("AIRFIELD")) {
                     return TacticalLines.AIRFIELD;
-                if(strLine.equalsIgnoreCase("AC"))
+                }
+                if (strLine.equalsIgnoreCase("AC")) {
                     return TacticalLines.AC;
-                if(strLine.equalsIgnoreCase("MRR"))
+                }
+                if (strLine.equalsIgnoreCase("MRR")) {
                     return TacticalLines.MRR;
-                if(strLine.equalsIgnoreCase("MRR_USAS"))
+                }
+                if (strLine.equalsIgnoreCase("MRR_USAS")) {
                     return TacticalLines.MRR_USAS;
-                if(strLine.equalsIgnoreCase("SAAFR"))
+                }
+                if (strLine.equalsIgnoreCase("SAAFR")) {
                     return TacticalLines.SAAFR;
-                if(strLine.equalsIgnoreCase("UAV"))
+                }
+                if (strLine.equalsIgnoreCase("UAV")) {
                     return TacticalLines.UAV;
-                if(strLine.equalsIgnoreCase("UAV_USAS"))
+                }
+                if (strLine.equalsIgnoreCase("UAV_USAS")) {
                     return TacticalLines.UAV_USAS;
-                if(strLine.equalsIgnoreCase("LLTR"))
+                }
+                if (strLine.equalsIgnoreCase("LLTR")) {
                     return TacticalLines.LLTR;
+                }
 
-                if(strLine.equalsIgnoreCase("ROZ"))
+                if (strLine.equalsIgnoreCase("ROZ")) {
                     return TacticalLines.ROZ;
-                if(strLine.equalsIgnoreCase("SHORADZ"))
+                }
+                if (strLine.equalsIgnoreCase("SHORADZ")) {
                     return TacticalLines.FAADZ;
-                if(strLine.equalsIgnoreCase("FAADZ"))
+                }
+                if (strLine.equalsIgnoreCase("FAADZ")) {
                     return TacticalLines.FAADZ;
-                if(strLine.equalsIgnoreCase("HIDACZ"))
+                }
+                if (strLine.equalsIgnoreCase("HIDACZ")) {
                     return TacticalLines.HIDACZ;
-                if(strLine.equalsIgnoreCase("MEZ"))
+                }
+                if (strLine.equalsIgnoreCase("MEZ")) {
                     return TacticalLines.MEZ;
-                if(strLine.equalsIgnoreCase("LOMEZ"))
+                }
+                if (strLine.equalsIgnoreCase("LOMEZ")) {
                     return TacticalLines.LOMEZ;
-                if(strLine.equalsIgnoreCase("HIMEZ"))
+                }
+                if (strLine.equalsIgnoreCase("HIMEZ")) {
                     return TacticalLines.HIMEZ;
-                if(strLine.equalsIgnoreCase("WFZ"))
+                }
+                if (strLine.equalsIgnoreCase("WFZ")) {
                     return TacticalLines.WFZ;
-                if(strLine.equalsIgnoreCase("DECEIVE"))
+                }
+                if (strLine.equalsIgnoreCase("DECEIVE")) {
                     return TacticalLines.DECEIVE;
-                if(strLine.equalsIgnoreCase("AAFNT"))
+                }
+                if (strLine.equalsIgnoreCase("AAFNT")) {
                     return TacticalLines.AAFNT;
-                if(strLine.equalsIgnoreCase("DIRATKFNT"))
+                }
+                if (strLine.equalsIgnoreCase("DIRATKFNT")) {
                     return TacticalLines.DIRATKFNT;
-                if(strLine.equalsIgnoreCase("DMA"))
+                }
+                if (strLine.equalsIgnoreCase("DMA")) {
                     return TacticalLines.DMA;
-                if(strLine.equalsIgnoreCase("DMAF"))
+                }
+                if (strLine.equalsIgnoreCase("DMAF")) {
                     return TacticalLines.DMAF;
-                if(strLine.equalsIgnoreCase("DUMMY"))
+                }
+                if (strLine.equalsIgnoreCase("DUMMY")) {
                     return TacticalLines.DUMMY;
-                if(strLine.equalsIgnoreCase("FEBA"))
+                }
+                if (strLine.equalsIgnoreCase("FEBA")) {
                     return TacticalLines.FEBA;
-                if(strLine.equalsIgnoreCase("PDF"))
+                }
+                if (strLine.equalsIgnoreCase("PDF")) {
                     return TacticalLines.PDF;
-                if(strLine.equalsIgnoreCase("BATTLE"))
+                }
+                if (strLine.equalsIgnoreCase("BATTLE")) {
                     return TacticalLines.BATTLE;
-                if(strLine.equalsIgnoreCase("PNO"))
+                }
+                if (strLine.equalsIgnoreCase("PNO")) {
                     return TacticalLines.PNO;
-                if(strLine.equalsIgnoreCase("EA1"))
+                }
+                if (strLine.equalsIgnoreCase("EA1")) {
                     return TacticalLines.EA1;
-                if(strLine.equalsIgnoreCase("AXAD"))
+                }
+                if (strLine.equalsIgnoreCase("AXAD")) {
                     return TacticalLines.AXAD;
-                if(strLine.equalsIgnoreCase("AIRAOA"))
+                }
+                if (strLine.equalsIgnoreCase("AIRAOA")) {
                     return TacticalLines.AIRAOA;
-                if(strLine.equalsIgnoreCase("AAAAA"))
+                }
+                if (strLine.equalsIgnoreCase("AAAAA")) {
                     return TacticalLines.AAAAA;
-                if(strLine.equalsIgnoreCase("ROTARY"))
+                }
+                if (strLine.equalsIgnoreCase("ROTARY")) {
                     return TacticalLines.AAAAA;
-                if(strLine.equalsIgnoreCase("MAIN"))
+                }
+                if (strLine.equalsIgnoreCase("MAIN")) {
                     return TacticalLines.MAIN;
-                if(strLine.equalsIgnoreCase("SPT"))
+                }
+                if (strLine.equalsIgnoreCase("SPT")) {
                     return TacticalLines.SPT;
-                if(strLine.equalsIgnoreCase("DIRATKAIR"))
+                }
+                if (strLine.equalsIgnoreCase("DIRATKAIR")) {
                     return TacticalLines.DIRATKAIR;
-                if(strLine.equalsIgnoreCase("DIRATKGND"))
+                }
+                if (strLine.equalsIgnoreCase("DIRATKGND")) {
                     return TacticalLines.DIRATKGND;
-                if(strLine.equalsIgnoreCase("DIRATKSPT"))
+                }
+                if (strLine.equalsIgnoreCase("DIRATKSPT")) {
                     return TacticalLines.DIRATKSPT;
+                }
 
-                if(strLine.equalsIgnoreCase("FCL"))
+                if (strLine.equalsIgnoreCase("FCL")) {
                     return TacticalLines.FCL;
-                if(strLine.equalsIgnoreCase("IL"))
+                }
+                if (strLine.equalsIgnoreCase("IL")) {
                     return TacticalLines.IL;
-                if(strLine.equalsIgnoreCase("LOA"))
+                }
+                if (strLine.equalsIgnoreCase("LOA")) {
                     return TacticalLines.LOA;
-                if(strLine.equalsIgnoreCase("LOD"))
+                }
+                if (strLine.equalsIgnoreCase("LOD")) {
                     return TacticalLines.LOD;
-                if(strLine.equalsIgnoreCase("LDLC"))
+                }
+                if (strLine.equalsIgnoreCase("LDLC")) {
                     return TacticalLines.LDLC;
-                if(strLine.equalsIgnoreCase("PLD"))
+                }
+                if (strLine.equalsIgnoreCase("PLD")) {
                     return TacticalLines.PLD;
-                if(strLine.equalsIgnoreCase("ASSAULT"))
+                }
+                if (strLine.equalsIgnoreCase("ASSAULT")) {
                     return TacticalLines.ASSAULT;
-                if(strLine.equalsIgnoreCase("ATKPOS"))
+                }
+                if (strLine.equalsIgnoreCase("ATKPOS")) {
                     return TacticalLines.ATKPOS;
-                if(strLine.equalsIgnoreCase("ATKBYFIRE"))
+                }
+                if (strLine.equalsIgnoreCase("ATKBYFIRE")) {
                     return TacticalLines.ATKBYFIRE;
-                if(strLine.equalsIgnoreCase("SPTBYFIRE"))
+                }
+                if (strLine.equalsIgnoreCase("SPTBYFIRE")) {
                     return TacticalLines.SPTBYFIRE;
+                }
 
-                if(strLine.equalsIgnoreCase("ENCIRCLE"))
+                if (strLine.equalsIgnoreCase("ENCIRCLE")) {
                     return TacticalLines.ENCIRCLE;
-                if(strLine.equalsIgnoreCase("SEIZE"))
+                }
+                if (strLine.equalsIgnoreCase("SEIZE")) {
                     return TacticalLines.SEIZE;
-                if(strLine.equalsIgnoreCase("OBJ"))
+                }
+                if (strLine.equalsIgnoreCase("OBJ")) {
                     return TacticalLines.OBJ;
-                if(strLine.equalsIgnoreCase("PEN"))
+                }
+                if (strLine.equalsIgnoreCase("PEN")) {
                     return TacticalLines.PEN;
-                if(strLine.equalsIgnoreCase("PENETRATE"))
+                }
+                if (strLine.equalsIgnoreCase("PENETRATE")) {
                     return TacticalLines.PENETRATE;
-                if(strLine.equalsIgnoreCase("AMBUSH"))
+                }
+                if (strLine.equalsIgnoreCase("AMBUSH")) {
                     return TacticalLines.AMBUSH;
-                if(strLine.equalsIgnoreCase("HOLD"))
+                }
+                if (strLine.equalsIgnoreCase("HOLD")) {
                     return TacticalLines.HOLD;
-                if(strLine.equalsIgnoreCase("RELEASE"))
+                }
+                if (strLine.equalsIgnoreCase("RELEASE")) {
                     return TacticalLines.RELEASE;
-                if(strLine.equalsIgnoreCase("BRDGHD"))
+                }
+                if (strLine.equalsIgnoreCase("BRDGHD")) {
                     return TacticalLines.BRDGHD;
-                if(strLine.equalsIgnoreCase("AO"))
+                }
+                if (strLine.equalsIgnoreCase("AO")) {
                     return TacticalLines.AO;
-                if(strLine.equalsIgnoreCase("AIRHEAD"))
+                }
+                if (strLine.equalsIgnoreCase("AIRHEAD")) {
                     return TacticalLines.AIRHEAD;
-                if(strLine.equalsIgnoreCase("NAI"))
+                }
+                if (strLine.equalsIgnoreCase("NAI")) {
                     return TacticalLines.NAI;
-                if(strLine.equalsIgnoreCase("TAI"))
+                }
+                if (strLine.equalsIgnoreCase("TAI")) {
                     return TacticalLines.TAI;
+                }
 
-                if(strLine.equalsIgnoreCase("BELT"))
+                if (strLine.equalsIgnoreCase("BELT")) {
                     return TacticalLines.BELT;
-                if(strLine.equalsIgnoreCase("BELT1"))
+                }
+                if (strLine.equalsIgnoreCase("BELT1")) {
                     return TacticalLines.BELT1;
-                if(strLine.equalsIgnoreCase("LINE"))
+                }
+                if (strLine.equalsIgnoreCase("LINE")) {
                     return TacticalLines.LINE;
-                if(strLine.equalsIgnoreCase("ZONE"))
+                }
+                if (strLine.equalsIgnoreCase("ZONE")) {
                     return TacticalLines.ZONE;
-                if(strLine.equalsIgnoreCase("OBSFAREA"))
+                }
+                if (strLine.equalsIgnoreCase("OBSFAREA")) {
                     return TacticalLines.OBSFAREA;
-                if(strLine.equalsIgnoreCase("OBSAREA"))
+                }
+                if (strLine.equalsIgnoreCase("OBSAREA")) {
                     return TacticalLines.OBSAREA;
-                if(strLine.equalsIgnoreCase("ABATIS"))
+                }
+                if (strLine.equalsIgnoreCase("ABATIS")) {
                     return TacticalLines.ABATIS;
+                }
 
-                if(strLine.equalsIgnoreCase("ATDITCH"))
+                if (strLine.equalsIgnoreCase("ATDITCH")) {
                     return TacticalLines.ATDITCH;
-                if(strLine.equalsIgnoreCase("ATDITCHC"))
+                }
+                if (strLine.equalsIgnoreCase("ATDITCHC")) {
                     return TacticalLines.ATDITCHC;
-                if(strLine.equalsIgnoreCase("ATDITCHM"))
+                }
+                if (strLine.equalsIgnoreCase("ATDITCHM")) {
                     return TacticalLines.ATDITCHM;
-                if(strLine.equalsIgnoreCase("ATWALL"))
+                }
+                if (strLine.equalsIgnoreCase("ATWALL")) {
                     return TacticalLines.ATWALL;
-                if(strLine.equalsIgnoreCase("CLUSTER"))
+                }
+                if (strLine.equalsIgnoreCase("CLUSTER")) {
                     return TacticalLines.CLUSTER;
-                if(strLine.equalsIgnoreCase("DEPICT"))
+                }
+                if (strLine.equalsIgnoreCase("DEPICT")) {
                     return TacticalLines.DEPICT;
-                if(strLine.equalsIgnoreCase("GAP"))
+                }
+                if (strLine.equalsIgnoreCase("GAP")) {
                     return TacticalLines.GAP;
-                if(strLine.equalsIgnoreCase("MINED"))
+                }
+                if (strLine.equalsIgnoreCase("MINED")) {
                     return TacticalLines.MINED;
-                if(strLine.equalsIgnoreCase("MNFLDBLK"))
+                }
+                if (strLine.equalsIgnoreCase("MNFLDBLK")) {
                     return TacticalLines.MNFLDBLK;
-                if(strLine.equalsIgnoreCase("MNFLDFIX"))
+                }
+                if (strLine.equalsIgnoreCase("MNFLDFIX")) {
                     return TacticalLines.MNFLDFIX;
-                if(strLine.equalsIgnoreCase("TURN"))
+                }
+                if (strLine.equalsIgnoreCase("TURN")) {
                     return TacticalLines.TURN;
-                if(strLine.equalsIgnoreCase("MNFLDDIS"))
+                }
+                if (strLine.equalsIgnoreCase("MNFLDDIS")) {
                     return TacticalLines.MNFLDDIS;
-                if(strLine.equalsIgnoreCase("UXO"))
+                }
+                if (strLine.equalsIgnoreCase("UXO")) {
                     return TacticalLines.UXO;
-                if(strLine.equalsIgnoreCase("PLANNED"))
+                }
+                if (strLine.equalsIgnoreCase("PLANNED")) {
                     return TacticalLines.PLANNED;
-                if(strLine.equalsIgnoreCase("ESR1"))
+                }
+                if (strLine.equalsIgnoreCase("ESR1")) {
                     return TacticalLines.ESR1;
-                if(strLine.equalsIgnoreCase("ESR2"))
+                }
+                if (strLine.equalsIgnoreCase("ESR2")) {
                     return TacticalLines.ESR2;
-                if(strLine.equalsIgnoreCase("ROADBLK"))
+                }
+                if (strLine.equalsIgnoreCase("ROADBLK")) {
                     return TacticalLines.ROADBLK;
-                if(strLine.equalsIgnoreCase("TRIP"))
+                }
+                if (strLine.equalsIgnoreCase("TRIP")) {
                     return TacticalLines.TRIP;
-                if(strLine.equalsIgnoreCase("UNSP"))
+                }
+                if (strLine.equalsIgnoreCase("UNSP")) {
                     return TacticalLines.UNSP;
-                if(strLine.equalsIgnoreCase("SFENCE"))
+                }
+                if (strLine.equalsIgnoreCase("SFENCE")) {
                     return TacticalLines.SFENCE;
-                if(strLine.equalsIgnoreCase("DFENCE"))
+                }
+                if (strLine.equalsIgnoreCase("DFENCE")) {
                     return TacticalLines.DFENCE;
-                if(strLine.equalsIgnoreCase("DOUBLEA"))
+                }
+                if (strLine.equalsIgnoreCase("DOUBLEA")) {
                     return TacticalLines.DOUBLEA;
-                if(strLine.equalsIgnoreCase("LWFENCE"))
+                }
+                if (strLine.equalsIgnoreCase("LWFENCE")) {
                     return TacticalLines.LWFENCE;
-                if(strLine.equalsIgnoreCase("HWFENCE"))
+                }
+                if (strLine.equalsIgnoreCase("HWFENCE")) {
                     return TacticalLines.HWFENCE;
-                if(strLine.equalsIgnoreCase("SINGLEC"))
+                }
+                if (strLine.equalsIgnoreCase("SINGLEC")) {
                     return TacticalLines.SINGLEC;
-                if(strLine.equalsIgnoreCase("DOUBLEC"))
+                }
+                if (strLine.equalsIgnoreCase("DOUBLEC")) {
                     return TacticalLines.DOUBLEC;
-                if(strLine.equalsIgnoreCase("TRIPLE"))
+                }
+                if (strLine.equalsIgnoreCase("TRIPLE")) {
                     return TacticalLines.TRIPLE;
+                }
 
-                if(strLine.equalsIgnoreCase("EASY"))
+                if (strLine.equalsIgnoreCase("EASY")) {
                     return TacticalLines.EASY;
-                if(strLine.equalsIgnoreCase("BYDIF"))
+                }
+                if (strLine.equalsIgnoreCase("BYDIF")) {
                     return TacticalLines.BYDIF;
-                if(strLine.equalsIgnoreCase("BYIMP"))
+                }
+                if (strLine.equalsIgnoreCase("BYIMP")) {
                     return TacticalLines.BYIMP;
+                }
 
-                if(strLine.equalsIgnoreCase("ASLTXING"))
+                if (strLine.equalsIgnoreCase("ASLTXING")) {
                     return TacticalLines.ASLTXING;
-                if(strLine.equalsIgnoreCase("BRIDGE"))
+                }
+                if (strLine.equalsIgnoreCase("BRIDGE")) {
                     return TacticalLines.BRIDGE;
-                if(strLine.equalsIgnoreCase("FERRY"))
+                }
+                if (strLine.equalsIgnoreCase("FERRY")) {
                     return TacticalLines.FERRY;
-                if(strLine.equalsIgnoreCase("FORD"))
+                }
+                if (strLine.equalsIgnoreCase("FORD")) {
                     return TacticalLines.FORDSITE;
-                if(strLine.equalsIgnoreCase("FORDSITE"))
+                }
+                if (strLine.equalsIgnoreCase("FORDSITE")) {
                     return TacticalLines.FORDSITE;
-                if(strLine.equalsIgnoreCase("FORDIF"))
+                }
+                if (strLine.equalsIgnoreCase("FORDIF")) {
                     return TacticalLines.FORDIF;
-                if(strLine.equalsIgnoreCase("LANE"))
+                }
+                if (strLine.equalsIgnoreCase("LANE")) {
                     return TacticalLines.MFLANE;
-                if(strLine.equalsIgnoreCase("MFLANE"))
+                }
+                if (strLine.equalsIgnoreCase("MFLANE")) {
                     return TacticalLines.MFLANE;
-                if(strLine.equalsIgnoreCase("RAFT"))
+                }
+                if (strLine.equalsIgnoreCase("RAFT")) {
                     return TacticalLines.RAFT;
+                }
 
-                if(strLine.equalsIgnoreCase("FORTL"))
+                if (strLine.equalsIgnoreCase("FORTL")) {
                     return TacticalLines.FORTL;
-                if(strLine.equalsIgnoreCase("FOXHOLE"))
+                }
+                if (strLine.equalsIgnoreCase("FOXHOLE")) {
                     return TacticalLines.FOXHOLE;
-                if(strLine.equalsIgnoreCase("STRONG"))
+                }
+                if (strLine.equalsIgnoreCase("STRONG")) {
                     return TacticalLines.STRONG;
-                if(strLine.equalsIgnoreCase("MSDZ"))
+                }
+                if (strLine.equalsIgnoreCase("MSDZ")) {
                     return TacticalLines.MSDZ;
-                if(strLine.equalsIgnoreCase("RAD"))
+                }
+                if (strLine.equalsIgnoreCase("RAD")) {
                     return TacticalLines.RAD;
-                if(strLine.equalsIgnoreCase("CHEM"))
+                }
+                if (strLine.equalsIgnoreCase("CHEM")) {
                     return TacticalLines.CHEM;
-                if(strLine.equalsIgnoreCase("BIO"))
+                }
+                if (strLine.equalsIgnoreCase("BIO")) {
                     return TacticalLines.BIO;
-                if(strLine.equalsIgnoreCase("DRCL"))
+                }
+                if (strLine.equalsIgnoreCase("DRCL")) {
                     return TacticalLines.DRCL;
+                }
 
-                if(strLine.equalsIgnoreCase("LINTGT"))
+                if (strLine.equalsIgnoreCase("LINTGT")) {
                     return TacticalLines.LINTGT;
-                if(strLine.equalsIgnoreCase("LINTGTS"))
+                }
+                if (strLine.equalsIgnoreCase("LINTGTS")) {
                     return TacticalLines.LINTGTS;
-                if(strLine.equalsIgnoreCase("FPF"))
+                }
+                if (strLine.equalsIgnoreCase("FPF")) {
                     return TacticalLines.FPF;
-                if(strLine.equalsIgnoreCase("FSCL"))
+                }
+                if (strLine.equalsIgnoreCase("FSCL")) {
                     return TacticalLines.FSCL;
-                if(strLine.equalsIgnoreCase("CFL"))
+                }
+                if (strLine.equalsIgnoreCase("CFL")) {
                     return TacticalLines.CFL;
-                if(strLine.equalsIgnoreCase("NFL"))
+                }
+                if (strLine.equalsIgnoreCase("NFL")) {
                     return TacticalLines.NFL;
-                if(strLine.equalsIgnoreCase("MFP"))
+                }
+                if (strLine.equalsIgnoreCase("MFP")) {
                     return TacticalLines.MFP;
-                if(strLine.equalsIgnoreCase("TGMF"))
+                }
+                if (strLine.equalsIgnoreCase("TGMF")) {
                     return TacticalLines.TGMF;
-                if(strLine.equalsIgnoreCase("RFL"))
+                }
+                if (strLine.equalsIgnoreCase("RFL")) {
                     return TacticalLines.RFL;
-                if(strLine.equalsIgnoreCase("AT"))
+                }
+                if (strLine.equalsIgnoreCase("AT")) {
                     return TacticalLines.AT;
+                }
 
-                if(strLine.equalsIgnoreCase("RECTANGULAR"))
+                if (strLine.equalsIgnoreCase("RECTANGULAR")) {
                     return TacticalLines.RECTANGULAR;
-                if(strLine.equalsIgnoreCase("CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CIRCULAR")) {
                     return TacticalLines.CIRCULAR;
-                if(strLine.equalsIgnoreCase("SERIES"))
+                }
+                if (strLine.equalsIgnoreCase("SERIES")) {
                     return TacticalLines.SERIES;
-                if(strLine.equalsIgnoreCase("SMOKE"))
+                }
+                if (strLine.equalsIgnoreCase("SMOKE")) {
                     return TacticalLines.SMOKE;
-                if(strLine.equalsIgnoreCase("BOMB"))
+                }
+                if (strLine.equalsIgnoreCase("BOMB")) {
                     return TacticalLines.BOMB;
+                }
 
-                if(strLine.equalsIgnoreCase("FSA"))
+                if (strLine.equalsIgnoreCase("FSA")) {
                     return TacticalLines.FSA;
-                if(strLine.equalsIgnoreCase("FSA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("FSA_RECTANGULAR")) {
                     return TacticalLines.FSA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("FSA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("FSA_CIRCULAR")) {
                     return TacticalLines.FSA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("ACA"))
+                if (strLine.equalsIgnoreCase("ACA")) {
                     return TacticalLines.ACA;
-                if(strLine.equalsIgnoreCase("ACA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("ACA_RECTANGULAR")) {
                     return TacticalLines.ACA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("ACA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("ACA_CIRCULAR")) {
                     return TacticalLines.ACA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("FFA"))
+                if (strLine.equalsIgnoreCase("FFA")) {
                     return TacticalLines.FFA;
-                if(strLine.equalsIgnoreCase("FFA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("FFA_RECTANGULAR")) {
                     return TacticalLines.FFA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("FFA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("FFA_CIRCULAR")) {
                     return TacticalLines.FFA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("NFA"))
+                if (strLine.equalsIgnoreCase("NFA")) {
                     return TacticalLines.NFA;
-                if(strLine.equalsIgnoreCase("NFA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("NFA_RECTANGULAR")) {
                     return TacticalLines.NFA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("NFA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("NFA_CIRCULAR")) {
                     return TacticalLines.NFA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("RFA"))
+                if (strLine.equalsIgnoreCase("RFA")) {
                     return TacticalLines.RFA;
-                if(strLine.equalsIgnoreCase("RFA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("RFA_RECTANGULAR")) {
                     return TacticalLines.RFA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("RFA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("RFA_CIRCULAR")) {
                     return TacticalLines.RFA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("PAA"))
+                if (strLine.equalsIgnoreCase("PAA")) {
                     return TacticalLines.PAA;
-                if(strLine.equalsIgnoreCase("PAA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("PAA_RECTANGULAR")) {
                     return TacticalLines.PAA_RECTANGULAR_REVC;
-                if(strLine.equalsIgnoreCase("PAA_RECTANGULAR_REVC"))
+                }
+                if (strLine.equalsIgnoreCase("PAA_RECTANGULAR_REVC")) {
                     return TacticalLines.PAA_RECTANGULAR_REVC;
-                if(strLine.equalsIgnoreCase("PAA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("PAA_CIRCULAR")) {
                     return TacticalLines.PAA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("ATI"))
+                if (strLine.equalsIgnoreCase("ATI")) {
                     return TacticalLines.ATI;
-                if(strLine.equalsIgnoreCase("ATI_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("ATI_RECTANGULAR")) {
                     return TacticalLines.ATI_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("ATI_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("ATI_CIRCULAR")) {
                     return TacticalLines.ATI_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("CFFZ"))
+                if (strLine.equalsIgnoreCase("CFFZ")) {
                     return TacticalLines.CFFZ;
-                if(strLine.equalsIgnoreCase("CFFZ_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CFFZ_RECTANGULAR")) {
                     return TacticalLines.CFFZ_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("CFFZ_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CFFZ_CIRCULAR")) {
                     return TacticalLines.CFFZ_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("SENSOR"))
+                if (strLine.equalsIgnoreCase("SENSOR")) {
                     return TacticalLines.SENSOR;
-                if(strLine.equalsIgnoreCase("SENSOR_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("SENSOR_RECTANGULAR")) {
                     return TacticalLines.SENSOR_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("SENSOR_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("SENSOR_CIRCULAR")) {
                     return TacticalLines.SENSOR_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("CENSOR"))
+                if (strLine.equalsIgnoreCase("CENSOR")) {
                     return TacticalLines.CENSOR;
-                if(strLine.equalsIgnoreCase("CENSOR_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CENSOR_RECTANGULAR")) {
                     return TacticalLines.CENSOR_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("CENSOR_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CENSOR_CIRCULAR")) {
                     return TacticalLines.CENSOR_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("DA"))
+                if (strLine.equalsIgnoreCase("DA")) {
                     return TacticalLines.DA;
-                if(strLine.equalsIgnoreCase("DA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("DA_RECTANGULAR")) {
                     return TacticalLines.DA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("DA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("DA_CIRCULAR")) {
                     return TacticalLines.DA_CIRCULAR;
+                }
 
-
-                if(strLine.equalsIgnoreCase("CFZ"))
+                if (strLine.equalsIgnoreCase("CFZ")) {
                     return TacticalLines.CFZ;
-                if(strLine.equalsIgnoreCase("CFZ_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CFZ_RECTANGULAR")) {
                     return TacticalLines.CFZ_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("CFZ_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("CFZ_CIRCULAR")) {
                     return TacticalLines.CFZ_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("ZOR"))
+                if (strLine.equalsIgnoreCase("ZOR")) {
                     return TacticalLines.ZOR;
-                if(strLine.equalsIgnoreCase("ZOR_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("ZOR_RECTANGULAR")) {
                     return TacticalLines.ZOR_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("ZOR_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("ZOR_CIRCULAR")) {
                     return TacticalLines.ZOR_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("TBA"))
+                if (strLine.equalsIgnoreCase("TBA")) {
                     return TacticalLines.TBA;
-                if(strLine.equalsIgnoreCase("TBA_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("TBA_RECTANGULAR")) {
                     return TacticalLines.TBA_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("TBA_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("TBA_CIRCULAR")) {
                     return TacticalLines.TBA_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("TVAR"))
+                if (strLine.equalsIgnoreCase("TVAR")) {
                     return TacticalLines.TVAR;
-                if(strLine.equalsIgnoreCase("TVAR_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("TVAR_RECTANGULAR")) {
                     return TacticalLines.TVAR_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("TVAR_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("TVAR_CIRCULAR")) {
                     return TacticalLines.TVAR_CIRCULAR;
-                
-                if(strLine.equalsIgnoreCase("KILLBOXBLUE"))
+                }
+
+                if (strLine.equalsIgnoreCase("KILLBOXBLUE")) {
                     return TacticalLines.KILLBOXBLUE;
-                if(strLine.equalsIgnoreCase("KILLBOXBLUE_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("KILLBOXBLUE_RECTANGULAR")) {
                     return TacticalLines.KILLBOXBLUE_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("KILLBOXBLUE_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("KILLBOXBLUE_CIRCULAR")) {
                     return TacticalLines.KILLBOXBLUE_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("KILLBOXPURPLE"))
+                if (strLine.equalsIgnoreCase("KILLBOXPURPLE")) {
                     return TacticalLines.KILLBOXPURPLE;
-                if(strLine.equalsIgnoreCase("KILLBOXPURPLE_RECTANGULAR"))
+                }
+                if (strLine.equalsIgnoreCase("KILLBOXPURPLE_RECTANGULAR")) {
                     return TacticalLines.KILLBOXPURPLE_RECTANGULAR;
-                if(strLine.equalsIgnoreCase("KILLBOXPURPLE_CIRCULAR"))
+                }
+                if (strLine.equalsIgnoreCase("KILLBOXPURPLE_CIRCULAR")) {
                     return TacticalLines.KILLBOXPURPLE_CIRCULAR;
+                }
 
-                if(strLine.equalsIgnoreCase("RANGE_FAN"))
+                if (strLine.equalsIgnoreCase("RANGE_FAN")) {
                     return TacticalLines.RANGE_FAN;
-                if(strLine.equalsIgnoreCase("RANGEFAN"))
+                }
+                if (strLine.equalsIgnoreCase("RANGEFAN")) {
                     return TacticalLines.RANGE_FAN;
-                if(strLine.equalsIgnoreCase("RANGE_FANS"))
+                }
+                if (strLine.equalsIgnoreCase("RANGE_FANS")) {
                     return TacticalLines.RANGE_FAN;
-                if(strLine.equalsIgnoreCase("RANGEFANS"))
+                }
+                if (strLine.equalsIgnoreCase("RANGEFANS")) {
                     return TacticalLines.RANGE_FAN;
+                }
 
-                if(strLine.equalsIgnoreCase("SECTOR"))
+                if (strLine.equalsIgnoreCase("SECTOR")) {
                     return TacticalLines.RANGE_FAN_SECTOR;
+                }
 
-                if(strLine.equalsIgnoreCase("CONVOY"))
+                if (strLine.equalsIgnoreCase("CONVOY")) {
                     return TacticalLines.CONVOY;
-                if(strLine.equalsIgnoreCase("HCONVOY"))
+                }
+                if (strLine.equalsIgnoreCase("HCONVOY")) {
                     return TacticalLines.HCONVOY;
+                }
 
-                if(strLine.equalsIgnoreCase("MSR"))
+                if (strLine.equalsIgnoreCase("MSR")) {
                     return TacticalLines.MSR;
-                if(strLine.equalsIgnoreCase("ASR"))
+                }
+                if (strLine.equalsIgnoreCase("ASR")) {
                     return TacticalLines.ASR;
-                if(strLine.equalsIgnoreCase("ONEWAY"))
+                }
+                if (strLine.equalsIgnoreCase("ONEWAY")) {
                     return TacticalLines.ONEWAY;
-                if(strLine.equalsIgnoreCase("TWOWAY"))
+                }
+                if (strLine.equalsIgnoreCase("TWOWAY")) {
                     return TacticalLines.TWOWAY;
-                if(strLine.equalsIgnoreCase("ALT"))
+                }
+                if (strLine.equalsIgnoreCase("ALT")) {
                     return TacticalLines.ALT;
+                }
 
-                if(strLine.equalsIgnoreCase("DHA"))
+                if (strLine.equalsIgnoreCase("DHA")) {
                     return TacticalLines.DHA;
-                if(strLine.equalsIgnoreCase("EPW"))
+                }
+                if (strLine.equalsIgnoreCase("EPW")) {
                     return TacticalLines.EPW;
-                if(strLine.equalsIgnoreCase("FARP"))
+                }
+                if (strLine.equalsIgnoreCase("FARP")) {
                     return TacticalLines.FARP;
-                if(strLine.equalsIgnoreCase("RHA"))
+                }
+                if (strLine.equalsIgnoreCase("RHA")) {
                     return TacticalLines.RHA;
-                if(strLine.equalsIgnoreCase("BSA"))
+                }
+                if (strLine.equalsIgnoreCase("BSA")) {
                     return TacticalLines.BSA;
-                if(strLine.equalsIgnoreCase("DSA"))
+                }
+                if (strLine.equalsIgnoreCase("DSA")) {
                     return TacticalLines.DSA;
-                if(strLine.equalsIgnoreCase("RSA"))
+                }
+                if (strLine.equalsIgnoreCase("RSA")) {
                     return TacticalLines.RSA;
+                }
 
-                if(strLine.equalsIgnoreCase("BEARING"))
+                if (strLine.equalsIgnoreCase("BEARING")) {
                     return TacticalLines.BEARING;
-                if(strLine.equalsIgnoreCase("ELECTRO"))
+                }
+                if (strLine.equalsIgnoreCase("ELECTRO")) {
                     return TacticalLines.ELECTRO;
-                if(strLine.equalsIgnoreCase("ACOUSTIC"))
+                }
+                if (strLine.equalsIgnoreCase("ACOUSTIC")) {
                     return TacticalLines.ACOUSTIC;
-                if(strLine.equalsIgnoreCase("TORPEDO"))
+                }
+                if (strLine.equalsIgnoreCase("TORPEDO")) {
                     return TacticalLines.TORPEDO;
-                if(strLine.equalsIgnoreCase("OPTICAL"))
+                }
+                if (strLine.equalsIgnoreCase("OPTICAL")) {
                     return TacticalLines.OPTICAL;
+                }
 
             }
             //These are length >= 15, are for the SEC tester only
-            if(strLine.equalsIgnoreCase("FSA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("FSA_RECTANGULAR")) {
                 return TacticalLines.FSA_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("ACA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("ACA_RECTANGULAR")) {
                 return TacticalLines.ACA_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("FFA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("FFA_RECTANGULAR")) {
                 return TacticalLines.FFA_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("NFA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("NFA_RECTANGULAR")) {
                 return TacticalLines.NFA_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("RFA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("RFA_RECTANGULAR")) {
                 return TacticalLines.RFA_RECTANGULAR;
+            }
 
             //if(strLine.equalsIgnoreCase("PAA_RECTANGULAR"))
-                //return TacticalLines.PAA_RECTANGULAR;
-
-            if(strLine.equalsIgnoreCase("ATI_RECTANGULAR"))
+            //return TacticalLines.PAA_RECTANGULAR;
+            if (strLine.equalsIgnoreCase("ATI_RECTANGULAR")) {
                 return TacticalLines.ATI_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("CFFZ_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("CFFZ_RECTANGULAR")) {
                 return TacticalLines.CFFZ_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("SENSOR_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("SENSOR_RECTANGULAR")) {
                 return TacticalLines.SENSOR_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("SENSOR_CIRCULAR"))
+            if (strLine.equalsIgnoreCase("SENSOR_CIRCULAR")) {
                 return TacticalLines.SENSOR_CIRCULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("CENSOR_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("CENSOR_RECTANGULAR")) {
                 return TacticalLines.CENSOR_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("CENSOR_CIRCULAR"))
+            if (strLine.equalsIgnoreCase("CENSOR_CIRCULAR")) {
                 return TacticalLines.CENSOR_CIRCULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("DA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("DA_RECTANGULAR")) {
                 return TacticalLines.DA_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("CFZ_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("CFZ_RECTANGULAR")) {
                 return TacticalLines.CFZ_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("ZOR_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("ZOR_RECTANGULAR")) {
                 return TacticalLines.ZOR_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("TBA_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("TBA_RECTANGULAR")) {
                 return TacticalLines.TBA_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("TVAR_RECTANGULAR"))
+            if (strLine.equalsIgnoreCase("TVAR_RECTANGULAR")) {
                 return TacticalLines.TVAR_RECTANGULAR;
+            }
 
-            if(strLine.equalsIgnoreCase("GENERIC---****X"))
+            if (strLine.equalsIgnoreCase("GENERIC---****X")) {
                 return TacticalLines.GENERIC;
+            }
             //end section
-            
-            String str1,str2,str3,str4,str5,str6,str7,str10;
-            String c0=strLine.substring(0,1);
-            String c1=strLine.substring(1,2);
-            String c2=strLine.substring(2,3);
+
+            String str1, str2, str3, str4, str5, str6, str7, str10;
+            String c0 = strLine.substring(0, 1);
+            String c1 = strLine.substring(1, 2);
+            String c2 = strLine.substring(2, 3);
             //int bolUseEllipticArc=0;
 
-            str1=strLine.substring(4,5);//was(4,1)
-            str2=strLine.substring(4,6);//was(4,2)
-            str3=strLine.substring(4,7);//was(4,3)
-            str4=strLine.substring(4,8);//was(4,4)
-            str5=strLine.substring(4,9);//was(4,5)
-            str6=strLine.substring(3,9);//was(3,6)
-            str7=strLine.substring(3,10);//was(3,7)
-            str10=strLine.substring(3,13);//was(3,10)
+            str1 = strLine.substring(4, 5);//was(4,1)
+            str2 = strLine.substring(4, 6);//was(4,2)
+            str3 = strLine.substring(4, 7);//was(4,3)
+            str4 = strLine.substring(4, 8);//was(4,4)
+            str5 = strLine.substring(4, 9);//was(4,5)
+            str6 = strLine.substring(3, 9);//was(3,6)
+            str7 = strLine.substring(3, 10);//was(3,7)
+            str10 = strLine.substring(3, 13);//was(3,10)
 
             //Basic Shapes
-            if(strLine.equalsIgnoreCase("BS_LINE--------"))
+            if (strLine.equalsIgnoreCase("BS_LINE--------")) {
                 return TacticalLines.BS_LINE;
-            if(strLine.equalsIgnoreCase("BS_AREA--------"))
+            }
+            if (strLine.equalsIgnoreCase("BS_AREA--------")) {
                 return TacticalLines.BS_AREA;
-            if(strLine.equalsIgnoreCase("BS_CROSS-------"))
+            }
+            if (strLine.equalsIgnoreCase("BS_CROSS-------")) {
                 return TacticalLines.BS_CROSS;
-            if(strLine.equalsIgnoreCase("BS_ELLIPSE-----"))
+            }
+            if (strLine.equalsIgnoreCase("BS_ELLIPSE-----")) {
                 return TacticalLines.BS_ELLIPSE;
-            if(strLine.equalsIgnoreCase("PBS_ELLIPSE----"))
+            }
+            if (strLine.equalsIgnoreCase("PBS_ELLIPSE----")) {
                 return TacticalLines.PBS_ELLIPSE;
-            if(strLine.equalsIgnoreCase("PBS_CIRCLE-----"))
+            }
+            if (strLine.equalsIgnoreCase("PBS_CIRCLE-----")) {
                 return TacticalLines.PBS_CIRCLE;
-            if(strLine.equalsIgnoreCase("BS_RECTANGLE---"))
+            }
+            if (strLine.equalsIgnoreCase("BS_RECTANGLE---")) {
                 return TacticalLines.BS_RECTANGLE;
+            }
             //buffered shapes
-            if(strLine.equalsIgnoreCase("BBS_LINE-------"))
+            if (strLine.equalsIgnoreCase("BBS_LINE-------")) {
                 return TacticalLines.BBS_LINE;
-            if(strLine.equalsIgnoreCase("BBS_AREA-------"))
+            }
+            if (strLine.equalsIgnoreCase("BBS_AREA-------")) {
                 return TacticalLines.BBS_AREA;
-            if(strLine.equalsIgnoreCase("BBS_POINT------"))
+            }
+            if (strLine.equalsIgnoreCase("BBS_POINT------")) {
                 return TacticalLines.BBS_POINT;
-            if(strLine.equalsIgnoreCase("BBS_RECTANGLE--"))
+            }
+            if (strLine.equalsIgnoreCase("BBS_RECTANGLE--")) {
                 return TacticalLines.BBS_RECTANGLE;
-            if(strLine.equalsIgnoreCase("BS_BBOX--------"))
+            }
+            if (strLine.equalsIgnoreCase("BS_BBOX--------")) {
                 return TacticalLines.BS_BBOX;
-            
+            }
+
             //METOCs
-            if (c0.equals("W") && c1.equals("A"))
-            {
+            if (c0.equals("W") && c1.equals("A")) {
                 if (str7.equals("DPXSQ--")) {
                     return TacticalLines.SQUALL;
                 }
@@ -962,7 +1263,6 @@ public final class CELineArray {
                     return TacticalLines.OPERATOR_FREEFORM;
                 }
 
-
                 //if (strncmp(str,"PXR",3).equals(0)
                 if (str3.equals("PXR")) {
                     return TacticalLines.RIDGE;
@@ -999,8 +1299,7 @@ public final class CELineArray {
                     return TacticalLines.CF;
                 }
             }
-            if (c0.equals("W") && c1.equals("O"))
-            {
+            if (c0.equals("W") && c1.equals("O")) {
                 if (str10.equals("DHCF----L-")) {
                     return TacticalLines.FORESHORE_LINE;
                 }
@@ -1020,8 +1319,7 @@ public final class CELineArray {
                     return TacticalLines.LOADING_FACILITY_AREA;
                 }
             }
-            if (c0.equals("W") && c1.equals("O"))
-            {
+            if (c0.equals("W") && c1.equals("O")) {
                 if (str7.equals("DIDID--")) {
                     return TacticalLines.ICE_DRIFT;
                 }
@@ -1326,19 +1624,19 @@ public final class CELineArray {
             //end METOC section
 
             //SPT
-            if(str5.equals("OLAGS") && c0.equals("G") && c2.equals("G")){
+            if (str5.equals("OLAGS") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.SPT;
             }
             //MAIN
-            if(str5.equals("OLAGM") && c0.equals("G") && c2.equals("G")){
+            if (str5.equals("OLAGM") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.MAIN;
             }
             //DIRATKGND
-            if (str5.equals("OLKGM") && c0.equals("G") && c2.equals("G")){
+            if (str5.equals("OLKGM") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.DIRATKGND;
             }
             //DIRATKSPT
-            if (str5.equals("OLKGS") && c0.equals("G") && c2.equals("G")){
+            if (str5.equals("OLKGS") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.DIRATKSPT;
             }
             //AIRAOA
@@ -1351,7 +1649,7 @@ public final class CELineArray {
             }
             //DIRATKAIR
             if (str4.equals("OLKA") && c0.equals("G") && c2.equals("G")) {
-                return  TacticalLines.DIRATKAIR;
+                return TacticalLines.DIRATKAIR;
             }
             //AXAD
             if (str4.equals("OLAV") && c0.equals("G") && c2.equals("G")) {
@@ -1363,7 +1661,7 @@ public final class CELineArray {
             }
             //ATDITCHC
             if (str4.equals("OADC") && c0.equals("G") && c2.equals("M")) {
-                return  TacticalLines.ATDITCHC;
+                return TacticalLines.ATDITCHC;
             }
             //LOMEZ
             if (str4.equals("AAML") && c0.equals("G") && c2.equals("G")) {
@@ -1378,8 +1676,8 @@ public final class CELineArray {
                 return TacticalLines.PNO;
             }
             //TRIPLE
-            if (str4.equals("OWCT") && c0.equals("G") && c2.equals("M")){
-                    return TacticalLines.TRIPLE;
+            if (str4.equals("OWCT") && c0.equals("G") && c2.equals("M")) {
+                return TacticalLines.TRIPLE;
             }
             //DOUBLEC
             if (str4.equals("OWCD") && c0.equals("G") && c2.equals("M")) {
@@ -1387,7 +1685,7 @@ public final class CELineArray {
             }
             //SINGLEC
             if (str4.equals("OWCS") && c0.equals("G") && c2.equals("M")) {
-                    return TacticalLines.SINGLEC;
+                return TacticalLines.SINGLEC;
             }
             //PAA
             if (str4.equals("ACPR") && c0.equals("G") && c2.equals("F")) //change 1
@@ -1426,7 +1724,7 @@ public final class CELineArray {
                 return TacticalLines.ACA_CIRCULAR;
             }
             //FFA
-            if (str4.equals("ACFI") && c0.equals("G") && c2.equals( "F")) //change 1
+            if (str4.equals("ACFI") && c0.equals("G") && c2.equals("F")) //change 1
             {
                 return TacticalLines.FFA;
             }
@@ -1682,7 +1980,7 @@ public final class CELineArray {
             {
                 return TacticalLines.TVAR_CIRCULAR;
             }
-            
+
             //KILLBOXBLUE
             if (str4.equals("AKBI") && c0.equals("G") && c2.equals("F"))//change 1
             {
@@ -1713,10 +2011,7 @@ public final class CELineArray {
             {
                 return TacticalLines.KILLBOXPURPLE_CIRCULAR;
             }
-            
-            
-            
-            
+
             //RFL
             if (str3.equals("LCR") && c0.equals("G") && c2.equals("F")) //change 1
             {
@@ -1828,68 +2123,68 @@ public final class CELineArray {
                 return TacticalLines.ROADBLK;
             }
             //PLD
-            if (str3.equals( "OLP") && c0.equals( "G") && c2.equals( "G")) {
+            if (str3.equals("OLP") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.PLD;
             }
             //BYDIF
-            if (str3.equals( "BDD") && c0.equals( "G") && c2.equals( "M")) {
+            if (str3.equals("BDD") && c0.equals("G") && c2.equals("M")) {
                 return TacticalLines.BYDIF;
             }
             //BYIMP
-            if (str3.equals( "BDI") && c0.equals( "G") && c2.equals( "M")) {
+            if (str3.equals("BDI") && c0.equals("G") && c2.equals("M")) {
                 return TacticalLines.BYIMP;
             }
             //EASY
-            if (str3.equals( "BDE") && c0.equals( "G") && c2.equals( "M")) {
+            if (str3.equals("BDE") && c0.equals("G") && c2.equals("M")) {
                 return TacticalLines.EASY;
             }
             //FLOT
             if (str3.equals("GLF") && c0.equals("G") && c2.equals("G")) {
-                    return TacticalLines.FLOT;
+                return TacticalLines.FLOT;
             }
             //LC
-            if (str3.equals("GLC") && c0.equals("G") && c2.equals("G"))  {
-                    return TacticalLines.LC;
+            if (str3.equals("GLC") && c0.equals("G") && c2.equals("G")) {
+                return TacticalLines.LC;
             }
             //LDLC
-            if (str3.equals("OLC") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("OLC") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.LDLC;
             }
             //ZONE
-            if (str3.equals("OGZ") && c0.equals("G") && c2.equals("M"))  {
+            if (str3.equals("OGZ") && c0.equals("G") && c2.equals("M")) {
                 return TacticalLines.ZONE;
             }
             //ENCIRCLE
-            if (str3.equals("SAE") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("SAE") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.ENCIRCLE;
             }
             //areas
             //BATTLE
-            if (str3.equals("DAB") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("DAB") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.BATTLE;
             }
             //ASSY
-            if (str3.equals("GAA") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("GAA") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.ASSY;
             }
             //TAI
-            if (str3.equals("SAT") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("SAT") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.TAI;
             }
             //BSA
-            if (str3.equals("ASB") && c0.equals("G") && c2.equals("S"))  {
+            if (str3.equals("ASB") && c0.equals("G") && c2.equals("S")) {
                 return TacticalLines.BSA;
             }
             //DSA
-            if (str3.equals("ASD") && c0.equals("G") && c2.equals("S"))  {
+            if (str3.equals("ASD") && c0.equals("G") && c2.equals("S")) {
                 return TacticalLines.DSA;
             }
             //EA
-            if (str3.equals("GAE") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("GAE") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.EA;
             }
             //NAI
-            if (str3.equals("SAN") && c0.equals("G") && c2.equals("G"))  {
+            if (str3.equals("SAN") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.NAI;
             }
 
@@ -2315,24 +2610,27 @@ public final class CELineArray {
             }
             //COVER
             if (str2.equals("UC") && c0.equals("G") && c2.equals("T")) {
-                if(rev==RendererSettings.Symbology_2525C)
+                if (rev == RendererSettings.Symbology_2525C) {
                     return TacticalLines.COVER_REVC;
-                else
+                } else {
                     return TacticalLines.COVER;
+                }
             }
             //SCREEN
             if (str2.equals("US") && c0.equals("G") && c2.equals("T")) {
-                if(rev==RendererSettings.Symbology_2525C)
+                if (rev == RendererSettings.Symbology_2525C) {
                     return TacticalLines.SCREEN_REVC;
-                else
+                } else {
                     return TacticalLines.SCREEN;
+                }
             }
             //GUARD
             if (str2.equals("UG") && c0.equals("G") && c2.equals("T")) {
-                if(rev==RendererSettings.Symbology_2525C)
+                if (rev == RendererSettings.Symbology_2525C) {
                     return TacticalLines.GUARD_REVC;
-                else
+                } else {
                     return TacticalLines.GUARD;
+                }
             }
             //DECOY MINED AREA
             if (str2.equals("PM") && c0.equals("G") && c2.equals("G")) {
@@ -2432,10 +2730,11 @@ public final class CELineArray {
             //SEIZE
             if (str1.equals("Z") && c0.equals("G") && c2.equals("T")) {
                 //return TacticalLines.SEIZE;
-                if(rev==RendererSettings.Symbology_2525C)
+                if (rev == RendererSettings.Symbology_2525C) {
                     return TacticalLines.SEIZE_REVC;
-                else
+                } else {
                     return TacticalLines.SEIZE;
+                }
             }
             //SECURE
             if (str1.equals("S") && c0.equals("G") && c2.equals("T")) {
@@ -2486,16 +2785,15 @@ public final class CELineArray {
                 return TacticalLines.NEUTRALIZE;
             }
 
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(_className ,"CGetLinetypeFromString",
-                    new RendererException("Failed inside CGetLinetypeFromString " + strLine, exc));
+        } catch (Exception ex) {
+            logger.error("failed to get channel from string: {}", strLine, ex);
         }
         return -1;
     }
+
     /**
      * Return true is the line type is a channel type
+     *
      * @param lineType line type
      * @return
      */
@@ -2539,22 +2837,19 @@ public final class CELineArray {
                     lResult = 0;
                     break;
             }
-        } 
-        catch (Exception exc)
-        {
-            ErrorLogger.LogException(_className ,"CIsChannel",
-                    new RendererException("Failed inside CIsChannel " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("failed channel check", ex);
         }
         return lResult;
     }
-    private static String _client="";
-    public static void setClient(String value)
-    {
-        _client=value;
+    private static String _client = "";
+
+    public static void setClient(String value) {
+        _client = value;
         Channels.setClient(value);
     }
-    public static String getClient()
-    {
+
+    public static String getClient() {
         return _client;
     }
 //    public static void setMinLength(double value)

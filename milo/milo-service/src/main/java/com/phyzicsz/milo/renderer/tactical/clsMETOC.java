@@ -4,6 +4,7 @@
  */
 package com.phyzicsz.milo.renderer.tactical;
 
+import com.phyzicsz.milo.renderer.SinglePointRenderer;
 import com.phyzicsz.milo.renderer.line.TacticalLines;
 import com.phyzicsz.milo.renderer.line.arraysupport;
 import com.phyzicsz.milo.renderer.line.lineutility;
@@ -20,58 +21,66 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import javax.imageio.ImageIO;
 import java.io.InputStream;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.ShapeInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to calculate the points for the Weather symbols
+ *
  * @author Michael Deutch
  */
 public final class clsMETOC {
-    private static final String _className = "clsMETOC";    
+
+    private static final Logger logger = LoggerFactory.getLogger(clsMETOC.class);
+
+    private static final String _className = "clsMETOC";
+
     /**
      * @param symbolID Mil-Standard 2525 15 character code
-     * @return the line type as an integer if it is a weather symbol, else return -1
-     */    
+     * @return the line type as an integer if it is a weather symbol, else
+     * return -1
+     */
     public static int IsWeather(String symbolID) {
         //the MeTOCs
-        try
-        {            
+        try {
             //added section for revD
-            if(symbolID.length()>15)
-            {
+            if (symbolID.length() > 15) {
                 //test for hold,brdghd
                 //String setA=Modifier2.getSetA(symbolID);
-                String setA=symbolID.substring(0,10);
+                String setA = symbolID.substring(0, 10);
                 //String setB=Modifier2.getSetB(symbolID);
-                String setB=symbolID.substring(10);
+                String setB = symbolID.substring(10);
                 //String entityCode=Modifier2.getCode(setB);
-                String entityCode=setB.substring(0,6);
-                int nEntityCode=Integer.parseInt(entityCode);
+                String entityCode = setB.substring(0, 6);
+                int nEntityCode = Integer.parseInt(entityCode);
                 //String symbolSet=Modifier2.getSymbolSet(setA);
-                String symbolSet=setA.substring(4,6);
-                int nSymbolSet=Integer.parseInt(symbolSet);
-                switch(nSymbolSet)
-                {
+                String symbolSet = setA.substring(4, 6);
+                int nSymbolSet = Integer.parseInt(symbolSet);
+                switch (nSymbolSet) {
                     case 25:    //look for holding line, bridgehead
-                        if(nEntityCode==141400)
+                        if (nEntityCode == 141400) {
                             return TacticalLines.BRDGHD;
-                        else if(nEntityCode==141500)
+                        } else if (nEntityCode == 141500) {
                             return TacticalLines.HOLD;
+                        }
                         break;
                     case 45:
                     case 46:
-                        return getWeatherLinetype(symbolSet,entityCode);
+                        return getWeatherLinetype(symbolSet, entityCode);
                 }
             }
             //end section
-            if(symbolID==null)
+            if (symbolID == null) {
                 return -1;
-            if(symbolID.equalsIgnoreCase("HOLD"))
+            }
+            if (symbolID.equalsIgnoreCase("HOLD")) {
                 return TacticalLines.HOLD;
-            if(symbolID.equalsIgnoreCase("BRDGHD"))
+            }
+            if (symbolID.equalsIgnoreCase("BRDGHD")) {
                 return TacticalLines.BRDGHD;
+            }
 
             if (symbolID.equalsIgnoreCase("CF")) {
                 return TacticalLines.CF;
@@ -284,12 +293,10 @@ public final class clsMETOC {
             } else if (symbolID.equalsIgnoreCase("RIDGE")) {
                 return TacticalLines.RIDGE;
             } else if (symbolID.equalsIgnoreCase("TROUGH")) {
-                return TacticalLines.TROUGH;                
-            } 
-            else if (symbolID.equalsIgnoreCase("TROUGH_A")) {
-                return TacticalLines.TROUGH;                
-            } 
-            else if (symbolID.equalsIgnoreCase("INSTABILITY")) {
+                return TacticalLines.TROUGH;
+            } else if (symbolID.equalsIgnoreCase("TROUGH_A")) {
+                return TacticalLines.TROUGH;
+            } else if (symbolID.equalsIgnoreCase("INSTABILITY")) {
                 return TacticalLines.INSTABILITY;
             } else if (symbolID.equalsIgnoreCase("SHEAR")) {
                 return TacticalLines.SHEAR;
@@ -401,14 +408,17 @@ public final class clsMETOC {
 
             //METOC
             //HOLD  handled as METOC
-            if (str3.equals("SLH") && c0.equals("G") && c2.equals("G"))
+            if (str3.equals("SLH") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.HOLD;
+            }
             //BRDGHD    handled as METOC
-            if (str3.equals("SLB") && c0.equals("G") && c2.equals("G"))
+            if (str3.equals("SLB") && c0.equals("G") && c2.equals("G")) {
                 return TacticalLines.BRDGHD;
-            
-            if(c0.equalsIgnoreCase("W")==false)
+            }
+
+            if (c0.equalsIgnoreCase("W") == false) {
                 return -1;
+            }
 
             if (c0.equals("W") && c1.equals("A")) {
                 if (str7.equals("DPXSQ--")) {
@@ -519,7 +529,6 @@ public final class clsMETOC {
                 if (str7.equals("DIPFF--")) {
                     return TacticalLines.OPERATOR_FREEFORM;
                 }
-
 
                 //if (strncmp(str,"PXR",3).equals(0)
                 if (str3.equals("PXR")) {
@@ -879,30 +888,28 @@ public final class clsMETOC {
                     return TacticalLines.OPERATOR_DEFINED;
                 }
             }
-        } 
-        catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsMETOC.IsWeather");
-               ErrorLogger.LogException(_className ,"isWeather",
-                    new RendererException("Failed inside isWeather", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed is inside", ex);
         }
         //end METOC section
         return -1;
     }
+
     //the following functions are for the rev D symbols
     /**
      * Rev D METOC symbols
+     *
      * @param SymbolSet
      * @param entityCode
-     * @return 
+     * @return
      */
-    public static int getWeatherLinetype(String SymbolSet, String entityCode)
-    {
-        int symbolSet=Integer.parseInt(SymbolSet);
-        if(symbolSet != 45 && symbolSet != 46)
+    public static int getWeatherLinetype(String SymbolSet, String entityCode) {
+        int symbolSet = Integer.parseInt(SymbolSet);
+        if (symbolSet != 45 && symbolSet != 46) {
             return -1;
-        int nCode=Integer.parseInt(entityCode);
-        switch(nCode)
-        {
+        }
+        int nCode = Integer.parseInt(entityCode);
+        switch (nCode) {
             case 110301:
                 return TacticalLines.CF;
             case 110302:
@@ -973,7 +980,7 @@ public final class clsMETOC {
             case 170700:
                 return TacticalLines.THUNDERSTORMS;
             case 170800:
-                return TacticalLines.FOG;                
+                return TacticalLines.FOG;
             case 170900:
                 return TacticalLines.SAND;
             case 171000:
@@ -1034,7 +1041,7 @@ public final class clsMETOC {
                 return TacticalLines.ANCHORAGE_LINE;
             case 120306:
                 return TacticalLines.ANCHORAGE_AREA;
-                
+
             case 120308:
                 return TacticalLines.PIER;
             case 120312:
@@ -1045,12 +1052,12 @@ public final class clsMETOC {
                 return TacticalLines.LOADING_FACILITY_LINE;
             case 120318:
                 return TacticalLines.LOADING_FACILITY_AREA;
-                
+
             case 120319:
                 return TacticalLines.RAMP_ABOVE_WATER;
             case 120320:
                 return TacticalLines.RAMP_BELOW_WATER;
-                
+
             case 120326:
                 return TacticalLines.JETTY_ABOVE_WATER;
             case 120327:
@@ -1077,7 +1084,7 @@ public final class clsMETOC {
                 return TacticalLines.EBB_TIDE;
             case 120703:
                 return TacticalLines.FLOOD_TIDE;
-                
+
             case 130101:
                 return TacticalLines.VDR_LEVEL_12;
             case 130102:
@@ -1184,7 +1191,7 @@ public final class clsMETOC {
                 return TacticalLines.BOTTOM_TYPE_C2;
             case 140140:
                 return TacticalLines.BOTTOM_TYPE_C3;
-            
+
             case 150100:
                 return TacticalLines.MARITIME_LIMIT;
             case 150200:
@@ -1207,34 +1214,32 @@ public final class clsMETOC {
                 return TacticalLines.OIL_RIG_FIELD;
             case 160800:
                 return TacticalLines.PIPE;
-                
+
             default:
                 return -1;
         }
         return -1;
     }
-    
-/**
- * Sets tactical graphic properties based on Mil-Std-2525 Appendix C.
- * @param tg
- */
+
+    /**
+     * Sets tactical graphic properties based on Mil-Std-2525 Appendix C.
+     *
+     * @param tg
+     */
     private static void SetMeTOCProperties(TGLight tg) {
-        try
-        {
+        try {
             //METOC's have no user defined fills
             //any fills per Mil-Std-2525 will be set below
             //tg.set_FillColor(null);
-            String symbolId=tg.get_SymbolId();
+            String symbolId = tg.get_SymbolId();
             switch (tg.get_LineType()) {   //255:150:150
                 case TacticalLines.TROUGH:
-                    if(symbolId.length()>=20)
-                    {
-                       String setB=symbolId.substring(10);
-                       String entityCode=setB.substring(0,6);
-                       if(entityCode.equalsIgnoreCase("110401"))
-                       {
-                           tg.set_LineStyle(2);
-                       }
+                    if (symbolId.length() >= 20) {
+                        String setB = symbolId.substring(10);
+                        String entityCode = setB.substring(0, 6);
+                        if (entityCode.equalsIgnoreCase("110401")) {
+                            tg.set_LineStyle(2);
+                        }
                     }
                     tg.set_LineColor(Color.BLACK);
                     break;
@@ -1654,25 +1659,25 @@ public final class clsMETOC {
                 default:
                     break;
             }
-        }
-        catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsMETOC.SetMeTOCProperties");
-               ErrorLogger.LogException(_className ,"SetMeTOCProperties",
-                    new RendererException("Failed inside SetMeTOCProperties", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to set properties", ex);
         }
     }
 
     /**
      *
-     * Finds next closest point with same x position on the splinePoints curve as pt
-     * walks up the curve and if it does not find a range that straddles x it return null.
-     * We ultimately will draw a line from pt to the extrapolated point on the splinePoints spline.
-     * used for ICE_OPENINGS_FROZEN_LEAD
+     * Finds next closest point with same x position on the splinePoints curve
+     * as pt walks up the curve and if it does not find a range that straddles x
+     * it return null. We ultimately will draw a line from pt to the
+     * extrapolated point on the splinePoints spline. used for
+     * ICE_OPENINGS_FROZEN_LEAD
      *
      * @param splinePoints - the points on the opposite spline
-     * @param pt - the point in the original curve from which the line will start
+     * @param pt - the point in the original curve from which the line will
+     * start
      *
-     * @return The extrapolated point on the opposite spline to which the line will be drawn
+     * @return The extrapolated point on the opposite spline to which the line
+     * will be drawn
      */
     private static POINT2 ExtrapolatePointFromCurve(ArrayList<POINT2> splinePoints,
             POINT2 pt) {
@@ -1707,42 +1712,42 @@ public final class clsMETOC {
                     return pt2;
                 }
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsMETOC.ExtrapolatePointFromCurve");
-               ErrorLogger.LogException(_className ,"ExtrapolatePointFromCurve",
-                    new RendererException("Failed inside ExtrapolatePointfromCurve", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed extrapolate point from curve", ex);
         }
         return pt2;
     }
+
     /**
      * The public interface, main function to return METOC shapes
+     *
      * @param tg the tactical graphic
      * @param shapes the ShapeInfo array
      * @param rev the Mil-Standard-2525 revision
      */
-    public static void GetMeTOCShape(TGLight tg, 
+    public static void GetMeTOCShape(TGLight tg,
             ArrayList<Shape2> shapes,
             int rev) {
-        try
-        {
-            if(shapes==null)
+        try {
+            if (shapes == null) {
                 return;
+            }
             GeneralPath lineObject = null;
             GeneralPath lineObject2 = null;
             ArrayList<POINT2> splinePoints = new ArrayList();
             ArrayList<POINT2> splinePoints2 = new ArrayList();
             double d = 0;
-            int j = 0, k=0, l=0;
-            Shape2 shape=null;
+            int j = 0, k = 0, l = 0;
+            Shape2 shape = null;
             POINT2 ptLast = tg.Pixels.get(tg.Pixels.size() - 1);
             ArrayList<POINT2> twoSplines = null;
             ArrayList<POINT2> upperSpline = null;
             ArrayList<POINT2> lowerSpline = null;
             ArrayList<POINT2> originalPixels = null;
-            
-            ArrayList<POINT2>pixels=null;
-            originalPixels=null;
-            ArrayList<P1>partitions=null;
+
+            ArrayList<POINT2> pixels = null;
+            originalPixels = null;
+            ArrayList<P1> partitions = null;
             SetMeTOCProperties(tg);
             switch (tg.get_LineType()) {
                 case TacticalLines.SF:
@@ -1867,7 +1872,7 @@ public final class clsMETOC {
                 case TacticalLines.BOTTOM_TYPE_C2:
                 case TacticalLines.BOTTOM_TYPE_C3:
                     //int rev=tg.getSymbologyStandard();
-                    arraysupport.GetLineArray2(tg.get_LineType(), tg.Pixels, shapes,null,rev,null);
+                    arraysupport.GetLineArray2(tg.get_LineType(), tg.Pixels, shapes, null, rev, null);
                     break;
                 case TacticalLines.ISOBAR:
                 case TacticalLines.ISOBAR_GE:
@@ -1923,8 +1928,7 @@ public final class clsMETOC {
                     break;
                 case TacticalLines.HOLD_GE:
                 case TacticalLines.BRDGHD_GE:
-                    if(tg.get_FillColor()!=null && tg.get_FillColor().getAlpha()>1)
-                    {
+                    if (tg.get_FillColor() != null && tg.get_FillColor().getAlpha() > 1) {
                         lineObject2 = DrawSplines(tg, splinePoints);
                         lineObject2.lineTo(ptLast.x, ptLast.y);
                         shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
@@ -1935,7 +1939,7 @@ public final class clsMETOC {
                         shapes.add(shape);
                         splinePoints.clear();
                     }
-                    
+
                     lineObject2 = DrawSplines(tg, splinePoints);
                     lineObject2.lineTo(ptLast.x, ptLast.y);
                     shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
@@ -1944,7 +1948,7 @@ public final class clsMETOC {
                     //shape.setStroke(new BasicStroke(tg.get_LineThickness()));
                     //shape.setFillColor(null);
                     shapes.add(shape);
-                    SetShapeProperties(tg,shapes,null);
+                    SetShapeProperties(tg, shapes, null);
                     return;
                 case TacticalLines.HOLD:
                 case TacticalLines.BRDGHD:
@@ -1958,28 +1962,26 @@ public final class clsMETOC {
                     //this section is to add a fill shape using the spline points
                     //Use tg.Pixels if splinepoints is empty
                     //fill did not conform very well to the outline
-                    shape=new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                     //shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
                     shape.setFillColor(tg.get_FillColor());
-                    if(tg.get_FillColor() != null && tg.get_FillColor().getAlpha()>1)
-                    {
-                        if(splinePoints != null && splinePoints.size()>0)
-                        {
+                    if (tg.get_FillColor() != null && tg.get_FillColor().getAlpha() > 1) {
+                        if (splinePoints != null && splinePoints.size() > 0) {
                             shape.moveTo(splinePoints.get(0));
-                            for(j=1;j<splinePoints.size();j++)
+                            for (j = 1; j < splinePoints.size(); j++) {
                                 shape.lineTo(splinePoints.get(j));
+                            }
 
-                            shape.lineTo(tg.Pixels.get(tg.Pixels.size()-1));
-                            shapes.add(0,shape);
-                        }
-                        else
-                        {
+                            shape.lineTo(tg.Pixels.get(tg.Pixels.size() - 1));
+                            shapes.add(0, shape);
+                        } else {
                             shape.moveTo(tg.Pixels.get(0));
-                            for(j=1;j<tg.Pixels.size();j++)
+                            for (j = 1; j < tg.Pixels.size(); j++) {
                                 shape.lineTo(tg.Pixels.get(j));
+                            }
 
-                            shape.lineTo(tg.Pixels.get(tg.Pixels.size()-1));
-                            shapes.add(0,shape);
+                            shape.lineTo(tg.Pixels.get(tg.Pixels.size() - 1));
+                            shapes.add(0, shape);
                         }
                     }
                     //end section
@@ -1996,22 +1998,23 @@ public final class clsMETOC {
                     break;
                 case TacticalLines.ICE_OPENINGS_LEAD:
                     //pixels=null;
-                    originalPixels=tg.Pixels;
-                    partitions=clsChannelUtility.GetPartitions2(tg);
+                    originalPixels = tg.Pixels;
+                    partitions = clsChannelUtility.GetPartitions2(tg);
                     //int s=0,e=0;
-                    for(l=0;l<partitions.size();l++)
-                    {
-                        tg.Pixels=originalPixels;
-                        pixels=new ArrayList();
-                        for(k=partitions.get(l).start;k<=partitions.get(l).end_Renamed+1;k++)
+                    for (l = 0; l < partitions.size(); l++) {
+                        tg.Pixels = originalPixels;
+                        pixels = new ArrayList();
+                        for (k = partitions.get(l).start; k <= partitions.get(l).end_Renamed + 1; k++) {
                             pixels.add(tg.Pixels.get(k));
-                        
-                        if(pixels==null || pixels.isEmpty())
+                        }
+
+                        if (pixels == null || pixels.isEmpty()) {
                             continue;
+                        }
 
                         twoSplines = new ArrayList();
                         //twoSplines = ParallelLines(tg);
-                        twoSplines = ParallelLines2(pixels,rev);
+                        twoSplines = ParallelLines2(pixels, rev);
 
                         upperSpline = new ArrayList();
                         lowerSpline = new ArrayList();
@@ -2039,22 +2042,23 @@ public final class clsMETOC {
                     break;
                 case TacticalLines.ICE_OPENINGS_LEAD_GE:
                     //pixels=null;
-                    originalPixels=tg.Pixels;
-                    partitions=clsChannelUtility.GetPartitions2(tg);
+                    originalPixels = tg.Pixels;
+                    partitions = clsChannelUtility.GetPartitions2(tg);
                     //int s=0,e=0;
-                    for(l=0;l<partitions.size();l++)
-                    {
-                        tg.Pixels=originalPixels;
-                        pixels=new ArrayList();
-                        for(k=partitions.get(l).start;k<=partitions.get(l).end_Renamed+1;k++)
+                    for (l = 0; l < partitions.size(); l++) {
+                        tg.Pixels = originalPixels;
+                        pixels = new ArrayList();
+                        for (k = partitions.get(l).start; k <= partitions.get(l).end_Renamed + 1; k++) {
                             pixels.add(tg.Pixels.get(k));
+                        }
 
-                        if(pixels==null || pixels.isEmpty())
+                        if (pixels == null || pixels.isEmpty()) {
                             continue;
+                        }
 
                         twoSplines = new ArrayList();
                         //twoSplines = ParallelLines(tg);
-                        twoSplines = ParallelLines2(pixels,rev);
+                        twoSplines = ParallelLines2(pixels, rev);
 
                         upperSpline = new ArrayList();
                         lowerSpline = new ArrayList();
@@ -2069,16 +2073,16 @@ public final class clsMETOC {
 
                         tg.Pixels = lowerSpline;
                         lineObject2 = DrawSplines(tg, splinePoints);
-                        ptLast=tg.Pixels.get(tg.Pixels.size()-1);
+                        ptLast = tg.Pixels.get(tg.Pixels.size() - 1);
                         lineObject2.lineTo(ptLast.x, ptLast.y);
                         shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                         shape.setShape(lineObject2);
                         shapes.add(shape);
 
                         tg.Pixels = upperSpline;
-                        splinePoints=new ArrayList();
+                        splinePoints = new ArrayList();
                         lineObject2 = DrawSplines(tg, splinePoints);
-                        ptLast=tg.Pixels.get(tg.Pixels.size()-1);
+                        ptLast = tg.Pixels.get(tg.Pixels.size() - 1);
                         lineObject2.lineTo(ptLast.x, ptLast.y);
                         shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                         shape.setShape(lineObject2);
@@ -2086,21 +2090,22 @@ public final class clsMETOC {
                     }
                     break;
                 case TacticalLines.ICE_OPENINGS_FROZEN:
-                    originalPixels=tg.Pixels;
-                    partitions=clsChannelUtility.GetPartitions2(tg);
-                    for(l=0;l<partitions.size();l++)
-                    {
-                        tg.Pixels=originalPixels;
-                        pixels=new ArrayList();
-                        for(k=partitions.get(l).start;k<=partitions.get(l).end_Renamed+1;k++)
+                    originalPixels = tg.Pixels;
+                    partitions = clsChannelUtility.GetPartitions2(tg);
+                    for (l = 0; l < partitions.size(); l++) {
+                        tg.Pixels = originalPixels;
+                        pixels = new ArrayList();
+                        for (k = partitions.get(l).start; k <= partitions.get(l).end_Renamed + 1; k++) {
                             pixels.add(tg.Pixels.get(k));
+                        }
 
-                        if(pixels==null || pixels.isEmpty())
+                        if (pixels == null || pixels.isEmpty()) {
                             continue;
+                        }
 
                         twoSplines = new ArrayList();
                         //twoSplines = ParallelLines(tg);
-                        twoSplines = ParallelLines2(pixels,rev);
+                        twoSplines = ParallelLines2(pixels, rev);
                         upperSpline = new ArrayList();
                         lowerSpline = new ArrayList();
 
@@ -2129,24 +2134,18 @@ public final class clsMETOC {
                         ArrayList splinePoints2Arrays = new ArrayList();
                         ArrayList<POINT2> ptsArray = new ArrayList();
                         for (j = 0; j < splinePoints.size(); j++) {
-                            if (splinePoints.get(j).style != 47)
-                            {
+                            if (splinePoints.get(j).style != 47) {
                                 ptsArray.add(splinePoints.get(j));
-                            } 
-                            else
-                            {
+                            } else {
                                 splinePointsArrays.add(ptsArray);
                                 ptsArray = new ArrayList();
                             }
                         }
 
                         for (j = 0; j < splinePoints2.size(); j++) {
-                            if (splinePoints2.get(j).style != 47)
-                            {
+                            if (splinePoints2.get(j).style != 47) {
                                 ptsArray.add(splinePoints2.get(j));
-                            } 
-                            else
-                            {
+                            } else {
                                 splinePoints2Arrays.add(ptsArray);
                                 ptsArray = new ArrayList();
                             }
@@ -2156,24 +2155,26 @@ public final class clsMETOC {
                         ArrayList<POINT2> array = null;
                         ArrayList<POINT2> array2 = null;
                         POINT2 pt,
-                         pt2;
+                                pt2;
                         lineObject = new GeneralPath();
                         //the lines to connect the extrapolated points
                         for (j = 0; j < splinePointsArrays.size(); j++) {
                             array = (ArrayList<POINT2>) splinePointsArrays.get(j);
 
-                            if(splinePoints2Arrays.size()>j)
+                            if (splinePoints2Arrays.size() > j) {
                                 array2 = (ArrayList<POINT2>) splinePoints2Arrays.get(j);
-                            else
+                            } else {
                                 break;
+                            }
                             //extrapolate against points in the shortest array
                             if (splinePointsArrays.size() >= splinePoints2Arrays.size()) //array is shorter
                             {
                                 for (k = 0; k < array.size(); k++) {
-                                    if(array.size()>k)
+                                    if (array.size() > k) {
                                         pt = array.get(k);
-                                    else
+                                    } else {
                                         break;
+                                    }
 
                                     pt2 = ExtrapolatePointFromCurve(array2, pt);
                                     //if we got a valid extrapolation point then draw the line
@@ -2206,21 +2207,22 @@ public final class clsMETOC {
                     //the lines connecting the extrapolated points
                     break;
                 case TacticalLines.ICE_OPENINGS_FROZEN_GE:
-                    originalPixels=tg.Pixels;
-                    partitions=clsChannelUtility.GetPartitions2(tg);
-                    for(l=0;l<partitions.size();l++)
-                    {
-                        tg.Pixels=originalPixels;
-                        pixels=new ArrayList();
-                        for(k=partitions.get(l).start;k<=partitions.get(l).end_Renamed+1;k++)
+                    originalPixels = tg.Pixels;
+                    partitions = clsChannelUtility.GetPartitions2(tg);
+                    for (l = 0; l < partitions.size(); l++) {
+                        tg.Pixels = originalPixels;
+                        pixels = new ArrayList();
+                        for (k = partitions.get(l).start; k <= partitions.get(l).end_Renamed + 1; k++) {
                             pixels.add(tg.Pixels.get(k));
+                        }
 
-                        if(pixels==null || pixels.isEmpty())
+                        if (pixels == null || pixels.isEmpty()) {
                             continue;
+                        }
 
                         twoSplines = new ArrayList();
                         //twoSplines = ParallelLines(tg);
-                        twoSplines = ParallelLines2(pixels,rev);
+                        twoSplines = ParallelLines2(pixels, rev);
                         upperSpline = new ArrayList();
                         lowerSpline = new ArrayList();
 
@@ -2233,20 +2235,20 @@ public final class clsMETOC {
                         }
 
                         tg.Pixels = lowerSpline;
-                        ArrayList<POINT2>splinePoints3=new ArrayList();
+                        ArrayList<POINT2> splinePoints3 = new ArrayList();
                         lineObject2 = DrawSplines(tg, splinePoints3);
                         splinePoints.addAll(splinePoints3);
-                        ptLast=tg.Pixels.get(tg.Pixels.size()-1);
+                        ptLast = tg.Pixels.get(tg.Pixels.size() - 1);
                         lineObject2.lineTo(ptLast.x, ptLast.y);
                         shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                         shape.setShape(lineObject2);
                         shapes.add(shape);
 
                         tg.Pixels = upperSpline;
-                        ArrayList<POINT2>splinePoints4=new ArrayList();
+                        ArrayList<POINT2> splinePoints4 = new ArrayList();
                         lineObject2 = DrawSplines(tg, splinePoints4);
                         splinePoints2.addAll(splinePoints4);
-                        ptLast=tg.Pixels.get(tg.Pixels.size()-1);
+                        ptLast = tg.Pixels.get(tg.Pixels.size() - 1);
                         lineObject2.lineTo(ptLast.x, ptLast.y);
                         shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                         shape.setShape(lineObject2);
@@ -2257,24 +2259,18 @@ public final class clsMETOC {
                         ArrayList splinePoints2Arrays = new ArrayList();
                         ArrayList<POINT2> ptsArray = new ArrayList();
                         for (j = 0; j < splinePoints.size(); j++) {
-                            if (splinePoints.get(j).style != 47)
-                            {
+                            if (splinePoints.get(j).style != 47) {
                                 ptsArray.add(splinePoints.get(j));
-                            }
-                            else
-                            {
+                            } else {
                                 splinePointsArrays.add(ptsArray);
                                 ptsArray = new ArrayList();
                             }
                         }
 
                         for (j = 0; j < splinePoints2.size(); j++) {
-                            if (splinePoints2.get(j).style != 47)
-                            {
+                            if (splinePoints2.get(j).style != 47) {
                                 ptsArray.add(splinePoints2.get(j));
-                            }
-                            else
-                            {
+                            } else {
                                 splinePoints2Arrays.add(ptsArray);
                                 ptsArray = new ArrayList();
                             }
@@ -2284,24 +2280,26 @@ public final class clsMETOC {
                         ArrayList<POINT2> array = null;
                         ArrayList<POINT2> array2 = null;
                         POINT2 pt,
-                         pt2;
+                                pt2;
                         lineObject = new GeneralPath();
                         //the lines to connect the extrapolated points
                         for (j = 0; j < splinePointsArrays.size(); j++) {
                             array = (ArrayList<POINT2>) splinePointsArrays.get(j);
 
-                            if(splinePoints2Arrays.size()>j)
+                            if (splinePoints2Arrays.size() > j) {
                                 array2 = (ArrayList<POINT2>) splinePoints2Arrays.get(j);
-                            else
+                            } else {
                                 break;
+                            }
                             //extrapolate against points in the shortest array
                             if (splinePointsArrays.size() >= splinePoints2Arrays.size()) //array is shorter
                             {
                                 for (k = 0; k < array.size(); k++) {
-                                    if(array.size()>k)
+                                    if (array.size() > k) {
                                         pt = array.get(k);
-                                    else
+                                    } else {
                                         break;
+                                    }
 
                                     pt2 = ExtrapolatePointFromCurve(array2, pt);
                                     //if we got a valid extrapolation point then draw the line
@@ -2337,13 +2335,13 @@ public final class clsMETOC {
                     //the solid line
                     lineObject = DrawSplines(tg, splinePoints);
                     lineObject2 = new GeneralPath();
-                    if(splinePoints.size()>0)
+                    if (splinePoints.size() > 0) {
                         lineObject2.moveTo(splinePoints.get(0).x, splinePoints.get(0).y);
-                    else
-                    {
-                        lineObject2.moveTo(tg.Pixels.get(0).x,tg.Pixels.get(0).y);
-                        for(j=0;j<tg.Pixels.size();j++)
-                            lineObject2.lineTo(tg.Pixels.get(j).x,tg.Pixels.get(j).y);
+                    } else {
+                        lineObject2.moveTo(tg.Pixels.get(0).x, tg.Pixels.get(0).y);
+                        for (j = 0; j < tg.Pixels.size(); j++) {
+                            lineObject2.lineTo(tg.Pixels.get(j).x, tg.Pixels.get(j).y);
+                        }
 
                         shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                         shape.setShape(lineObject2);
@@ -2354,8 +2352,9 @@ public final class clsMETOC {
 
                     int n = splinePoints.size() / 2;
                     for (j = 1; j <= n; j++) {
-                        if(splinePoints.size()>=j-1)
+                        if (splinePoints.size() >= j - 1) {
                             lineObject2.lineTo(splinePoints.get(j).x, splinePoints.get(j).y);
+                        }
                     }
                     shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                     shape.setShape(lineObject2);
@@ -2365,8 +2364,9 @@ public final class clsMETOC {
                     lineObject2 = new GeneralPath();
                     lineObject2.moveTo(splinePoints.get(n).x, splinePoints.get(n).y);
                     for (j = n + 1; j < splinePoints.size(); j++) {
-                        if(splinePoints.size()>=j-1)
+                        if (splinePoints.size() >= j - 1) {
                             lineObject2.lineTo(splinePoints.get(j).x, splinePoints.get(j).y);
+                        }
                     }
                     shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                     shape.setShape(lineObject2);
@@ -2381,15 +2381,13 @@ public final class clsMETOC {
                     break;
             }
             //add the last point
-            if (tg.get_LineType() != TacticalLines.ICE_OPENINGS_LEAD &&
-                    tg.get_LineType() != TacticalLines.ICE_OPENINGS_LEAD_GE &&
-                    tg.get_LineType() != TacticalLines.ICE_OPENINGS_FROZEN &&
-                    tg.get_LineType() != TacticalLines.ICE_OPENINGS_FROZEN_GE &&
-                    //tg.get_LineType() != TacticalLines.ICE_EDGE_RADAR_GE &&
-                    tg.get_LineType() != TacticalLines.ICE_EDGE_RADAR)
-            {
-                if (splinePoints != null && splinePoints.size() > 0)
-                {
+            if (tg.get_LineType() != TacticalLines.ICE_OPENINGS_LEAD
+                    && tg.get_LineType() != TacticalLines.ICE_OPENINGS_LEAD_GE
+                    && tg.get_LineType() != TacticalLines.ICE_OPENINGS_FROZEN
+                    && tg.get_LineType() != TacticalLines.ICE_OPENINGS_FROZEN_GE
+                    && //tg.get_LineType() != TacticalLines.ICE_EDGE_RADAR_GE &&
+                    tg.get_LineType() != TacticalLines.ICE_EDGE_RADAR) {
+                if (splinePoints != null && splinePoints.size() > 0) {
                     lineObject2 = new GeneralPath();
                     lineObject2.moveTo(splinePoints.get(splinePoints.size() - 1).x, splinePoints.get(splinePoints.size() - 1).y);
                     lineObject2.lineTo(ptLast.x, ptLast.y);
@@ -2400,76 +2398,70 @@ public final class clsMETOC {
                 }
             }
             SetShapeProperties(tg, shapes, null);
-        } 
-        catch (Exception exc) {
-            //clsUtility.WriteFile("error in clsMETOC.GetMeTOCShape");
-               ErrorLogger.LogException(_className ,"GetMeTOCShape",
-                    new RendererException("Failed inside GetMeTOCShape", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to get shape", ex);
         }
     }
-/**
- * Returns the image file name based on the linetype for the METOC symbols with pattern ill
- * @param tg
- * @return
- */
+
+    /**
+     * Returns the image file name based on the linetype for the METOC symbols
+     * with pattern ill
+     *
+     * @param tg
+     * @return
+     */
     private static String GetImageFile(TGLight tg) {
         String fileName = "";
-        try
-        {
-        switch (tg.get_LineType()) {
-            case TacticalLines.WEIRS:
-                fileName = "visualAssets/Weirs.png";
-                break;
-            case TacticalLines.SWEPT_AREA:
-                fileName = "visualAssets/SweptArea.png";
-                break;
-            case TacticalLines.OIL_RIG_FIELD:
-                fileName = "visualAssets/OilRigField.png";
-                break;
-            case TacticalLines.FOUL_GROUND:
-                fileName = "visualAssets/FoulGround.png";
-                break;
-            case TacticalLines.KELP:
-                fileName = "visualAssets/Kelp.png";
-                break;
-            case TacticalLines.BEACH_SLOPE_STEEP:
-                fileName = "visualAssets/BeachSlopeSteep.png";
-                break;
-            case TacticalLines.BEACH:
-                fileName = "visualAssets/BeigeStipple.png";
-                break;
-            case TacticalLines.BEACH_SLOPE_MODERATE:
-                fileName = "visualAssets/BeachSlopeModerate.png";
-                break;
-            default:
-                break;
-        }
-        }
-        catch(Exception exc)
-        {
-            //clsUtility.WriteFile("Error in clsMETOC.GetImageFile");
-               ErrorLogger.LogException(_className ,"GetImageFile",
-                    new RendererException("Failed inside GetImageFile", exc));
+        try {
+            switch (tg.get_LineType()) {
+                case TacticalLines.WEIRS:
+                    fileName = "visualAssets/Weirs.png";
+                    break;
+                case TacticalLines.SWEPT_AREA:
+                    fileName = "visualAssets/SweptArea.png";
+                    break;
+                case TacticalLines.OIL_RIG_FIELD:
+                    fileName = "visualAssets/OilRigField.png";
+                    break;
+                case TacticalLines.FOUL_GROUND:
+                    fileName = "visualAssets/FoulGround.png";
+                    break;
+                case TacticalLines.KELP:
+                    fileName = "visualAssets/Kelp.png";
+                    break;
+                case TacticalLines.BEACH_SLOPE_STEEP:
+                    fileName = "visualAssets/BeachSlopeSteep.png";
+                    break;
+                case TacticalLines.BEACH:
+                    fileName = "visualAssets/BeigeStipple.png";
+                    break;
+                case TacticalLines.BEACH_SLOPE_MODERATE:
+                    fileName = "visualAssets/BeachSlopeModerate.png";
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to get image file", ex);
         }
 
         return fileName;
     }
-/**
- * Sets the shape properties based on the tacttical graphic properties and also based on shape
- * styles which may have been set by JavaLineArray
- * @param tg
- * @param shapes shapes array to set properties
- * @param bi BufferedImage used for hatch fills
- */
+
+    /**
+     * Sets the shape properties based on the tacttical graphic properties and
+     * also based on shape styles which may have been set by JavaLineArray
+     *
+     * @param tg
+     * @param shapes shapes array to set properties
+     * @param bi BufferedImage used for hatch fills
+     */
     protected static void SetShapeProperties(TGLight tg, ArrayList<Shape2> shapes, BufferedImage bi) {
-        try
-        {
-            if (shapes == null)
-            {
+        try {
+            if (shapes == null) {
                 return;
             }
-            switch(tg.get_LineType())
-            {
+            switch (tg.get_LineType()) {
                 case TacticalLines.DEPTH_AREA:
                     return;
                 default:
@@ -2501,8 +2493,7 @@ public final class clsMETOC {
                     shape = shapes.get(0);
                     shape.setLineColor(tg.get_LineColor());
                     inFile = clsMETOC.class.getClassLoader().getResourceAsStream(fileName);
-                    if(inFile!=null)
-                    {
+                    if (inFile != null) {
                         bi2 = ImageIO.read(inFile);
                         rect = new Rectangle2D.Double(0, 0, bi2.getWidth(), bi2.getHeight());
                         tp = new TexturePaint(bi2, rect);
@@ -2544,7 +2535,6 @@ public final class clsMETOC {
                 }
 
                 //clsUtility.ResolveModifierShape(tg,shape);
-
                 shapeType = shape.getShapeType();
                 switch (tg.get_LineType()) {
                     case TacticalLines.SF:
@@ -2559,12 +2549,11 @@ public final class clsMETOC {
                         break;
                     case TacticalLines.BRDGHD_GE:
                     case TacticalLines.HOLD_GE:
-                        if(shape.getShapeType()==ShapeInfo.SHAPE_TYPE_FILL)
+                        if (shape.getShapeType() == ShapeInfo.SHAPE_TYPE_FILL) {
                             shape.setLineColor(null);
-                        else
-                        {
+                        } else {
                             shape.setLineColor(tg.get_LineColor());
-                            shape.set_Style(tg.get_LineStyle());                            
+                            shape.set_Style(tg.get_LineStyle());
                         }
                         break;
                     default:
@@ -2573,9 +2562,8 @@ public final class clsMETOC {
                         break;
                 }
 
-                if (isClosedPolygon || shapeType == Shape2.SHAPE_TYPE_FILL)
-                {
-                    switch(tg.get_LineType())//these have fill instead of TexturePaint
+                if (isClosedPolygon || shapeType == Shape2.SHAPE_TYPE_FILL) {
+                    switch (tg.get_LineType())//these have fill instead of TexturePaint
                     {
                         case TacticalLines.FORESHORE_AREA:
                         case TacticalLines.WATER:
@@ -2744,10 +2732,8 @@ public final class clsMETOC {
                 stroke = new BasicStroke(lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, dash, 0);
                 shape.setStroke(stroke);
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("error in clsMETOC.SetShapeProperties");
-               ErrorLogger.LogException(_className ,"SetShapeProperties",
-                    new RendererException("Failed inside SetShapeProperties", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to get shape properties", ex);
         }
     }
 
@@ -2765,8 +2751,7 @@ public final class clsMETOC {
             POINT2 pt2,
             int size,
             GeneralPath lineObject) {
-        try
-        {
+        try {
             POINT2 ptBase = new POINT2();
             POINT2 ptTemp = new POINT2();
             ArrayList<POINT2> pts = new ArrayList();
@@ -2782,15 +2767,16 @@ public final class clsMETOC {
             lineObject.lineTo(pts.get(2).x, pts.get(2).y);
             pts.clear();
             pts = null;
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("error in clsMETOC.DrawArrow");
-               ErrorLogger.LogException(_className ,"DrawArrow",
-                    new RendererException("Failed inside DrawArrow", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to draw arrow", ex);
         }
     }
+
     /**
-     * Returns a GeneralPath for symbols which require splines. Also returns the calculated
-     * spline points for those symbols with additional features based on them.
+     * Returns a GeneralPath for symbols which require splines. Also returns the
+     * calculated spline points for those symbols with additional features based
+     * on them.
+     *
      * @param tg
      * @param splinePoints2 spline points in pixels
      * @return
@@ -2836,7 +2822,6 @@ public final class clsMETOC {
                     pt_after2 = array.get(array.size() - 1);
                 }
 
-
                 Di = new POINT2();
                 p2 = new POINT2();
 
@@ -2858,11 +2843,11 @@ public final class clsMETOC {
                 tmpArray = drawCubicBezier2(tg, lineObject, pt, p2, p3, pt2);
 
                 //ICE_OPENINGS_FROZEN needs to know which segment corresponds to each spline point
-                if (tg.get_LineType() == TacticalLines.ICE_OPENINGS_FROZEN ||
-                        tg.get_LineType() == TacticalLines.ICE_OPENINGS_FROZEN_GE)
-                {
-                    if(tmpArray.size()>0)
+                if (tg.get_LineType() == TacticalLines.ICE_OPENINGS_FROZEN
+                        || tg.get_LineType() == TacticalLines.ICE_OPENINGS_FROZEN_GE) {
+                    if (tmpArray.size() > 0) {
                         tmpArray.get(tmpArray.size() - 1).style = 47;   //use this to differentiate the arrays
+                    }
                 }
                 splinePoints2.addAll(tmpArray);
 
@@ -2870,10 +2855,10 @@ public final class clsMETOC {
 
                 switch (tg.get_LineType()) {
                     case TacticalLines.EBB_TIDE:
-                        if (i == array.size() - 2)
-                        {
-                            if(splinePoints.size()>=2)
+                        if (i == array.size() - 2) {
+                            if (splinePoints.size() >= 2) {
                                 DrawArrow(splinePoints.get(splinePoints.size() - 2), tg.Pixels.get(tg.Pixels.size() - 1), 10, lineObject);
+                            }
                         }
                         break;
                     case TacticalLines.FLOOD_TIDE:
@@ -2904,17 +2889,16 @@ public final class clsMETOC {
                             lineObject.moveTo(pt4.x, pt4.y);
                             lineObject.lineTo(pt6.x, pt6.y);
                         }
-                        if (i == array.size() - 2)
-                        {
-                            if(splinePoints.size()>=2)
+                        if (i == array.size() - 2) {
+                            if (splinePoints.size() >= 2) {
                                 DrawArrow(splinePoints.get(splinePoints.size() - 2), tg.Pixels.get(tg.Pixels.size() - 1), 10, lineObject);
+                            }
                         }
                         break;
                     case TacticalLines.STREAM:
                     case TacticalLines.JET:
                         //if (i == 0)
-                        if (i == 0 && splinePoints.size()>1)
-                        {
+                        if (i == 0 && splinePoints.size() > 1) {
                             DrawArrow(splinePoints.get(1), splinePoints.get(0), 10, lineObject);
                         }
                         break;
@@ -2950,40 +2934,44 @@ public final class clsMETOC {
                             lineObject.moveTo(pt4.x, pt4.y);
                             lineObject.lineTo(pt6.x, pt6.y);
                         }
-                        if(i==array.size()-2)//the last point in the array
+                        if (i == array.size() - 2)//the last point in the array
                         {
-                            lineObject.moveTo((int)splinePoints2.get(0).x,(int)splinePoints2.get(0).y);
-                            for(j=1;j<splinePoints2.size();j++)
-                                lineObject.lineTo((int)splinePoints2.get(j).x,(int)splinePoints2.get(j).y);
+                            lineObject.moveTo((int) splinePoints2.get(0).x, (int) splinePoints2.get(0).y);
+                            for (j = 1; j < splinePoints2.size(); j++) {
+                                lineObject.lineTo((int) splinePoints2.get(j).x, (int) splinePoints2.get(j).y);
+                            }
 
-                            if(splinePoints.size()>=2)
+                            if (splinePoints.size() >= 2) {
                                 DrawArrow(splinePoints.get(splinePoints.size() - 2), tg.Pixels.get(tg.Pixels.size() - 1), 10, lineObject);
+                            }
                         }
                         break;
                     case TacticalLines.EBB_TIDE_GE:
-                        if(i==array.size()-2)//the last point in the array
+                        if (i == array.size() - 2)//the last point in the array
                         {
-                            lineObject=new GeneralPath();
-                            lineObject.moveTo((int)splinePoints2.get(0).x,(int)splinePoints2.get(0).y);
-                            for(j=1;j<splinePoints2.size();j++)
-                                lineObject.lineTo((int)splinePoints2.get(j).x,(int)splinePoints2.get(j).y);
+                            lineObject = new GeneralPath();
+                            lineObject.moveTo((int) splinePoints2.get(0).x, (int) splinePoints2.get(0).y);
+                            for (j = 1; j < splinePoints2.size(); j++) {
+                                lineObject.lineTo((int) splinePoints2.get(j).x, (int) splinePoints2.get(j).y);
+                            }
 
-                            if(splinePoints.size()>=2)
+                            if (splinePoints.size() >= 2) {
                                 DrawArrow(splinePoints.get(splinePoints.size() - 2), tg.Pixels.get(tg.Pixels.size() - 1), 10, lineObject);
+                            }
                         }
                         break;
                     case TacticalLines.JET_GE:
                     case TacticalLines.STREAM_GE:
-                        if (i == 0 && splinePoints.size()>1)
-                        {
+                        if (i == 0 && splinePoints.size() > 1) {
                             DrawArrow(splinePoints.get(1), splinePoints.get(0), 10, lineObject);
                         }
-                        if(i==array.size()-2)//the last point in the array
+                        if (i == array.size() - 2)//the last point in the array
                         {
                             //lineObject=new GeneralPath();
-                            lineObject.moveTo((int)splinePoints2.get(0).x,(int)splinePoints2.get(0).y);
-                            for(j=1;j<splinePoints2.size();j++)
-                                lineObject.lineTo((int)splinePoints2.get(j).x,(int)splinePoints2.get(j).y);
+                            lineObject.moveTo((int) splinePoints2.get(0).x, (int) splinePoints2.get(0).y);
+                            for (j = 1; j < splinePoints2.size(); j++) {
+                                lineObject.lineTo((int) splinePoints2.get(j).x, (int) splinePoints2.get(j).y);
+                            }
                         }
                         break;
                     case TacticalLines.ICE_OPENINGS_FROZEN_GE:
@@ -3009,14 +2997,14 @@ public final class clsMETOC {
                     case TacticalLines.ISOBAR_GE:
                     case TacticalLines.HOLD_GE:
                     case TacticalLines.BRDGHD_GE:
-                        if(splinePoints2!=null && !splinePoints2.isEmpty())
-                        {
-                            lineObject=new GeneralPath();
-                            if(i==array.size()-2)//the last point in the array
+                        if (splinePoints2 != null && !splinePoints2.isEmpty()) {
+                            lineObject = new GeneralPath();
+                            if (i == array.size() - 2)//the last point in the array
                             {
-                                lineObject.moveTo((int)splinePoints2.get(0).x,(int)splinePoints2.get(0).y);
-                                for(j=1;j<splinePoints2.size();j++)
-                                    lineObject.lineTo((int)splinePoints2.get(j).x,(int)splinePoints2.get(j).y);
+                                lineObject.moveTo((int) splinePoints2.get(0).x, (int) splinePoints2.get(0).y);
+                                for (j = 1; j < splinePoints2.size(); j++) {
+                                    lineObject.lineTo((int) splinePoints2.get(j).x, (int) splinePoints2.get(j).y);
+                                }
                             }
                         }
                         break;
@@ -3042,8 +3030,7 @@ public final class clsMETOC {
                         }
                         break;
                     case TacticalLines.ICE_EDGE_RADAR_GE:
-                        for (j = 0; j < splinePoints.size() - 1; j++)
-                        {
+                        for (j = 0; j < splinePoints.size() - 1; j++) {
                             pt0 = new POINT2(splinePoints.get(j).x, splinePoints.get(j).y);
                             pt2 = lineutility.ExtendAngledLine(splinePoints.get(j), splinePoints.get(j + 1), pt0, 45, 5);
                             pt1 = new POINT2(splinePoints.get(j).x, splinePoints.get(j).y);
@@ -3062,17 +3049,17 @@ public final class clsMETOC {
                             lineObject.moveTo(splinePoints.get(j).x, splinePoints.get(j).y);
                             lineObject.lineTo(pt3.x, pt3.y);
                         }
-                        if(i==array.size()-2)//the last point in the array
+                        if (i == array.size() - 2)//the last point in the array
                         {
                             //lineObject=new GeneralPath();
-                            lineObject.moveTo((int)splinePoints2.get(0).x,(int)splinePoints2.get(0).y);
-                            for(j=1;j<splinePoints2.size();j++)
-                                lineObject.lineTo((int)splinePoints2.get(j).x,(int)splinePoints2.get(j).y);
+                            lineObject.moveTo((int) splinePoints2.get(0).x, (int) splinePoints2.get(0).y);
+                            for (j = 1; j < splinePoints2.size(); j++) {
+                                lineObject.lineTo((int) splinePoints2.get(j).x, (int) splinePoints2.get(j).y);
+                            }
                         }
                         break;
                     case TacticalLines.CRACKS_SPECIFIC_LOCATION:
-                        for (j = 0; j < splinePoints.size() - 1; j++)
-                        {
+                        for (j = 0; j < splinePoints.size() - 1; j++) {
                             //get perpendicular points (point pair)
                             pt0 = splinePoints.get(j + 1);
                             pt1 = lineutility.ExtendDirectedLine(splinePoints.get(j), splinePoints.get(j + 1), pt0, 2, 5);
@@ -3082,8 +3069,7 @@ public final class clsMETOC {
                         }
                         break;
                     case TacticalLines.CRACKS_SPECIFIC_LOCATION_GE:
-                        for (j = 0; j < splinePoints.size() - 1; j++)
-                        {
+                        for (j = 0; j < splinePoints.size() - 1; j++) {
                             //get perpendicular points (point pair)
                             pt0 = splinePoints.get(j + 1);
                             pt1 = lineutility.ExtendDirectedLine(splinePoints.get(j), splinePoints.get(j + 1), pt0, 2, 5);
@@ -3091,30 +3077,28 @@ public final class clsMETOC {
                             pt1 = lineutility.ExtendDirectedLine(splinePoints.get(j), splinePoints.get(j + 1), pt0, 3, 5);
                             lineObject.lineTo(pt1.x, pt1.y);
                         }
-                        if(i==array.size()-2)//the last point in the array
+                        if (i == array.size() - 2)//the last point in the array
                         {
                             //lineObject=new GeneralPath();
-                            lineObject.moveTo((int)splinePoints2.get(0).x,(int)splinePoints2.get(0).y);
-                            for(j=1;j<splinePoints2.size();j++)
-                                lineObject.lineTo((int)splinePoints2.get(j).x,(int)splinePoints2.get(j).y);
+                            lineObject.moveTo((int) splinePoints2.get(0).x, (int) splinePoints2.get(0).y);
+                            for (j = 1; j < splinePoints2.size(); j++) {
+                                lineObject.lineTo((int) splinePoints2.get(j).x, (int) splinePoints2.get(j).y);
+                            }
                         }
                         break;
                     default:
                         break;
                 }
             }
-        }
-        catch (Exception exc) {
-            //clsUtility.WriteFile("error in clsMETOC.DrawSplines");
-               ErrorLogger.LogException(_className ,"DrawSplines",
-                    new RendererException("Failed inside DrawSplines", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to draw splie", ex);
         }
         return lineObject;
     }
 
     /**
-     * Calculates a point on a segment using a ratio of the segment length.
-     * This function is used for calculating control points on Bezier curves.
+     * Calculates a point on a segment using a ratio of the segment length. This
+     * function is used for calculating control points on Bezier curves.
      *
      * @param P0 the 1st point on the segment.
      * @param P1 the last point on the segment
@@ -3126,24 +3110,19 @@ public final class clsMETOC {
         //return {x: (P0.x + ((P1.x - P0.x) * ratio)), y: (P0.y + ((P1.y - P0.y) * ratio))};
         //var pt:Point=new Point();
         POINT2 pt = new POINT2();
-        try
-        {
+        try {
             pt.x = P0.x + (P1.x - P0.x) * ratio;
             pt.y = P0.y + (P1.y - P0.y) * ratio;
-        }
-        catch (Exception exc)
-        {
-            //clsUtility.WriteFile("error in clsMETOC.getPointOnSegment");
-               ErrorLogger.LogException(_className ,"getPointOnSegment",
-                    new RendererException("Failed inside getPointOnSegment", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed get point on segment", ex);
         }
         return pt;
     }
 
     /**
-     * This function will trace a cubic approximation of the cubic Bezier
-     * It will calculate a series of (control point/Destination point] which
-     * will be used to draw quadratic Bezier starting from P0
+     * This function will trace a cubic approximation of the cubic Bezier It
+     * will calculate a series of (control point/Destination point] which will
+     * be used to draw quadratic Bezier starting from P0
      *
      * @param lineObject - the sprite to use for drawing
      * @param P0 - 1st client point
@@ -3151,7 +3130,8 @@ public final class clsMETOC {
      * @param P2 - 2nd control point
      * @param P3 - 2nd client point
      *
-     * @return an array of points along the spline at linetype specific intervals
+     * @return an array of points along the spline at linetype specific
+     * intervals
      */
     private static ArrayList drawCubicBezier2(
             TGLight tg,
@@ -3159,8 +3139,7 @@ public final class clsMETOC {
             POINT2 P0,
             POINT2 P1,
             POINT2 P2,
-            POINT2 P3)
-    {
+            POINT2 P3) {
         ArrayList<POINT2> array = new ArrayList();
         try {
             // this stuff may be unnecessary
@@ -3221,8 +3200,9 @@ public final class clsMETOC {
                     lineObject.moveTo(P0.x, P0.y);
                     lineObject.curveTo(P1.x, P1.y, P2.x, P2.y, P3.x, P3.y);
                     //return if no fill, these points are for fill
-                    if(tg.get_FillColor()==null || tg.get_FillColor().getAlpha()<2)
+                    if (tg.get_FillColor() == null || tg.get_FillColor().getAlpha() < 2) {
                         return array;
+                    }
                     break;
                 case TacticalLines.ICE_OPENINGS_LEAD_GE:
                 case TacticalLines.CABLE_GE:
@@ -3303,10 +3283,11 @@ public final class clsMETOC {
             }
 
             distance = lineutility.CalcDistanceDouble(P0, Pa_1);
-            if(distance<increment)
-                distance=increment;
+            if (distance < increment) {
+                distance = increment;
+            }
             n = (int) (distance / increment);
-            
+
             pt0 = P0;
             pt1 = Pc_1;
             pt2 = Pa_1;
@@ -3362,12 +3343,8 @@ public final class clsMETOC {
                 pt = new POINT2(x, y);
                 array.add(pt);
             }
-        }
-        catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("error in clsMETOC.drawCubicBezier2");
-               ErrorLogger.LogException(_className ,"drawCubicBezier2",
-                    new RendererException("Failed inside drawCubicBezier2", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed to draw curve", ex);
         }
         return array;
     }
@@ -3381,7 +3358,7 @@ public final class clsMETOC {
      *
      * @return An ArrayList to use for building the parallel splines
      */
-    private static ArrayList ParallelLines(TGLight tg,int rev) {
+    private static ArrayList ParallelLines(TGLight tg, int rev) {
         ArrayList<POINT2> channelPoints2 = new ArrayList();
         try {
             double[] pLinePoints = new double[tg.Pixels.size() * 2];
@@ -3400,11 +3377,9 @@ public final class clsMETOC {
             //Channels.GetChannel1Double(pLinePoints, numPoints, numPoints, TacticalLines.CHANNEL, channelWidth, distanceToChannelPoint );
 
             try {
-                CELineArray.CGetChannel2Double(pLinePoints, pLinePoints, channelPoints, numPoints, numPoints, (int) TacticalLines.CHANNEL, channelWidth, usePtr, shapes,rev);
-            } catch (Exception e) {
-                //clsUtility.WriteFile("error in clsMETOC.ParallelLines call to CGetChanne2lDouble");
-                ErrorLogger.LogException(_className, "ParallelLines",
-                    new RendererException("Failed inside ParallelLines", e));
+                CELineArray.CGetChannel2Double(pLinePoints, pLinePoints, channelPoints, numPoints, numPoints, (int) TacticalLines.CHANNEL, channelWidth, usePtr, shapes, rev);
+            } catch (Exception ex) {
+                logger.error("weather symbols - failed parallel lines", ex);
             }
 
             POINT2 pt2 = null;
@@ -3413,20 +3388,19 @@ public final class clsMETOC {
                 pt2 = new POINT2(channelPoints[3 * j], channelPoints[3 * j + 1], style);
                 channelPoints2.add(pt2);
             }
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("error in clsMETOC.ParallelLines");
-            ErrorLogger.LogException(_className, "ParallelLines",
-                    new RendererException("Failed inside ParallelLines", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed parallel lines", ex);
         }
         return channelPoints2;
     }
+
     /**
      * Call this function with segment
+     *
      * @param Pixels a segment of tg.Pixels
      * @return
      */
-    private static ArrayList ParallelLines2(ArrayList<POINT2> Pixels,int rev) {
+    private static ArrayList ParallelLines2(ArrayList<POINT2> Pixels, int rev) {
         ArrayList<POINT2> channelPoints2 = new ArrayList();
         try {
             double[] pLinePoints = new double[Pixels.size() * 2];
@@ -3445,11 +3419,9 @@ public final class clsMETOC {
             //Channels.GetChannel1Double(pLinePoints, numPoints, numPoints, TacticalLines.CHANNEL, channelWidth, distanceToChannelPoint );
 
             try {
-                CELineArray.CGetChannel2Double(pLinePoints, pLinePoints, channelPoints, numPoints, numPoints, (int) TacticalLines.CHANNEL, channelWidth, usePtr, shapes,rev);
-            } catch (Exception e) {
-                //clsUtility.WriteFile("error in clsMETOC.ParallelLines call to CGetChanne2lDouble");
-                ErrorLogger.LogException(_className, "ParallelLines2",
-                    new RendererException("Failed inside ParallelLines2", e));
+                CELineArray.CGetChannel2Double(pLinePoints, pLinePoints, channelPoints, numPoints, numPoints, (int) TacticalLines.CHANNEL, channelWidth, usePtr, shapes, rev);
+            } catch (Exception ex) {
+                logger.error("weather symbols - failed parallel lines", ex);
             }
 
             POINT2 pt2 = null;
@@ -3458,9 +3430,8 @@ public final class clsMETOC {
                 pt2 = new POINT2(channelPoints[3 * j], channelPoints[3 * j + 1], style);
                 channelPoints2.add(pt2);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ParallelLines2",
-                    new RendererException("Failed inside ParallelLines2", exc));
+        } catch (Exception ex) {
+            logger.error("weather symbols - failed parallel lines", ex);
         }
         return channelPoints2;
     }

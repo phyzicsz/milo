@@ -19,6 +19,7 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/MilStdSymbol.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/Channels.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/UnitFontLookup.java
+/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/TacticalGraphicText.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/PointConversionDummy.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SymbolDisplayProperties.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/TGLight.java
@@ -47,13 +48,11 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/TacticalGraphicLookup.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/TextInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/TacticalGraphicIconRenderer.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/ErrorLogger.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/TBCRendererException.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/SymbolInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/IJavaRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/LineInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/line/Shape2.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/Modifier2.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/JavaRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/clsUtility.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SymbolDef.java

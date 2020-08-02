@@ -4,16 +4,19 @@
  */
 
 package com.phyzicsz.milo.renderer.line;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import java.awt.geom.Rectangle2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * A class to calculate the number of pixels based points required for a line
  * @author Michael Deutch
  */
 public final class countsupport
 {
+    private static final Logger logger = LoggerFactory.getLogger(countsupport.class);
+    
     private static final double maxLength = 100;	//max arrow size
     private static final double minLength = 2.5;		//min arrow size
     private static final String _className = "countsupport";
@@ -527,10 +530,9 @@ public final class countsupport
                     break;
             }
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException(_className ,"GetCountersDouble",
-                    new RendererException("Failed inside GetCountersDouble " + Integer.toString(vbiDrawThis), exc));
+            logger.error("counters error - lineType: {}",vbiDrawThis,ex );
         }
         return count;
     }
@@ -566,9 +568,8 @@ public final class countsupport
                 count += 5 * (int) d / 40;
             }
             count += 2 * (int) vblCounter;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetReefCount",
-                    new RendererException("Failed inside GetReefCount", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - reef",ex );
         }
         return count;
     }
@@ -582,9 +583,8 @@ public final class countsupport
                 count += 4 * (int) d / 15;
             }
             count += 2 * (int) vblCounter;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetRestrictedAreaCount",
-                    new RendererException("Failed inside GetRestrictedAreaCount", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - restricted area",ex );
         }
         return count;
     }
@@ -599,9 +599,8 @@ public final class countsupport
                 count += 3 * (int) d / 20;
             }
             count += 2 * (int) vblCounter;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetPipeCount",
-                    new RendererException("Failed inside GetPipeCount", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - pipe",ex );
             }
         return count;
     }
@@ -624,10 +623,9 @@ public final class countsupport
                 xCounter += 4*numThisSegment;
             }
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException(_className ,"GetXPointsCount",
-                    new RendererException("Failed inside GetXPointsCount", exc));
+            logger.error("counters error - xpoints",ex );
         }
         return xCounter;
     }
@@ -648,9 +646,9 @@ public final class countsupport
                     lHowManyThisSegment = (int) ((d - 30) / 30)+1;
                 lEllipseCounter += lHowManyThisSegment*37;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetLVOCount",
-                    new RendererException("Failed inside GetLVOCount", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - lvo",ex );
+
         }
         return lEllipseCounter;
     }
@@ -664,9 +662,8 @@ public final class countsupport
                 length = (length / 15) * 4;
                 total += length;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetIcingCount",
-                    new RendererException("Failed inside GetIcingCount", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - icing",ex );
             }
         return total;
     }
@@ -685,9 +682,8 @@ public final class countsupport
                 //total += 2 * (int) (d / 15);
                 total += n;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetITDQty",
-                    new RendererException("Failed inside GetITDQty", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - itd",ex );
             }
         return total;
         }
@@ -703,9 +699,8 @@ public final class countsupport
                 d = lineutility.CalcDistanceDouble(pLinePoints[j], pLinePoints[j + 1]);
                 total += 4 * (int) (d / 10);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetConverganceQty",
-                    new RendererException("Failed inside GetConverganceQty", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - convergence",ex );
         }
         return total;
     }
@@ -750,9 +745,8 @@ public final class countsupport
                     vblXCounter += 2;
                 }
             }	//end for
-            } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDitchcountDouble",
-                    new RendererException("Failed inside GetDitchCountDouble " + Integer.toString(vbiDrawThis), exc));
+            } catch (Exception ex) {
+                logger.error("counters error - ditch",ex );
         }
         return vblXCounter;
     }
@@ -781,9 +775,8 @@ public final class countsupport
             }
 
             //clean up
-            } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetSquallQty",
-                    new RendererException("Failed inside GetSquallQty", exc));
+            } catch (Exception ex) {
+                logger.error("counters error - squall",ex );
         }
         return counter;
     }
@@ -797,9 +790,8 @@ public final class countsupport
             double dist = lineutility.CalcDistanceDouble(StartPt, EndPt);
             int numCurves = (int) (dist / (double) length);
             qty = numCurves * quantity;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetSquallSegQty",
-                    new RendererException("Failed inside GetSquallSegQty", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - squall segment",ex );
         }
         return qty;
     }
@@ -858,9 +850,8 @@ public final class countsupport
             }
             lCounter += 10 + vblCounter;
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetFORTLCountDouble",
-                    new RendererException("Failed inside GetFORTLCountDouble", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - fortl",ex );
             }
         return lCounter;
     }
@@ -882,9 +873,8 @@ public final class countsupport
             pointsCorner[1].x = points[1].x - point_mid.x + points[2].x;
             pointsCorner[1].y = points[1].y - point_mid.y + points[2].y;
             return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetByDifSegment",
-                    new RendererException("Failed inside GetByDifSegment", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - dif segment",ex );
         }
     }
     /**
@@ -946,9 +936,8 @@ public final class countsupport
 
             savepoints = null;
             counter = 20 + iNumJaggies * 3;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMFixCount",
-                    new RendererException("Failed inside GetDISMFixCount", exc));
+        } catch (Exception ex) {
+            logger.error("counters error - dism fix",ex );
         }
         return counter;
     }

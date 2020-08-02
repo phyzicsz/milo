@@ -21,11 +21,9 @@ import java.awt.Shape;
 import java.awt.Polygon;
 
 import java.awt.font.FontRenderContext;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
-//import ArmyC2.C2SD.Utilities.SymbolUtilities;
 import java.awt.geom.PathIterator;
 import com.phyzicsz.milo.renderer.common.ShapeInfo;
 import com.phyzicsz.milo.renderer.line.Channels;
@@ -35,6 +33,8 @@ import java.awt.geom.Point2D;
 import java.awt.font.TextLayout;
 import java.util.HashMap;
 import java.awt.geom.Line2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /*
  * This class handles everything having to do with text for a
  * tactical graphic. Note: labels are handled the same as text modifiers.
@@ -42,7 +42,8 @@ import java.awt.geom.Line2D;
  * 
  */
 
-public class Modifier2 {
+public class TacticalGraphicText {
+    private static final Logger logger = LoggerFactory.getLogger(TacticalGraphicText.class);
 
     public POINT2[] textPath;
     public String textID;
@@ -57,7 +58,7 @@ public class Modifier2 {
     public boolean fitsMBR = true;        //added 7-9-12 M. Deutch
     private static RendererSettings rendererSettings = RendererSettings.getInstance();
 
-    Modifier2() {
+    TacticalGraphicText() {
         textPath = new POINT2[2];
     }
     //static methods and properties
@@ -79,9 +80,8 @@ public class Modifier2 {
                 result = false;
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "DoublesBack",
-                    new RendererException("Failed inside DoublesBack", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - doubles back", ex);
         }
         return result;
     }
@@ -478,10 +478,8 @@ public class Modifier2 {
                 default:
                     break;
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.GetCenterLabel");
-            ErrorLogger.LogException(_className, "GetCenterLabel",
-                    new RendererException("Failed inside GetCenterLabel", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - center labels", ex);
         }
         return label;
     }
@@ -527,7 +525,7 @@ public class Modifier2 {
             //if(_isTextFlipped)
             //  lineFactor = -lineFactor;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             if (text == null || text.equals("")) {
                 return;
             }
@@ -549,13 +547,9 @@ public class Modifier2 {
                 modifier.textPath[1] = tg.Pixels.get(endIndex);
                 tg.modifiers.add(modifier);
             }
-        } catch (Exception exc) {
-            //String err=e.getMessage();
-            //clsUtility.WriteFile("Error in Modifier2.AddModifier");
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
-        return;
     }
 
     private static void AddOffsetModifier(TGLight tg,
@@ -573,7 +567,7 @@ public class Modifier2 {
             //if(_isTextFlipped)
             //  lineFactor = -lineFactor;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             if (text == null || text.equals("")) {
                 return;
             }
@@ -602,13 +596,9 @@ public class Modifier2 {
                 }
                 tg.modifiers.add(modifier);
             }
-        } catch (Exception exc) {
-            //String err=e.getMessage();
-            //clsUtility.WriteFile("Error in Modifier2.AddModifier");
-            ErrorLogger.LogException(_className, "AddOffsetModifier",
-                    new RendererException("Failed inside AddOffsetModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - offset modifier", ex);
         }
-        return;
     }
 
     /**
@@ -633,7 +623,7 @@ public class Modifier2 {
             //if(_isTextFlipped)
             //  lineFactor = -lineFactor;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             if (text == null || text.equals("")) {
                 return;
             }
@@ -656,13 +646,9 @@ public class Modifier2 {
             modifier.textPath[1] = ptEnd;
             tg.modifiers.add(modifier);
             //}
-        } catch (Exception exc) {
-            //String err=e.getMessage();
-            //clsUtility.WriteFile("Error in Modifier2.AddModifier");
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
-        return;
     }
 
     private static void AddModifier2(TGLight tg,
@@ -679,7 +665,7 @@ public class Modifier2 {
             //if(fillCanObscureText(tg))
             //isIntegral=true;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             if (text == null || text.equals("")) {
                 return;
             }
@@ -700,13 +686,9 @@ public class Modifier2 {
             modifier.textPath[1] = pt1;//tg.Pixels.get(endIndex);
             modifier.isIntegral = isIntegral;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //String err=e.getMessage();
-            //clsUtility.WriteFile("Error in Modifier2.AddModifier");
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
-        return;
     }
 
     private static void AddModifier2(TGLight tg,
@@ -724,7 +706,7 @@ public class Modifier2 {
             //if(fillCanObscureText(tg))
             //isIntegral=true;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             if (text == null || text.equals("")) {
                 return;
             }
@@ -746,13 +728,9 @@ public class Modifier2 {
             modifier.isIntegral = isIntegral;
             modifier.textID = modifierType;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //String err=e.getMessage();
-            //clsUtility.WriteFile("Error in Modifier2.AddModifier");
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
-        return;
     }
 
     private static void AddIntegralModifier(TGLight tg,
@@ -766,7 +744,7 @@ public class Modifier2 {
                 return;
             }
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.set_IsIntegral(true);
 
             if (text == null || text.equals("")) {
@@ -789,13 +767,9 @@ public class Modifier2 {
                 modifier.textPath[1] = tg.Pixels.get(endIndex);
                 tg.modifiers.add(modifier);
             }
-        } catch (Exception exc) {
-            //String err=e.getMessage();
-            //clsUtility.WriteFile("Error in Modifier2.AddModifier");
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddIntegralModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add integral modifier", ex);
         }
-        return;
     }
 
     private static void AddIntegralModifier(TGLight tg,
@@ -812,7 +786,7 @@ public class Modifier2 {
 
             //if(fillCanObscureText(tg))
             //isIntegral=true;
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.set_IsIntegral(isIntegral);
 
             if (text == null || text.equals("")) {
@@ -833,11 +807,9 @@ public class Modifier2 {
                 modifier.textPath[1] = tg.Pixels.get(endIndex);
                 tg.modifiers.add(modifier);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddIntegralModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
-        return;
     }
 
     private static void AddIntegralModifier(TGLight tg,
@@ -855,7 +827,7 @@ public class Modifier2 {
 
             //if(fillCanObscureText(tg))
             //isIntegral=true;
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.set_IsIntegral(isIntegral);
 
             if (text == null || text.equals("")) {
@@ -877,11 +849,9 @@ public class Modifier2 {
                 modifier.textPath[1] = tg.Pixels.get(endIndex);
                 tg.modifiers.add(modifier);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddModifier",
-                    new RendererException("Failed inside AddIntegralModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
-        return;
     }
 
     /**
@@ -905,7 +875,7 @@ public class Modifier2 {
                 return;
             }
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.text = text;
             modifier.set_IsIntegral(true);
             //if (text == null || text.equals(""))
@@ -922,13 +892,10 @@ public class Modifier2 {
             modifier.textPath[0] = pt0;
             modifier.textPath[1] = pt1;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddAreaModifier");
-            ErrorLogger.LogException(_className, "AddAreaModifier",
-                    new RendererException("Failed inside AddAreaModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add area modifier", ex);
         }
 
-        return;
     }
 
     /**
@@ -954,7 +921,7 @@ public class Modifier2 {
                 return;
             }
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.text = text;
             modifier.set_IsIntegral(true);
             //if (text == null || text.equals(""))
@@ -972,13 +939,10 @@ public class Modifier2 {
             modifier.textPath[0] = pt0;
             modifier.textPath[1] = pt1;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddAreaModifier");
-            ErrorLogger.LogException(_className, "AddAreaModifier",
-                    new RendererException("Failed inside AddAreaModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add area modifier", ex);
         }
 
-        return;
     }
 
     /**
@@ -1005,7 +969,7 @@ public class Modifier2 {
                 return;
             }
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.set_IsIntegral(false);
 
             //if(fillCanObscureText(tg))
@@ -1025,13 +989,9 @@ public class Modifier2 {
             modifier.textPath[1] = pt1;
             modifier.textID = modifierType;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddAreaModifier");
-            ErrorLogger.LogException(_className, "AddAreaModifier",
-                    new RendererException("Failed inside AddAreaModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add area modifier", ex);
         }
-
-        return;
     }
 
     private static void AddIntegralAreaModifier(TGLight tg,
@@ -1048,7 +1008,7 @@ public class Modifier2 {
             //if(fillCanObscureText(tg))
             //isIntegral=true;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.set_IsIntegral(isIntegral);
             modifier.text = text;
             if (text == null || text.equals("")) {
@@ -1064,13 +1024,9 @@ public class Modifier2 {
             modifier.textPath[0] = pt0;
             modifier.textPath[1] = pt1;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddAreaModifier");
-            ErrorLogger.LogException(_className, "AddAreaModifier",
-                    new RendererException("Failed inside AddAreaModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add area modifier", ex);
         }
-
-        return;
     }
 
     private static void AddIntegralAreaModifier(TGLight tg,
@@ -1088,7 +1044,7 @@ public class Modifier2 {
             //if(fillCanObscureText(tg))
             //isIntegral=true;
 
-            Modifier2 modifier = new Modifier2();
+            TacticalGraphicText modifier = new TacticalGraphicText();
             modifier.set_IsIntegral(isIntegral);
             modifier.text = text;
             if (text == null || text.equals("")) {
@@ -1105,13 +1061,9 @@ public class Modifier2 {
             modifier.textPath[1] = pt1;
             modifier.textID = modifierType;
             tg.modifiers.add(modifier);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddAreaModifier");
-            ErrorLogger.LogException(_className, "AddAreaModifier",
-                    new RendererException("Failed inside AddAreaModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add area modifier", ex);
         }
-
-        return;
     }
 
     /**
@@ -1161,10 +1113,8 @@ public class Modifier2 {
                     ptUr.y = y;
                 }
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.GetMBR");
-            ErrorLogger.LogException(_className, "GetMBR",
-                    new RendererException("Failed inside GetMBR", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - get mbr", ex);
         }
     }
 
@@ -1234,10 +1184,8 @@ public class Modifier2 {
                 default:
                     break;
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.GetMBR");
-            ErrorLogger.LogException(_className, "GetBoundaryLineTooShort",
-                    new RendererException("Failed inside GetBoundaryLineTooShort", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - aboundry line too short", ex);
         }
         return lineTooShort;
     }
@@ -1299,10 +1247,8 @@ public class Modifier2 {
                 default:
                     break;
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.GetMBR");
-            ErrorLogger.LogException(_className, "GetBoundaryLineTooShort",
-                    new RendererException("Failed inside GetBoundaryLineTooShort", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - boundry line to short", ex);
         }
         return lineTooShort;
     }
@@ -1414,11 +1360,9 @@ public class Modifier2 {
                     AddIntegralAreaModifier(tg, tg.get_N(), aboveMiddle, 0, pt1, ptLast, true);
                 }
             }//end if foundSegment==false
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddBoundaryModifiers",
-                    new RendererException("Failed inside AddBoundaryModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add boundry modifier", ex);
         }
-        return;
     }
 
     private static void AddBoundaryModifiers(TGLight tg,
@@ -1523,11 +1467,9 @@ public class Modifier2 {
                     AddIntegralAreaModifier(tg, tg.get_N(), aboveMiddle, 0, pt1, ptLast, true);
                 }
             }//end if foundSegment==false
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddBoundaryModifiers",
-                    new RendererException("Failed inside AddBoundaryModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add boundry modifier", ex);
         }
-        return;
     }
 
     /**
@@ -1564,11 +1506,9 @@ public class Modifier2 {
             pt1 = lineutility.ExtendAlongLineDouble(tg.Pixels.get(lastIndex), tg.Pixels.get(nextToLastIndex), -1.5 * stringWidth);
             AddModifier2(tg, tg.get_DTG(), aboveMiddle, 0.7 * csFactor, pt0, pt1, false);
             AddModifier2(tg, tg.get_DTG1(), aboveMiddle, 1.7 * csFactor, pt0, pt1, false);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddBoundaryModifiers",
-                    new RendererException("Failed inside AddBoundaryModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add boundry modifier", ex);
         }
-        return;
     }
 
     /**
@@ -1616,9 +1556,8 @@ public class Modifier2 {
                         return false;
                     }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "fillCanObscureText",
-                    new RendererException("Failed inside fillCanObscureText", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - cannot fill obscure text", ex);
         }
         return result;
     }
@@ -1658,9 +1597,8 @@ public class Modifier2 {
 //                if(tg.Pixels.get(upperIndex-1).y<tg.Pixels.get(upperIndex+1).y)
 //                    upperIndex-=1;
 //            }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetHighestSegmentIndex",
-                    new RendererException("Failed inside GetHighestSegmentIndex", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - cannot get hest segment index", ex);
         }
         return upperIndex;
     }
@@ -1701,9 +1639,8 @@ public class Modifier2 {
 //                    lowerIndex-=1;
 //            }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getLowestSegmentIndex",
-                    new RendererException("Failed inside getLowestSegmentIndex", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - cannot get lwest segment index", ex);
         }
         return lowerIndex;
     }
@@ -1721,9 +1658,8 @@ public class Modifier2 {
             while (metrics.stringWidth(str) < width) {
                 str += " ";
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getLowestSegmentIndex",
-                    new RendererException("Failed inside getLowestSegmentIndex", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - cannot get lowest segment index", ex);
         }
         return str;
     }
@@ -1785,11 +1721,9 @@ public class Modifier2 {
                 default:
                     return;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "shiftModifierPath",
-                    new RendererException("Failed inside shiftModifierPath", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - cannot shift modifier", ex);
         }
-        return;
     }
 
     /**
@@ -1868,9 +1802,8 @@ public class Modifier2 {
                 }
             }
             return true;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "areasWithTwoLabels",
-                    new RendererException("Failed inside areasWithTwoLabels", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - areas with multiple labels", ex);
         }
         return result;
     }
@@ -1991,11 +1924,9 @@ public class Modifier2 {
                 AddIntegralModifier(tg, label, aboveMiddle, 0, middleSegment2, middleSegment2 + 1, true);
             }//else
             
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "areasWithENY",
-                    new RendererException("Failed inside areasWithENY", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - areas with ENY", ex);
         }
-        return;
     }
 
     private static int getVisibleMiddleSegment(TGLight tg, Rectangle2D clipBounds) {
@@ -2078,9 +2009,8 @@ public class Modifier2 {
                 //middleSegment=-1;
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getMiddleSegment",
-                    new RendererException("Failed inside getMiddleSegment", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed getting middle segment", ex);
         }
         return middleSegment;
     }
@@ -2179,9 +2109,8 @@ public class Modifier2 {
                 //middleSegment=-1;
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getMiddleSegment",
-                    new RendererException("Failed inside getMiddleSegment", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed getting middle segment", ex);
         }
         return middleSegment;
     }
@@ -2219,9 +2148,8 @@ public class Modifier2 {
                 }
             }
             return Double.toString(max);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getLargestACWidth",
-                    new RendererException("Failed inside getLargestACWidth", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed getting ac width", ex);
         }
         return h2;
     }
@@ -2237,7 +2165,7 @@ public class Modifier2 {
             String modifierType) {
         try {
             int j = 0;
-            Modifier2 modifier = null;
+            TacticalGraphicText modifier = null;
             for (j = 0; j < tg.modifiers.size(); j++) {
                 modifier = tg.modifiers.get(j);
 
@@ -2250,11 +2178,9 @@ public class Modifier2 {
                     break;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "removeModifier",
-                    new RendererException("Failed inside removeModifier", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to remove modifier", ex);
         }
-        return;
     }
 
     /**
@@ -2351,7 +2277,7 @@ public class Modifier2 {
 
             double stringWidth = 0, stringHeight = 0;
             boolean wfits = true, w1fits = true, ww1fits = true, hfits = true, h1fits = true, h2fits = true;
-            Modifier2 modifier = null;
+            TacticalGraphicText modifier = null;
             String modifierType = "";
             String s = "";
             POINT2 pt0 = null, pt1 = null, pt2 = null, pt3 = null, pt4 = null;
@@ -2463,9 +2389,8 @@ public class Modifier2 {
                 removeModifier(tg, "H2");
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "RemoveModifeirs",
-                    new RendererException("Failed inside RemoveModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to remove modifier", ex);
         }
     }
 
@@ -2524,11 +2449,9 @@ public class Modifier2 {
                     break;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getPixelsMidpoint",
-                    new RendererException("Failed inside getPixelsMidpoint", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to get pixel midpoint", ex);
         }
-        return;
     }
 
     private static double getChange1Height(TGLight tg) {
@@ -2564,9 +2487,8 @@ public class Modifier2 {
             double deltax = x2 - x1;
             double deltay = y2 - y1;
             height = Math.sqrt(deltax * deltax + deltay * deltay);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getChange1Height",
-                    new RendererException("Failed inside getChange1Height", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to ghange height", ex);
         }
         return height;
     }
@@ -2618,8 +2540,8 @@ public class Modifier2 {
             }
 
             double heightModifiers = 0;
-            ArrayList<Modifier2> modifiers = tg.modifiers;
-            Modifier2 modifier = null;
+            ArrayList<TacticalGraphicText> modifiers = tg.modifiers;
+            TacticalGraphicText modifier = null;
             double minLF = Integer.MAX_VALUE;
             int j = 0;
             boolean isValid = false;
@@ -2653,7 +2575,7 @@ public class Modifier2 {
 
             boolean addEllipsis = false;
             //modifierE is ellipses modifier
-            Modifier2 modifierE = new Modifier2();
+            TacticalGraphicText modifierE = new TacticalGraphicText();
             if (expandModifiers) {
                 double factor = heightMBR / heightModifiers;
                 factor = 1 + (factor - 1) / 4;
@@ -2703,7 +2625,7 @@ public class Modifier2 {
                     }
                     modifier.lineFactor = newLF;
                 }
-                ArrayList<Modifier2> modifiers2 = new ArrayList();
+                ArrayList<TacticalGraphicText> modifiers2 = new ArrayList();
                 for (j = 0; j < modifiers.size(); j++) {
                     modifier = modifiers.get(j);
                     if (modifier.type != 7) {
@@ -2723,9 +2645,8 @@ public class Modifier2 {
                 }
                 tg.modifiers = modifiers2;
             }   //end shrink modifiers
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "scaleModifiers",
-                    new RendererException("Failed inside scaleModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to scale modifier", ex);
         }
     }
 
@@ -4158,10 +4079,8 @@ public class Modifier2 {
             }
             tg.Pixels = origPoints;
             scaleModifiers(tg);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddModifiers");
-            ErrorLogger.LogException(_className, "AddModifiers",
-                    new RendererException("Failed inside AddModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to add modifier", ex);
         }
 
     }
@@ -4194,9 +4113,8 @@ public class Modifier2 {
                 default:
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddModifiers",
-                    new RendererException("Failed inside AddModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to add modifier", ex);
         }
         return lines;
     }
@@ -4248,9 +4166,8 @@ public class Modifier2 {
                 }
                 return pts;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getshapePoints",
-                    new RendererException("Failed inside getShapePoints", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to get shape points", ex);
         }
         return null;
     }
@@ -4262,7 +4179,7 @@ public class Modifier2 {
      */
     public static void AddModifiers2RevD(TGLight tg, ArrayList<Shape2> shapes) {
         if (tg.get_SymbolId().length() < 20) {
-            Modifier2.AddModifiers2(tg);
+            TacticalGraphicText.AddModifiers2(tg);
             return;
         }
         try {
@@ -4356,10 +4273,8 @@ public class Modifier2 {
                     break;
             }
 
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddModifiers");
-            ErrorLogger.LogException(_className, "AddModifiers2RevD",
-                    new RendererException("Failed inside AddModifiers2RevD", exc));
+        } catch (NumberFormatException ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
     }
 
@@ -4919,10 +4834,8 @@ public class Modifier2 {
             tg.Pixels = origPoints;
             g2d.dispose();
             g2d = null;
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddModifiers2");
-            ErrorLogger.LogException(_className, "AddModifiers2",
-                    new RendererException("Failed inside AddModifiers2", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - add modifier", ex);
         }
     }
 
@@ -5068,10 +4981,8 @@ public class Modifier2 {
                 AddAreaModifier(tg, az[2*k+1], area, 0, ptRight, ptRight);                        
             }
             //end section
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.AddModifiers2");
-            ErrorLogger.LogException(_className, "addSectorModifiers",
-                    new RendererException("Failed inside addSectorModifiers", exc));
+        } catch (NumberFormatException ex) {
+            logger.error("tactical graphic text - failed to add sector modifier", ex);
         }
         return true;
     }
@@ -5091,7 +5002,7 @@ public class Modifier2 {
             g2d.setTransform(id);
             Font font = g2d.getFont();
             int j = 0;
-            Modifier2 modifier = null;
+            TacticalGraphicText modifier = null;
             g2d.setBackground(Color.white);
             POINT2 pt = null;
             double theta = 0;
@@ -5102,7 +5013,7 @@ public class Modifier2 {
             POINT2 pt1 = null, pt2 = null;
             int quadrant = -1;
             for (j = 0; j < tg.modifiers.size(); j++) {
-                modifier = (Modifier2) tg.modifiers.get(j);
+                modifier = (TacticalGraphicText) tg.modifiers.get(j);
                 double lineFactor = modifier.lineFactor;
                 //s=GetModifierTextFromID(tg,modifier.textID);
                 s = modifier.text;
@@ -5219,10 +5130,8 @@ public class Modifier2 {
                 }   //end switch
                 g2d.setTransform(id);
             }   //end for
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.DsiplayModifiers");
-            ErrorLogger.LogException(_className, "DisplayModifiers",
-                    new RendererException("Failed inside DisplayModifiers", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to display modifier", ex);
         }
     }//end function
 
@@ -5283,9 +5192,8 @@ public class Modifier2 {
             modifierFill.lineTo(pt6);
             modifierFill.lineTo(pt7);
             modifierFill.lineTo(pt4);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "BuildModifierShape",
-                    new RendererException("Failed inside BuildModifierShape", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to build modifier", ex);
         }
         return modifierFill;
     }
@@ -5522,9 +5430,8 @@ public class Modifier2 {
                 default:
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetIntegralTextShapes",
-                    new RendererException("Failed inside GetIntegralTextShapes", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to get test shape", ex);
         }
     }
 
@@ -5549,7 +5456,7 @@ public class Modifier2 {
      * @param modifier
      * @param stringWidth
      */
-    private static void toEndToAboveMiddle(Modifier2 modifier,
+    private static void toEndToAboveMiddle(TacticalGraphicText modifier,
             double stringWidth) {
         try {
             if (modifier.type != toEnd) {
@@ -5570,11 +5477,9 @@ public class Modifier2 {
             modifier.textPath[0] = pt2;
             modifier.textPath[1] = pt3;
             modifier.type = aboveMiddle;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "toEndToAboveMiddle",
-                    new RendererException("Failed inside toEndToAboveMiddle", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed end to above middle", ex);
         }
-        return;
     }
 
     /**
@@ -5605,7 +5510,7 @@ public class Modifier2 {
             g2d.setTransform(id);
             Font font = null;
             int j = 0;
-            Modifier2 modifier = null;
+            TacticalGraphicText modifier = null;
             AffineTransform tx = null;
             Color fontBackColor = tg.get_FontBackColor();
             Color textColor = tg.get_TextColor();
@@ -5640,7 +5545,7 @@ public class Modifier2 {
             Point glyphPosition = null;
             //boolean isIntegral=false;
             for (j = 0; j < tg.modifiers.size(); j++) {
-                modifier = (Modifier2) tg.modifiers.get(j);
+                modifier = (TacticalGraphicText) tg.modifiers.get(j);
 
                 //isIntegral=modifier.get_IsIntegral();
                 //double lineFactor = modifier.lineFactor*multFactor+ addFactor;
@@ -5925,11 +5830,9 @@ public class Modifier2 {
 
                 g2d.setTransform(id);
             }   //end for
-        } //end try
-        catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.DisplayModifiers2");
-            ErrorLogger.LogException(_className, "DisplayModifiers2",
-                    new RendererException("Failed inside DisplayModifiers2", exc));
+        } //end try //end try
+        catch (Exception ex) {
+            logger.error("tactical graphic text - failed to display modifier", ex);
         }
     }//end function
 
@@ -5951,10 +5854,8 @@ public class Modifier2 {
         try {
             frc = g2d.getFontRenderContext();
             tl = new TextLayout(str, font, frc);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in Modifier2.getTextShape");
-            ErrorLogger.LogException(_className, "getTextShape",
-                    new RendererException("Failed inside getTextShape", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to get text shape", ex);
         }
         return tl.getOutline(tx);
     }
@@ -5987,9 +5888,8 @@ public class Modifier2 {
             siOutline.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND,
                     BasicStroke.JOIN_ROUND, 3));
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "createTextOutline",
-                    new RendererException("Failed inside createTextOutline", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to create text outline", ex);
         }
         return siOutline;
     }
@@ -6081,7 +5981,7 @@ public class Modifier2 {
             Object clipBounds,
             IPointConversion converter) {
         if (tg.get_SymbolId().length() < 20) {
-            Modifier2.AddModifiersGeo(tg, g2d, clipBounds, converter);
+            TacticalGraphicText.AddModifiersGeo(tg, g2d, clipBounds, converter);
             return;
         }
         try {
@@ -6109,11 +6009,11 @@ public class Modifier2 {
             String label = GetCenterLabel(tg);
             double csFactor = 1d;
             if (nSymbol == 45 || nSymbol == 46) {
-                Modifier2.AddModifiersGeo(tg, g2d, clipBounds, converter);
+                TacticalGraphicText.AddModifiersGeo(tg, g2d, clipBounds, converter);
                 return;
             }
             if (nSymbol != 25) {
-                Modifier2.AddModifiersGeo(tg, g2d, clipBounds, converter);
+                TacticalGraphicText.AddModifiersGeo(tg, g2d, clipBounds, converter);
                 return;
             }
             //at this point the symbol is a control measure
@@ -6207,7 +6107,7 @@ public class Modifier2 {
                     ptUl = new POINT2();
                     ptLl = new POINT2();
                     ptLr = new POINT2();
-                    Modifier2.GetMBR(tg, ptUl, ptUr, ptLr, ptLl);
+                    TacticalGraphicText.GetMBR(tg, ptUl, ptUr, ptLr, ptLl);
                     label = getRevDLabel(nCode);
                     AddIntegralAreaModifier(tg, label, aboveMiddle, csFactor, ptLl, ptLr, false);
                     break;
@@ -6217,7 +6117,7 @@ public class Modifier2 {
                     t += " " + "(" + country + ")";
                     tg.set_Name(t);
                     tg.set_T1(t);
-                    Modifier2.AddModifiersGeo(tg, g2d, clipBounds, converter);
+                    TacticalGraphicText.AddModifiersGeo(tg, g2d, clipBounds, converter);
                     break;
                 case 110200:    //LL
                 case 141000:    //LD
@@ -6234,7 +6134,7 @@ public class Modifier2 {
                     ptUl = new POINT2();
                     ptLl = new POINT2();
                     ptLr = new POINT2();
-                    Modifier2.GetMBR(tg, ptUl, ptUr, ptLr, ptLl);
+                    TacticalGraphicText.GetMBR(tg, ptUl, ptUr, ptLr, ptLl);
                     stringWidth = metrics.stringWidth(tg.get_H());
                     pt0.x = ptUr.x + stringWidth / 2 + 1;
                     //pt0.x=ptUr.x+1;
@@ -6628,12 +6528,11 @@ public class Modifier2 {
                     AddIntegralModifier(tg, tg.get_DTG() + dash + tg.get_DTG1(), aboveMiddle, 1.2 * csFactor, 0, 1, false);
                     break;
                 default:
-                    Modifier2.AddModifiersGeo(tg, g2d, clipBounds, converter);
+                    TacticalGraphicText.AddModifiersGeo(tg, g2d, clipBounds, converter);
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AddModifiersGeo2",
-                    new RendererException("Failed inside AddModifiersGeo2", exc));
+        } catch (Exception ex) {
+            logger.error("tactical graphic text - failed to add geo modifier", ex);
         }
     }
 }

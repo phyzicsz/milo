@@ -9,12 +9,16 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Responsible for loading the single point & unit fonts into memory
  * @author michael.spinelli
  */
 public class SinglePointFont {
+    private static final Logger logger = LoggerFactory.getLogger(SinglePointFont.class);
+    
 
 
     static SinglePointFont _instance = null;
@@ -55,20 +59,9 @@ public class SinglePointFont {
             //create font
             newFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
         }
-        catch(FontFormatException ffe)
+        catch(FontFormatException | IOException ex)
         {
-            ErrorLogger.LogException(this.getClass().getName() ,"getUnitFont()",
-                    new RendererException("UnitFont failed to load.", ffe));
-        }
-        catch(IOException ioe)
-        {
-            ErrorLogger.LogException(this.getClass().getName() ,"getUnitFont()",
-                    new RendererException("UnitFont failed to load.", ioe));
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(this.getClass().getName() ,"getUnitFont()",
-                    new RendererException("UnitFont failed to load.", exc));
+            logger.error("failed to get font", ex);
         }
 
         //resize font
@@ -95,21 +88,12 @@ public class SinglePointFont {
             //create font
             newFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
         }
-        catch(FontFormatException ffe)
+        catch(FontFormatException | IOException ex)
         {
-            ErrorLogger.LogException(this.getClass().getName() ,"getSPFont()",
-                    new RendererException("SPFont failed to load.", ffe));
+            logger.error("failed to get font", ex);
+          
         }
-        catch(IOException ioe)
-        {
-            ErrorLogger.LogException(this.getClass().getName() ,"getSPFont()",
-                    new RendererException("SPFont failed to load.", ioe));
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(this.getClass().getName() ,"getSPFont()",
-                    new RendererException("SPFont failed to load.", exc));
-        }
+        
 
         //resize font
         newFont = newFont.deriveFont(Font.TRUETYPE_FONT, size);
@@ -135,21 +119,12 @@ public class SinglePointFont {
             //create font
             newFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
         }
-        catch(FontFormatException ffe)
+        catch(FontFormatException | IOException ex)
         {
-            ErrorLogger.LogException(this.getClass().getName() ,"getTGFont()",
-                    new RendererException("TGFont failed to load.", ffe));
+            logger.error("failed to get font", ex);
+           
         }
-        catch(IOException ioe)
-        {
-            ErrorLogger.LogException(this.getClass().getName() ,"getTGFont()",
-                    new RendererException("TGFont failed to load.", ioe));
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(this.getClass().getName() ,"getTGFont()",
-                    new RendererException("TGFont failed to load.", exc));
-        }
+        
 
         //resize font
         newFont = newFont.deriveFont(Font.TRUETYPE_FONT, size);

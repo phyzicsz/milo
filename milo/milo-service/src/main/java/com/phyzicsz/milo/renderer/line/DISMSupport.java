@@ -4,9 +4,10 @@
  */
 
 package com.phyzicsz.milo.renderer.line;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import java.awt.geom.Rectangle2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * A class which imported many of the C++ functions from Trident
  * Systems Dismounted Intelligence Situational Awareness System (DISM) for
@@ -16,6 +17,8 @@ import java.awt.geom.Rectangle2D;
  */
 public final class DISMSupport
 {
+    private static final Logger logger = LoggerFactory.getLogger(DISMSupport.class);
+    
     private static final int LEFT_SIDE=0;
     private static final int RIGHT_SIDE=1;
     private static final int COLINEAR=2;
@@ -43,10 +46,9 @@ public final class DISMSupport
             else
                 result = 2;
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException(_className ,"GetTGFontSize",
-                    new RendererException("Failed inside GetTGFontSize", exc));
+            logger.error("tg font error", ex);
         }
         return result;
     }
@@ -127,10 +129,10 @@ public final class DISMSupport
             }
             return;
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException(_className ,"ArcApproximationDouble",
-                    new RendererException("Failed inside ArcApproximationDouble", exc));
+            logger.error("arc approx error", ex);
+
         }
     }
     private static void DrawOpenRectangleDouble(POINT2[] points, POINT2[] pointsCorner, POINT2[] resultpts) {
@@ -154,9 +156,8 @@ public final class DISMSupport
             }
             resultpts[3].style = 5;
             
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"DrawOpenRectangleDouble",
-                    new RendererException("Failed inside DrawOpenRectangleDouble", exc));
+        } catch (Exception ex) {
+            logger.error("draw open rectangle error", ex);
         }
         return;
     }
@@ -183,9 +184,8 @@ public final class DISMSupport
                     return 0;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"DetermineDirectionDouble",
-                    new RendererException("Failed inside DetermineDirectionDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to determine direction", ex);
         }
         return result;
     }
@@ -227,9 +227,8 @@ public final class DISMSupport
             piDeltaX.value[0] =  (iDiagEOL_length * Math.cos(dAngle1));
             piDeltaY.value[0] = (iDiagEOL_length * Math.sin(dAngle1));
             return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CalcEndpieceDeltasDouble",
-                    new RendererException("Failed inside CalcEndpieceDeltasDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to calculate end", ex);
         }
     }
     /**
@@ -324,9 +323,9 @@ public final class DISMSupport
             savepoints = null;
             arcpoints = null;
             deltapoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDelayGraphicEtcDouble",
-                    new RendererException("Failed inside GetDelayGraphicEtcDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get delay graphic", ex);
+           
         }
         return counter;
     }
@@ -532,9 +531,8 @@ public final class DISMSupport
             savepoints = null;
             pts = null;
             ptsJaggyLine = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMcoverDouble",
-                    new RendererException("Failed inside GetDISMCoverDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get cover", ex);
         }
         return counter;
     }
@@ -870,10 +868,9 @@ public final class DISMSupport
             pts = null;
             ptsJaggyLine = null;
         } 
-        catch (Exception exc) 
+        catch (Exception ex) 
         {
-            ErrorLogger.LogException(_className ,"GetDISMcoverDoubleRevC",
-                    new RendererException("Failed inside GetDISMCoverDoubleRevc", exc));
+            logger.error("failed to get cover", ex);
         }
         return counter;
     }
@@ -955,9 +952,8 @@ public final class DISMSupport
             savepoints = null;
             deltapoints1 = null;
             deltapoints2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMBypassDouble",
-                    new RendererException("Failed inside GetDISMBypassDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get bypass",ex);
         }
         return counter;
     }
@@ -1036,9 +1032,8 @@ public final class DISMSupport
             savepoints = null;
             deltapoints1 = null;
             deltapoints2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMBreachDouble",
-                    new RendererException("Failed inside GetDISMBreachDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get breach", ex);
         }
         return counter;
     }
@@ -1121,9 +1116,8 @@ public final class DISMSupport
             deltapoints1 = null;
             deltapoints2 = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMCanalizeDouble",
-                    new RendererException("Failed inside GetDISMCanalizeDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get canal", ex);
         }
         return counter;
     }
@@ -1153,9 +1147,8 @@ public final class DISMSupport
             points[3].style = 5;
 
             savepoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMDeceiveDouble",
-                    new RendererException("Failed inside GetDISMDeceiveDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get deceive", ex);
         }
         return;
     }
@@ -1291,9 +1284,8 @@ public final class DISMSupport
             deltapoints2 = null;
             deltapoints3 = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMDisruptDouble",
-                    new RendererException("Failed inside GetDISMDisruptDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get disrupt", ex);
         }
         return counter;
     }
@@ -1751,9 +1743,8 @@ public final class DISMSupport
             savepoints = null;
             arcpoints = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMContainDouble",
-                    new RendererException("Failed inside GetDISMContainDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get contain", ex);
         }
         return counter;
     }
@@ -1903,9 +1894,8 @@ public final class DISMSupport
             //clean up
             pts = null;
             savepoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMFixDouble",
-                    new RendererException("Failed inside GetDISMFixDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get fix", ex);
         }
         return counter;
     }
@@ -2013,9 +2003,8 @@ public final class DISMSupport
             deltapoints2 = null;
             deltapoints3 = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMClearDouble",
-                    new RendererException("Failed inside GetDISMClearDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get clear", ex);
         }
         return counter;
     }
@@ -2048,9 +2037,8 @@ public final class DISMSupport
             } else {
                 return false;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"IsSeizeArcReversed",
-                    new RendererException("Failed inside IsSeizeArcReversed", exc));
+        } catch (Exception ex) {
+            logger.error("failed to check arc", ex);
         }
         return false;
     }
@@ -2209,9 +2197,8 @@ public final class DISMSupport
             arcpoints = null;
             pts = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMSeizeDouble",
-                    new RendererException("Failed inside GetDISMSeizeDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get seize", ex);
         }
         return counter;
     }
@@ -2241,9 +2228,8 @@ public final class DISMSupport
             if (o < 0.0) {
                 return (RIGHT_SIDE);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "side",
-                    new RendererException("Failed inside side", exc));
+        } catch (Exception ex) {
+            logger.error("failed to co-linearity", ex);
         }
         return (COLINEAR);
     }
@@ -2400,9 +2386,8 @@ public final class DISMSupport
             deltapoints = null;
             arcpoints = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMRIPDouble",
-                    new RendererException("Failed inside GetDISMRIPDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get rip", ex);
         }
         return counter;
     }
@@ -2684,10 +2669,9 @@ public final class DISMSupport
             pts = null;
             //segments = null;
             //return;
-        } catch (Exception exc) {
+        } catch (Exception ex) {
             //lineutility.WriteFile(exc.getMessage());
-            ErrorLogger.LogException(_className ,"GetDISMByDifDouble",
-                    new RendererException("Failed inside GetDISMByDifDouble", exc));
+            logger.error("failed to get bydif", ex);
         }
         return counter;
     }
@@ -2764,9 +2748,8 @@ public final class DISMSupport
             arrowpts = null;
             savepoints = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMPenetrateDouble",
-                    new RendererException("Failed inside GetDISMPenetrateDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get penetrate", ex);
         }
         return;
     }
@@ -2924,9 +2907,8 @@ public final class DISMSupport
             deltapoints2 = null;
             pts = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMByImpDouble",
-                    new RendererException("Failed inside GetDISMByImpDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get byimp", ex);
         }
         return counter;
     }
@@ -3071,9 +3053,8 @@ public final class DISMSupport
             savepoints = null;
             //return;
         }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMSupportbyFireDouble",
-                    new RendererException("Failed inside GetDISMSupportByFireDouble", exc));
+        catch (Exception ex) {
+            logger.error("failed to get byfire", ex);
         }
         return counter;
     }
@@ -3133,9 +3114,8 @@ public final class DISMSupport
             points[1].y = savepoints[1].y;
             points[2].x = savepoints[2].x;
             points[2].y = savepoints[2].y;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ReorderAtkByFirePoints",
-                    new RendererException("Failed inside GetDISMSupportByFireDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get byfire", ex);
         }
     }
     private static void ReorderSptByFirePoints(POINT2[] points) {
@@ -3185,9 +3165,8 @@ public final class DISMSupport
                 }
 
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ReorderSptByFire",
-                    new RendererException("Failed inside ReorderSptByFirePoints", exc));
+        } catch (Exception ex) {
+            logger.error("failed to reorder byfire", ex);
         }
     }
     /**
@@ -3308,9 +3287,8 @@ public final class DISMSupport
             //clean up
             pts = null;
             savepoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMAtkByFireDouble",
-                    new RendererException("Failed inside GetDISMAtkByFireDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get atakbyfire", ex);
         }
         return counter;
     }
@@ -3394,9 +3372,8 @@ public final class DISMSupport
             pts = null;
             savepoints = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMGapDouble",
-                    new RendererException("Failed inside GetDISMGapDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get gap", ex);
         }
         return 12;
     }
@@ -3611,9 +3588,8 @@ public final class DISMSupport
             deltapoints2 = null;
             deltapoints3 = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMMinefieldDisruptDouble",
-                    new RendererException("Failed inside GetDISMMinefieldDisruptDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get minefielddisruptable", ex);
         }
         return counter;
     }
@@ -3665,9 +3641,8 @@ public final class DISMSupport
                 points[0].style = 6;
             }
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMLinearTargetDouble",
-                    new RendererException("Failed inside GetDISMLinearTargetDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get lineartarget", ex);
         }
         return counter;
     }
@@ -3700,9 +3675,8 @@ public final class DISMSupport
               //  points[j].style = 5;
             //}
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMBlockDouble2",
-                    new RendererException("Failed inside GetDISMBlockDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get block", ex);
         }
         return;
     }
@@ -3736,9 +3710,8 @@ public final class DISMSupport
             points[3].style = 14;
             points[4] = new POINT2(pt0);
             points[4].style = 5;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMPAADouble",
-                    new RendererException("Failed inside GetDISMPAADouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get paa", ex);
         }
         return;
     }
@@ -3756,9 +3729,8 @@ public final class DISMSupport
         return !isInRange(curveAngle, upperBound, lineAngle);
         
         } 
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"ReverseDelayArc",
-                    new RendererException("Failed inside GetDelayArc", exc));
+        catch (Exception ex) {
+            logger.error("failed to reverse delay arc", ex);
         }
         return false;
     }
@@ -3808,9 +3780,8 @@ public final class DISMSupport
             deltapoints[3].x = point.x + iDelta3;
             deltapoints[3].y = point.y + iDelta4;
             deltapoints[3].style = 5;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"DrawEndpieceDeltasDouble",
-                    new RendererException("Failed inside DrawEndpieceDeltasDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to draw end", ex);
         }
     }
     /**
@@ -3911,9 +3882,8 @@ public final class DISMSupport
             savepoints = null;
             deltapoints1 = null;
             deltapoints2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetDISMEasyDouble",
-                    new RendererException("Failed inside GetDISMEasyDouble", exc));
+        } catch (Exception ex) {
+            logger.error("failed to get easy", ex);
         }
         return counter;
     }
@@ -4105,10 +4075,9 @@ public final class DISMSupport
             savepoints=null;
             arcpoints=null;
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException(_className ,"AmbushPointsDouble",
-                    new RendererException("Failed inside AmbushPointsDouble", exc));
+            logger.error("failed to get ambush", ex);
         }
         return counter;
     }

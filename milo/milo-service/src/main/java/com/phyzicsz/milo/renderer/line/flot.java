@@ -4,8 +4,10 @@
  */
 
 package com.phyzicsz.milo.renderer.line;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
+import com.phyzicsz.milo.renderer.SinglePointRenderer;
 import com.phyzicsz.milo.renderer.common.RendererException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class for calculating flot ellipses. Some functions use the same array for the client points
@@ -14,6 +16,8 @@ import com.phyzicsz.milo.renderer.common.RendererException;
  * @author Michael Deutch
  */
 public final class flot {
+        private static final Logger logger = LoggerFactory.getLogger(flot.class);
+
     private static final String _className = "flot";
     protected static int GetAnchorageFlotSegment(int[] vbPoints,
             int x1,
@@ -126,9 +130,8 @@ public final class flot {
             //save last lDirection
             lLastDirection.value[0] = lDirection.value[0];
             arcPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetAnchorageFlotSegment",
-                    new RendererException("Failed inside GetAnchorageFlotSegment", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get segment", ex);
         }
         return lSegCounter;
     }
@@ -160,9 +163,8 @@ public final class flot {
 
             //clean up
             vbPoints2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetAnchorageCountDouble",
-                    new RendererException("Failed inside GetAnchorageCountDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get count", ex);
         }
         return (lTotalpts);
     }
@@ -211,10 +213,9 @@ public final class flot {
 
             }
             //clean up
-        } catch (Exception exc)
+        } catch (Exception ex)
         {
-            ErrorLogger.LogException(_className ,"GetFlotCount2Double",
-                    new RendererException("Failed inside GetFlotCount2Double", exc));
+            logger.error("flot ellipse error - get count", ex);
         }
         return lTotalpts;
     }
@@ -406,9 +407,8 @@ public final class flot {
 
             //clean up
             vbPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetFlot2Double",
-                    new RendererException("Failed inside GetFlot2Double", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get flot", ex);
         }
         return lFlotCounter;
     }
@@ -561,9 +561,8 @@ public final class flot {
             //save last lDirection
             lLastDirection.value[0] = lDirection.value[0];
             arcpoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetFlotSegment2",
-                    new RendererException("Failed inside GetFlotSegment2", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get segment", ex);
         }
         return nNumSegs * 10;
     }
@@ -607,9 +606,8 @@ public final class flot {
             //	lTotalpts=numPts;
 
             //clean up
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetOFYCountDoulbe",
-                    new RendererException("Failed inside GetOFYCountDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - ofy count", ex);
         }
         return lTotalpts;
     }
@@ -916,10 +914,8 @@ public final class flot {
             pSpikePoints = null;
             pFlotPoints = null;
             flots = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetOccludedPointsDouble",
-                    new RendererException("Failed inside GetOccludedPointsDouble", exc));
-            //throw e;
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get occluded points", ex);
         }
         return nTotalCounter;
     }
@@ -957,9 +953,8 @@ public final class flot {
             }
 
             //clean up
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetOccludedCountDouble",
-                    new RendererException("Failed inside GetOccludedCountDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get occluded count", ex);
         }
         return lTotalpts;
     }
@@ -1037,9 +1032,8 @@ public final class flot {
             point[0] = (int) dx;
             point[1] = (int) dy;
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CalcNewPoint",
-                    new RendererException("Failed inside CalcNewPoint", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get net point", ex);
         }
         return 1;
     }
@@ -1161,9 +1155,8 @@ public final class flot {
             //save last lDirection
             lLastDirection.value[0] = lDirection.value[0];
             arcPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetFlotSegment",
-                    new RendererException("Failed inside GetFlotSegment", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get segment", ex);
         }
         return nNumSegs * 10;
     }
@@ -1254,9 +1247,8 @@ public final class flot {
 
             }
             vbPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetFlotDouble",
-                    new RendererException("Failed inside GetFlotDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get flot", ex);
         }
         return lFlotCounter;
     }
@@ -1280,9 +1272,8 @@ public final class flot {
                 k += 3;
             }
             lTemp = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CalcAnglePoints",
-                    new RendererException("Failed inside CalcAnglePoints", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get angle point", ex);
         }
         return 1;
     }
@@ -1320,9 +1311,8 @@ public final class flot {
 
             //clean up
             vbPoints2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetFlotCountDouble",
-                    new RendererException("Failed inside GetFlotCountDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get flot count", ex);
         }
         return (lTotalpts);
     }
@@ -1641,9 +1631,8 @@ public final class flot {
             pFlotEnd = null;
             pSpikeStart = null;
             pSpikeEnd = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetOFYPointsDouble",
-                    new RendererException("Failed inside GetOFYPointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get ofy points", ex);
         }
         return nTotalCounter;
     }
@@ -2030,9 +2019,8 @@ public final class flot {
             pSpikeStart = null;
             pSpikeEnd = null;
             pSegPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetSFPointsDouble",
-                    new RendererException("Failed inside GetSFPointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get sf points", ex);
         }
         return nTotalCounter;
     }
@@ -2072,9 +2060,8 @@ public final class flot {
             }
 
             //clean up
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetSFCountDouble",
-                    new RendererException("Failed inside GetSFCountDouble", exc));
+        } catch (Exception ex) {
+            logger.error("flot ellipse error - get sf count", ex);
         }
         return lTotalpts;
     }

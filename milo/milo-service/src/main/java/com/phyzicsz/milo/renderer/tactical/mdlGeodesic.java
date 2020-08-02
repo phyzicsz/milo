@@ -4,13 +4,15 @@
  */
 package com.phyzicsz.milo.renderer.tactical;
 
+import com.phyzicsz.milo.renderer.SinglePointRenderer;
 import com.phyzicsz.milo.renderer.line.POINT2;
 import com.phyzicsz.milo.renderer.line.ref;
 import com.phyzicsz.milo.renderer.line.TacticalLines;
 import java.util.ArrayList;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import java.awt.Rectangle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 //import JavaLineArray.lineutility;
 /**
  * Class to calculate the geodesic based shapes for the Fire Support Areas
@@ -18,6 +20,8 @@ import java.awt.Rectangle;
  * @author Michael Deutch
  */
 public final class mdlGeodesic {
+    
+    private static final Logger logger = LoggerFactory.getLogger(mdlGeodesic.class);
 
     private static final String _className = "mdlGeodesic";
     private static final double sm_a = 6378137;
@@ -60,11 +64,8 @@ public final class mdlGeodesic {
             x = x - z;
             theta = Math.atan2(y, x);
             theta = RadToDeg(theta);
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("Error in mdlGeodesic.GetAzimuth");
-            ErrorLogger.LogException(_className, "GetAzimuth",
-                    new RendererException("Failed inside GetAzimuth", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed inside get azimuth", ex);
         }
         return theta;//RadToDeg(k);
     }
@@ -118,11 +119,8 @@ public final class mdlGeodesic {
             h = Math.sqrt(a);
             k = Math.sqrt(1 - a);
             h = 2 * Math.atan2(h, k);
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("Error in mdlGeodesic.geodesic_distance");
-            ErrorLogger.LogException(_className, "geodesic_distance",
-                    new RendererException("Failed inside geodesic_distance", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed inside get distence",ex);
         }
         return sm_a * h;
     }
@@ -174,10 +172,8 @@ public final class mdlGeodesic {
             //var lon2:Number = start.x + RadToDeg(Math.atan2(Math.sin(DegToRad(azimuth)) * Math.sin(distance / sm_a) * Math.cos(DegToRad(start.y)), Math.cos(distance / sm_a) - Math.sin(DegToRad(start.y)) * Math.sin(DegToRad(lat2))));
             double lon = start.x + RadToDeg(p);
             pt = new POINT2(lon, lat);
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in mdlGeodesic.geodesic_distance");
-            ErrorLogger.LogException(_className, "geodesic_coordinate",
-                    new RendererException("Failed inside geodesic_coordinate", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed inside coordinate",ex);
         }
         return pt;
     }
@@ -255,10 +251,8 @@ public final class mdlGeodesic {
             } else {
                 pPoints2.add(pt2);
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in mdlGeodesic.GetGeodesicArc");
-            ErrorLogger.LogException(_className, "GetGeodesicArc",
-                    new RendererException("Failed inside GetGeodesicArc", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed inside get arc",ex);
         }
         return pPoints2;
     }
@@ -320,11 +314,8 @@ public final class mdlGeodesic {
                 pPoint = geodesic_coordinate(ptCenter, dist1, a12c.value[0]);
                 pPoints2.add(pPoint);
             }
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("Error in mdlGeodesic.GetGeodesicArc2");
-            ErrorLogger.LogException(_className, "GetGeodesicArc2",
-                    new RendererException("Failed inside GetGeodesicArc2", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed inside get arc",ex);
         }
         return circle;
     }
@@ -411,9 +402,8 @@ public final class mdlGeodesic {
             //return new POINT2(lat3.toDeg(), lon3.toDeg());
             ptResult = new POINT2(RadToDeg(lon3), RadToDeg(lat3));
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "IntersectLines",
-                    new RendererException("Failed inside IntersectLines", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed intersect lines",ex);
         }
         return ptResult;
     }
@@ -463,9 +453,8 @@ public final class mdlGeodesic {
                 }
                 normalizedPts.add(pt);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "normalize_pts",
-                    new RendererException("Failed inside normalize_pts", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed normalize points",ex);
         }
         return normalizedPts;
     }
@@ -509,9 +498,8 @@ public final class mdlGeodesic {
             double width=geodesic_distance(ul,ur,null,null);
             double height=geodesic_distance(ur,lr,null,null);
             rect2d=new Rectangle.Double(ulx,uly,width,height);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "geodesic_mbr",
-                    new RendererException("Failed inside geodesic_mbr", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed mbr", ex);
         }
         return rect2d;
     }
@@ -537,9 +525,8 @@ public final class mdlGeodesic {
             //next walk south by deltay;
             pt=geodesic_coordinate(ptEast,deltay,180);
             
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "geodesic_center",
-                    new RendererException("Failed inside geodesic_center", exc));
+        } catch (Exception ex) {
+            logger.error("fire support geodesy - failed inside center",ex);
         }
         return pt;
     }
@@ -611,9 +598,8 @@ public final class mdlGeodesic {
                 }
             }
             resultPts.add(pt1);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "SegmentGeoPoints",
-                    new RendererException("Failed inside SegmentGeoPoints", exc));
+        } catch (Exception ex) {
+             logger.error("fire support geodesy - failed segment geos",ex);
         }
         return resultPts;
     }
@@ -632,9 +618,8 @@ public final class mdlGeodesic {
             double dist=geodesic_distance(ptCenter,ptRotate,null,null);
             return geodesic_coordinate(ptCenter,dist,bearing+rotation);
         }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className, "geoRotatePoint",
-                    new RendererException("Failed inside geoRotatePoint", exc));
+        catch (Exception ex) {
+             logger.error("fire support geodesy - failed rotate",ex);
         }
         return null;
     }
@@ -675,10 +660,9 @@ public final class mdlGeodesic {
             }            
             pEllipsePoints[36]=new POINT2(pEllipsePoints[0]);
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException(_className, "GetGeoEllipse",
-                    new RendererException("GetGeoEllipse", exc));
+             logger.error("fire support geodesy - failed get ellipse",ex);
         }
         return pEllipsePoints;
     }

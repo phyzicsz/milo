@@ -4,14 +4,16 @@
  */
 package com.phyzicsz.milo.renderer.tactical;
 
+import com.phyzicsz.milo.renderer.SinglePointRenderer;
 import java.util.ArrayList;
 import com.phyzicsz.milo.renderer.line.POINT2;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.TexturePaint;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.line.TacticalLines;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class to encapsulate the tactical graphic object. Many of the properties
@@ -21,6 +23,8 @@ import com.phyzicsz.milo.renderer.line.TacticalLines;
  */
 public class TGLight {
 
+    private static final Logger logger = LoggerFactory.getLogger(TGLight.class);
+    
     public ArrayList<POINT2> LatLongs;
     private static final String _className = "TGLight";
 
@@ -40,13 +44,13 @@ public class TGLight {
     public void set_Pixels(ArrayList<POINT2> value) {
         Pixels = value;
     }
-    public ArrayList<Modifier2> modifiers;
+    public ArrayList<TacticalGraphicText> modifiers;
 
-    public ArrayList<Modifier2> get_Modifiers() {
+    public ArrayList<TacticalGraphicText> get_Modifiers() {
         return modifiers;
     }
 
-    public void set_Modifiers(ArrayList<Modifier2> value) {
+    public void set_Modifiers(ArrayList<TacticalGraphicText> value) {
         modifiers = value;
     }
     TexturePaint tp = null;
@@ -461,9 +465,8 @@ public class TGLight {
                 letter = (char) 216;
                 echelonSymbol = Character.toString(letter);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "set_SymbolId",
-                    new RendererException("Failed inside set_SymbolId", exc));
+        } catch (Exception ex) {
+            logger.error("failed to set symbol", ex);
         }
     }
     private boolean visibleModifiers;

@@ -2,64 +2,67 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.phyzicsz.milo.renderer.line;
+
 import java.awt.Color;
 import java.util.ArrayList;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CELineArray Channels class calculates the channel points
+ *
  * @author Michael Deutch
  */
 public final class Channels {
-    private static final double maxLength=100;//max arrow size
-    private static final double minLength=5;	//max arrow size
-    private static final String _className="Channels";
-    private static String _client="";
-    public static void setClient(String value)
-    {
-        _client=value;
+
+    private static final Logger logger = LoggerFactory.getLogger(Channels.class);
+
+    private static final double maxLength = 100;//max arrow size
+    private static final double minLength = 5;	//max arrow size
+    private static final String _className = "Channels";
+    private static String _client = "";
+
+    public static void setClient(String value) {
+        _client = value;
     }
 //    private static String _affiliation="";
 //    public static void setAffiliation(String value)
 //    {
 //        _affiliation=value;
 //    }
-    private static boolean _shiftLines=true;
+    private static boolean _shiftLines = true;
 //    public static void setShiftLines(boolean value)
 //    {
 //        _shiftLines=value;
 //    }
-    public static boolean getShiftLines()
-    {
+
+    public static boolean getShiftLines() {
         return _shiftLines;
     }
-    private static CChannelPoints2[] ConnectArrayTrueDouble(int  nWidth,
-                                                    int  nCounter,
-                                                    POINT2[] pLinePoints,
-                                                    CChannelPoints2[] pResultChannelPoints)
 
-    {
-        try
-        {
+    private static CChannelPoints2[] ConnectArrayTrueDouble(int nWidth,
+            int nCounter,
+            POINT2[] pLinePoints,
+            CChannelPoints2[] pResultChannelPoints) {
+        try {
             //declarations
-            int  nPointCounter = 0;
-            double	nDiff1X = 0,
+            int nPointCounter = 0;
+            double nDiff1X = 0,
                     nDiff2X = 0,
                     nDiff1Y = 0,
                     nDiff2Y = 0;
-            int	nLast = 0;
-            int lOrient=0;
-            POINT2  LinePoint1 = new POINT2(pLinePoints[0]),
+            int nLast = 0;
+            int lOrient = 0;
+            POINT2 LinePoint1 = new POINT2(pLinePoints[0]),
                     LinePoint2 = new POINT2(pLinePoints[0]),
                     LinePoint3 = new POINT2(pLinePoints[0]);
 
             //POINT2 EndPoint1=new POINT2(pLinePoints[0]);
             //POINT2 EndPoint2=new POINT2(pLinePoints[0]);
-            CChannelPoints2  ResultChannelPoint=new CChannelPoints2();
+            CChannelPoints2 ResultChannelPoint = new CChannelPoints2();
             //end declarations
 
             //must establish nLast before we get the first channel end point
@@ -68,40 +71,45 @@ public final class Channels {
             LinePoint2 = new POINT2(pLinePoints[1]);
             nDiff1X = LinePoint2.x - LinePoint1.x;
             nDiff1Y = LinePoint2.y - LinePoint1.y;
-            if(nDiff1X==0)
-            {
-                if(nDiff1Y>0)
-                    nLast=6;
-                if(nDiff1Y<0)
-                    nLast=4;
+            if (nDiff1X == 0) {
+                if (nDiff1Y > 0) {
+                    nLast = 6;
+                }
+                if (nDiff1Y < 0) {
+                    nLast = 4;
+                }
             }
-            if(nDiff1Y==0)
-            {
-                if(nDiff1X>0)
-                    nLast=0;
-                if(nDiff1X<0)
-                    nLast=2;
+            if (nDiff1Y == 0) {
+                if (nDiff1X > 0) {
+                    nLast = 0;
+                }
+                if (nDiff1X < 0) {
+                    nLast = 2;
+                }
             }
-            if(nDiff1X<0 && nDiff1Y>0)
-                nLast=3;
-            if(nDiff1X>0 && nDiff1Y>0)
-                nLast=0;
-            if(nDiff1X<0 && nDiff1Y<0)
-                nLast=3;
-            if(nDiff1X>0 && nDiff1Y<0)
-                nLast=0;
+            if (nDiff1X < 0 && nDiff1Y > 0) {
+                nLast = 3;
+            }
+            if (nDiff1X > 0 && nDiff1Y > 0) {
+                nLast = 0;
+            }
+            if (nDiff1X < 0 && nDiff1Y < 0) {
+                nLast = 3;
+            }
+            if (nDiff1X > 0 && nDiff1Y < 0) {
+                nLast = 0;
+            }
 
-            ResultChannelPoint = GetTrueEndPointDouble(nWidth,pLinePoints[0],pLinePoints[1],nLast);
+            ResultChannelPoint = GetTrueEndPointDouble(nWidth, pLinePoints[0], pLinePoints[1], nLast);
             pResultChannelPoints[0] = new CChannelPoints2(ResultChannelPoint);
             //initialize nLast depending on the first 1 or 2 segments
 
             //stuff the array
             //nLast needs to indicate if the last segment2 had line1 above or below it
-            for(nPointCounter=1;nPointCounter < nCounter;nPointCounter++)
-            {
-                LinePoint1 = new POINT2(pLinePoints[nPointCounter-1]);
+            for (nPointCounter = 1; nPointCounter < nCounter; nPointCounter++) {
+                LinePoint1 = new POINT2(pLinePoints[nPointCounter - 1]);
                 LinePoint2 = new POINT2(pLinePoints[nPointCounter]);
-                LinePoint3 = new POINT2(pLinePoints[nPointCounter+1]);
+                LinePoint3 = new POINT2(pLinePoints[nPointCounter + 1]);
                 nDiff1X = LinePoint2.x - LinePoint1.x;
                 nDiff2X = LinePoint3.x - LinePoint2.x;
                 nDiff1Y = LinePoint2.y - LinePoint1.y;
@@ -116,21 +124,20 @@ public final class Channels {
                 //nLast=5: last segment2 was vertical upward and line1 below (to the right of it)
                 //nLast=6: last segment2 was vertical downward and line1 above (to the left of it)
                 //nLast=7: last segment2 was vertical downward and line1 below (to the right of it)
-                if(nDiff1X>0 && nDiff2X>0)	//pt1------pt2------pt3
+                if (nDiff1X > 0 && nDiff2X > 0) //pt1------pt2------pt3
                 {
-                    switch(nLast)
-                    {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            lOrient=0;	//above & above
+                            lOrient = 0;	//above & above
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            lOrient=3;	//below & below
+                            lOrient = 3;	//below & below
                             break;
                         default:
                             break;
@@ -142,27 +149,29 @@ public final class Channels {
                 //										|					|
                 //										|					|
                 //										pt3		   pt1-----pt2
-                if(nDiff1X>0 && nDiff2X==0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X > 0 && nDiff2X == 0) {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            if(nDiff2Y>0)
-                                lOrient=1;	//above & below
-                            if(nDiff2Y<0)
-                                lOrient=0;	//above & above
+                            if (nDiff2Y > 0) {
+                                lOrient = 1;	//above & below
+                            }
+                            if (nDiff2Y < 0) {
+                                lOrient = 0;	//above & above
+                            }
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            if(nDiff2Y>0)
-                                lOrient=2;
-                            if(nDiff2Y<0)
-                                lOrient=3;
+                            if (nDiff2Y > 0) {
+                                lOrient = 2;
+                            }
+                            if (nDiff2Y < 0) {
+                                lOrient = 3;
+                            }
                             break;
                         default:
                             break;
@@ -174,27 +183,29 @@ public final class Channels {
                 //								|					|
                 //								|					|
                 //								pt3					pt2-----pt1
-                if(nDiff1X<0 && nDiff2X==0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X < 0 && nDiff2X == 0) {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            if(nDiff2Y>0)
-                                lOrient=3;
-                            if(nDiff2Y<0)
-                                lOrient=2;
+                            if (nDiff2Y > 0) {
+                                lOrient = 3;
+                            }
+                            if (nDiff2Y < 0) {
+                                lOrient = 2;
+                            }
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            if(nDiff2Y>0)
-                                lOrient=0;
-                            if(nDiff2Y<0)
-                                lOrient=1;
+                            if (nDiff2Y > 0) {
+                                lOrient = 0;
+                            }
+                            if (nDiff2Y < 0) {
+                                lOrient = 1;
+                            }
                             break;
                         default:
                             break;
@@ -206,27 +217,29 @@ public final class Channels {
                 //								|					|
                 //								|					|
                 //								pt1					pt2-----pt3
-                if(nDiff1X==0 && nDiff2X>0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X == 0 && nDiff2X > 0) {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            if(nDiff1Y>0)
-                                lOrient=2;
-                            if(nDiff1Y<0)
-                                lOrient=0;
+                            if (nDiff1Y > 0) {
+                                lOrient = 2;
+                            }
+                            if (nDiff1Y < 0) {
+                                lOrient = 0;
+                            }
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            if(nDiff1Y>0)
-                                lOrient=1;
-                            if(nDiff1Y<0)
-                                lOrient=3;
+                            if (nDiff1Y > 0) {
+                                lOrient = 1;
+                            }
+                            if (nDiff1Y < 0) {
+                                lOrient = 3;
+                            }
                             break;
                         default:
                             break;
@@ -238,49 +251,49 @@ public final class Channels {
                 //								|					|
                 //								|					|
                 //								pt1			pt3-----pt2
-                if(nDiff1X==0 && nDiff2X<0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X == 0 && nDiff2X < 0) {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            if(nDiff1Y>0)
-                                lOrient=3;
-                            if(nDiff1Y<0)
-                                lOrient=1;
+                            if (nDiff1Y > 0) {
+                                lOrient = 3;
+                            }
+                            if (nDiff1Y < 0) {
+                                lOrient = 1;
+                            }
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            if(nDiff1Y>0)
-                                lOrient=0;
-                            if(nDiff1Y<0)
-                                lOrient=2;
+                            if (nDiff1Y > 0) {
+                                lOrient = 0;
+                            }
+                            if (nDiff1Y < 0) {
+                                lOrient = 2;
+                            }
                             break;
                         default:
                             break;
                     }
                 }
 
-
-                if(nDiff1X<0 && nDiff2X<0)	//pt3-----pt2------pt1
+                if (nDiff1X < 0 && nDiff2X < 0) //pt3-----pt2------pt1
                 {
-                    switch(nLast)
-                    {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            lOrient=3;	//below & below
+                            lOrient = 3;	//below & below
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            lOrient=0;	//above & above
+                            lOrient = 0;	//above & above
                             break;
                         default:
                             break;
@@ -293,21 +306,19 @@ public final class Channels {
                 //		   /
                 //	     /
                 //  pt3/
-                if(nDiff1X>0 & nDiff2X<0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X > 0 & nDiff2X < 0) {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            lOrient=1;	//above & below
+                            lOrient = 1;	//above & below
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            lOrient=2;	//below & above
+                            lOrient = 2;	//below & above
                             break;
                         default:
                             break;
@@ -321,27 +332,24 @@ public final class Channels {
                 //		\
                 //	      \
                 //		    \pt3
-                if(nDiff1X<0 & nDiff2X>0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X < 0 & nDiff2X > 0) {
+                    switch (nLast) {
                         case 0:
                         case 3:
                         case 4:
                         case 7:
-                            lOrient=2;	//below & above
+                            lOrient = 2;	//below & above
                             break;
                         case 1:
                         case 2:
                         case 5:
                         case 6:
-                            lOrient=1;	//above & below
+                            lOrient = 1;	//above & below
                             break;
                         default:
                             break;
                     }	//end switch(nLast)
                 }	//end if
-
 
                 //			 pt1    or   pt3
                 //		      |			  |
@@ -350,38 +358,39 @@ public final class Channels {
                 //		      |			  |
                 //	          |			  |
                 //		     pt3		 pt1
-                if(nDiff1X==0 && nDiff2X==0)
-                {
-                    switch(nLast)
-                    {
+                if (nDiff1X == 0 && nDiff2X == 0) {
+                    switch (nLast) {
                         case 4:
-                            if(nDiff2Y<0)
-                                lOrient=0;
+                            if (nDiff2Y < 0) {
+                                lOrient = 0;
+                            }
                             break;
                         case 6:
-                            if(nDiff2Y>0)
-                                lOrient=0;
+                            if (nDiff2Y > 0) {
+                                lOrient = 0;
+                            }
                             break;
                         case 5:
-                            if(nDiff2Y<0)
-                                lOrient=3;
+                            if (nDiff2Y < 0) {
+                                lOrient = 3;
+                            }
                             break;
                         case 7:
-                            if(nDiff2Y>0)
-                                lOrient=3;
+                            if (nDiff2Y > 0) {
+                                lOrient = 3;
+                            }
                             break;
                         default:
-                                break;
+                            break;
                     }
                 }
 
                 //get the channel points based on the desired orientation
-                pResultChannelPoints[nPointCounter] = ConnectTrueDouble2(nWidth,LinePoint1,
-                        LinePoint2,LinePoint3,lOrient);
+                pResultChannelPoints[nPointCounter] = ConnectTrueDouble2(nWidth, LinePoint1,
+                        LinePoint2, LinePoint3, lOrient);
 
                 //2nd segment vertical
-                if(nDiff2X==0)
-                {
+                if (nDiff2X == 0) {
                     switch (lOrient) {
                         case 0:
                             if (nDiff2Y > 0) {
@@ -461,18 +470,16 @@ public final class Channels {
             }	//end for
 
             ResultChannelPoint = GetTrueEndPointDouble(nWidth, pLinePoints[nCounter],
-                pLinePoints[nCounter - 1],nLast);
+                    pLinePoints[nCounter - 1], nLast);
 
             pResultChannelPoints[nCounter] = new CChannelPoints2(ResultChannelPoint);
-        }
-        catch(Exception exc)
-        {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className ,"ConnectArrayTrueDouble",
-                    new RendererException("Failed inside ConnectArrayTrueDouble", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
+
         }
         return pResultChannelPoints;
     }
+
     private static CChannelPoints2[] GetChannel2Double(long nChannelWidth,
             long vblCounter,
             POINT2[] pLinePoints,
@@ -481,18 +488,15 @@ public final class Channels {
             pResultChannelPoints = ConnectArrayTrueDouble((int) nChannelWidth / 2, (int) vblCounter - 1,
                     pLinePoints, pResultChannelPoints);
 
-        }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetChannel2Double",
-                    new RendererException("Failed inside GetChannel2Double", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return pResultChannelPoints;
     }
-    
+
     private static POINT2[] GetLowerChannelLineDouble(CChannelPoints2[] pChannelPoints,
             int vblCounter,
-            POINT2[] pResultLinePoints) throws Exception
-    {
+            POINT2[] pResultLinePoints) throws Exception {
         try {
             int j = 0;
 
@@ -500,12 +504,12 @@ public final class Channels {
                 pResultLinePoints[j] = new POINT2(pChannelPoints[j].m_Line1);
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetLowerChannelLineDouble",
-                    new RendererException("GetLowerChannelLineDouble", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return pResultLinePoints;
     }
+
     private static POINT2[] GetUpperChannelLineDouble(CChannelPoints2[] pChannelPoints,
             int vblCounter,
             POINT2[] pResultLinePoints) {
@@ -515,12 +519,12 @@ public final class Channels {
                 pResultLinePoints[j] = new POINT2(pChannelPoints[j].m_Line2);
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetUpperChannelLineDouble",
-                    new RendererException("Failed inside GetUpperChannelLineDouble", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return pResultLinePoints;
     }
+
     private static int FenceType(int linetype) {
         int bolResult = 0;
         try {
@@ -543,21 +547,21 @@ public final class Channels {
                     bolResult = 0;
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"FenceType",
-                    new RendererException("Failed inside FenceType " + Integer.toString(linetype), exc));
+        } catch (Exception ex) {
+            logger.error("channel fence error, lineType: {}", linetype, ex);
         }
         return bolResult;
     }
+
     /**
-    * Calculates the point count for the concertina wire and fence channels.
-    *
-    * @param pLinePoints client points
-    * @param vblCounter the client point count
-    * @param linetype the line type
-    *
-    * @return the number of points required to render the symbol
-    */
+     * Calculates the point count for the concertina wire and fence channels.
+     *
+     * @param pLinePoints client points
+     * @param vblCounter the client point count
+     * @param linetype the line type
+     *
+     * @return the number of points required to render the symbol
+     */
     protected static int GetTripleCountDouble(POINT2[] pLinePoints,
             int vblCounter,
             int linetype) {
@@ -606,9 +610,8 @@ public final class Channels {
                     lTotal = 2 * vblCounter;
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetTripleCountDouble",
-                    new RendererException("Failed inside GetTripleCountDouble " + Integer.toString(linetype), exc));
+        } catch (Exception ex) {
+            logger.error("channel error - lineType: {}", linetype, ex);
         }
         return lTotal;
     }
@@ -619,7 +622,7 @@ public final class Channels {
             int vblCounter,
             int linetype,
             int vblChannelWidth) {
-            POINT2[]pLinePoints2=new POINT2[vblCounter];
+        POINT2[] pLinePoints2 = new POINT2[vblCounter];
         try {
             //declarations
             int j, channelWidth = 20;
@@ -654,11 +657,9 @@ public final class Channels {
                     channelWidth = vblChannelWidth;
                     break;
             }
-            if (linetype != (long) TacticalLines.LC &&
-                    linetype != (long) TacticalLines.LC2 &&
-                    linetype != TacticalLines.LC_HOSTILE
-                    ) 
-            {
+            if (linetype != (long) TacticalLines.LC
+                    && linetype != (long) TacticalLines.LC2
+                    && linetype != TacticalLines.LC_HOSTILE) {
                 channelWidth /= 2;
             }
 
@@ -690,12 +691,12 @@ public final class Channels {
             //clean up
             pNewLinePoints = null;
             pChannelPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CoordIL2Double",
-                    new RendererException("Failed inside CoordIL2Double", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return pLinePoints2;
     }
+
     private static void GetAAFNTDouble(double dPrinter,
             POINT2[] pLowerLinePoints,
             int lLowerCounter,
@@ -707,7 +708,7 @@ public final class Channels {
         try {
             //declarations
             int j = 0;
-                    //nBase = 0;
+            //nBase = 0;
             int lCounter;
             double x = 0, y = 0;
             POINT2 outerTipLinePoint = new POINT2(pUpperLinePoints[0]),
@@ -735,13 +736,13 @@ public final class Channels {
                 pLinePoints[j] = new POINT2(pUpperLinePoints[0]);
             }
 
-            endLinePoint.x =
-                    (int) ((double) (pLowerLinePoints[lLowerCounter - 1].x +
-                    pUpperLinePoints[lUpperCounter - 1].x) / 2);
+            endLinePoint.x
+                    = (int) ((double) (pLowerLinePoints[lLowerCounter - 1].x
+                    + pUpperLinePoints[lUpperCounter - 1].x) / 2);
 
-            endLinePoint.y =
-                    (int) ((double) (pLowerLinePoints[lLowerCounter - 1].y +
-                    pUpperLinePoints[lUpperCounter - 1].y) / 2);
+            endLinePoint.y
+                    = (int) ((double) (pLowerLinePoints[lLowerCounter - 1].y
+                    + pUpperLinePoints[lUpperCounter - 1].y) / 2);
 
             x = (double) (pLowerLinePoints[lLowerCounter - 1].x - pUpperLinePoints[lUpperCounter - 1].x);
             y = (double) (pLowerLinePoints[lLowerCounter - 1].y - pUpperLinePoints[lUpperCounter - 1].y);
@@ -753,9 +754,9 @@ public final class Channels {
             outerTipLinePoint = new POINT2(ArrowLinePoint);
             //dottedTipLinePoint = lineutility.GetOffsetPointDouble
             //    (endLinePoint, outerTipLinePoint, (int)(dOffsetFactor * dPrinter));
-            
+
             //dottedTipLinePoint = lineutility.GetOffsetPointDouble(endLinePoint, outerTipLinePoint, (int) (10 * dPrinter));
-            dottedTipLinePoint = lineutility.GetOffsetPointDouble(endLinePoint, outerTipLinePoint, (int)(dOffsetFactor*dPrinter) );
+            dottedTipLinePoint = lineutility.GetOffsetPointDouble(endLinePoint, outerTipLinePoint, (int) (dOffsetFactor * dPrinter));
 
             pLinePoints[lCounter - 9].style = 5;
 
@@ -786,7 +787,7 @@ public final class Channels {
             pt1.y = pLowerLinePoints[lLowerCounter - 1].y;
             //tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int)(2 * dOffsetFactor * dPrinter));
             //tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) ((dOffsetFactor + 10) * dPrinter));
-            tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) (2*dOffsetFactor * dPrinter));
+            tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) (2 * dOffsetFactor * dPrinter));
 
             pLinePoints[lCounter - 3] = new POINT2(tempLinePoint);
             //pLinePoints[lCounter-3].weight=0;
@@ -801,19 +802,20 @@ public final class Channels {
             pt1.y = pUpperLinePoints[lUpperCounter - 1].y;
             //tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int)(2 * dOffsetFactor * dPrinter));
             //tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) ((dOffsetFactor + 10) * dPrinter));
-            tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) (2*dOffsetFactor * dPrinter));
+            tempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) (2 * dOffsetFactor * dPrinter));
 
             pLinePoints[lCounter - 1] = new POINT2(tempLinePoint);
             pLinePoints[lCounter - 1].style = 5;
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetAAFNTDouble",
-                    new RendererException("Failed inside GetAAFNTDouble", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return;
     }
+
     /**
      * gets the AXAD arrowhead
+     *
      * @param dPrinter
      * @param pLowerLinePoints
      * @param lLowerCounter
@@ -833,7 +835,7 @@ public final class Channels {
             POINT2[] pLinePoints,
             int vbiDrawThis,
             double dOffsetFactor) {
-        try {            
+        try {
             int j = 0,
                     lCounter = lLowerCounter + lUpperCounter + 8;
             double x = 0, y = 0;
@@ -844,24 +846,22 @@ public final class Channels {
             POINT2 pt0 = new POINT2(), pt1 = new POINT2();
             //double dOffsetFactor = 10;
             //end declarations
-            
+
             //10-19-12
             //we must do this for catkbyfire because the rotary arrow tip now has to match the
             //anchor point, i.e. the rotary feature can no longer stick out past the anchor point
             //45 pixels shift here matches the 45 pixels shift for catkbyfire found in 
             //lineutility.adjustCATKBYFIREControlPoint as called by clsChannelUtility.DrawChannel
-            POINT2 origArrowPt=new POINT2(ArrowLinePoint);
-            POINT2 ptUpper0=new POINT2(pUpperLinePoints[lUpperCounter-1]);
-            POINT2 ptLower0=new POINT2(pLowerLinePoints[lLowerCounter-1]);
-            double dist=lineutility.CalcDistanceDouble(pLowerLinePoints[lLowerCounter-1], pLowerLinePoints[lLowerCounter-2]);
-            if(vbiDrawThis==TacticalLines.CATKBYFIRE)
-            {
-                if(dist>45)
-                {
-                    POINT2 midPt=lineutility.MidPointDouble(pLowerLinePoints[lLowerCounter-2], pUpperLinePoints[lUpperCounter-2], 0);
-                    ArrowLinePoint=lineutility.ExtendAlongLineDouble(ArrowLinePoint, midPt, 45);
-                    pLowerLinePoints[lLowerCounter-1]=lineutility.ExtendAlongLineDouble(pLowerLinePoints[lLowerCounter-1], pLowerLinePoints[lLowerCounter-2], 45);//will be 45 if Oculus adjusts control point
-                    pUpperLinePoints[lUpperCounter-1]=lineutility.ExtendAlongLineDouble(pUpperLinePoints[lUpperCounter-1], pUpperLinePoints[lUpperCounter-2], 45);//will be 45 if Oculus adjusts control point
+            POINT2 origArrowPt = new POINT2(ArrowLinePoint);
+            POINT2 ptUpper0 = new POINT2(pUpperLinePoints[lUpperCounter - 1]);
+            POINT2 ptLower0 = new POINT2(pLowerLinePoints[lLowerCounter - 1]);
+            double dist = lineutility.CalcDistanceDouble(pLowerLinePoints[lLowerCounter - 1], pLowerLinePoints[lLowerCounter - 2]);
+            if (vbiDrawThis == TacticalLines.CATKBYFIRE) {
+                if (dist > 45) {
+                    POINT2 midPt = lineutility.MidPointDouble(pLowerLinePoints[lLowerCounter - 2], pUpperLinePoints[lUpperCounter - 2], 0);
+                    ArrowLinePoint = lineutility.ExtendAlongLineDouble(ArrowLinePoint, midPt, 45);
+                    pLowerLinePoints[lLowerCounter - 1] = lineutility.ExtendAlongLineDouble(pLowerLinePoints[lLowerCounter - 1], pLowerLinePoints[lLowerCounter - 2], 45);//will be 45 if Oculus adjusts control point
+                    pUpperLinePoints[lUpperCounter - 1] = lineutility.ExtendAlongLineDouble(pUpperLinePoints[lUpperCounter - 1], pUpperLinePoints[lUpperCounter - 2], 45);//will be 45 if Oculus adjusts control point
                 }
             }
             //end section
@@ -881,12 +881,11 @@ public final class Channels {
                 pLinePoints[j] = new POINT2(pUpperLinePoints[0]);
             }
 
-            EndLinePoint.x = (int) ((double) (pLowerLinePoints[lLowerCounter - 1].x +
-                    pUpperLinePoints[lUpperCounter - 1].x) / 2);
+            EndLinePoint.x = (int) ((double) (pLowerLinePoints[lLowerCounter - 1].x
+                    + pUpperLinePoints[lUpperCounter - 1].x) / 2);
 
-            EndLinePoint.y = (int) ((double) (pLowerLinePoints[lLowerCounter - 1].y +
-                    pUpperLinePoints[lUpperCounter - 1].y) / 2);
-
+            EndLinePoint.y = (int) ((double) (pLowerLinePoints[lLowerCounter - 1].y
+                    + pUpperLinePoints[lUpperCounter - 1].y) / 2);
 
             x = (double) (pLowerLinePoints[lLowerCounter - 1].x - pUpperLinePoints[lUpperCounter - 1].x);
             y = (double) (pLowerLinePoints[lLowerCounter - 1].y - pUpperLinePoints[lUpperCounter - 1].y);
@@ -895,7 +894,6 @@ public final class Channels {
             //nBase = (int) Math.sqrt(x + y);
 
             //nBase *= (int) dPrinter;
-
             OuterTipLinePoint = new POINT2(ArrowLinePoint);
             InnerTipLinePoint = lineutility.GetOffsetPointDouble(EndLinePoint, OuterTipLinePoint, -(int) (dOffsetFactor * dPrinter));
             pLinePoints[lCounter - 9].style = 5;
@@ -908,9 +906,9 @@ public final class Channels {
             TempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) (dOffsetFactor * dPrinter));
 
             pLinePoints[lCounter - 7] = new POINT2(TempLinePoint);
-            pLinePoints[lCounter - 6] = new POINT2( pLowerLinePoints[lLowerCounter - 1]);
-            pLinePoints[lCounter - 5] =  new POINT2(InnerTipLinePoint);
-            pLinePoints[lCounter - 4] =  new POINT2(pUpperLinePoints[lUpperCounter - 1]);
+            pLinePoints[lCounter - 6] = new POINT2(pLowerLinePoints[lLowerCounter - 1]);
+            pLinePoints[lCounter - 5] = new POINT2(InnerTipLinePoint);
+            pLinePoints[lCounter - 4] = new POINT2(pUpperLinePoints[lUpperCounter - 1]);
 
             pt0.x = pLowerLinePoints[lLowerCounter - 1].x;
             pt0.y = pLowerLinePoints[lLowerCounter - 1].y;
@@ -918,9 +916,9 @@ public final class Channels {
             pt1.y = pUpperLinePoints[lUpperCounter - 1].y;
             TempLinePoint = lineutility.GetOffsetPointDouble(pt0, pt1, (int) (dOffsetFactor * dPrinter));
 
-            pLinePoints[lCounter - 3] =  new POINT2(TempLinePoint);
-            pLinePoints[lCounter - 2] =  new POINT2(OuterTipLinePoint);
-            pLinePoints[lCounter - 1] =  new POINT2(OuterTipLinePoint);
+            pLinePoints[lCounter - 3] = new POINT2(TempLinePoint);
+            pLinePoints[lCounter - 2] = new POINT2(OuterTipLinePoint);
+            pLinePoints[lCounter - 1] = new POINT2(OuterTipLinePoint);
             pLinePoints[lCounter - 1].style = 5;
 
             switch (vbiDrawThis) {
@@ -937,27 +935,27 @@ public final class Channels {
                 default:
                     break;
             }
-            
+
             //10-19-12
             //reset the original points after the hack for catkbyfire
-            if(vbiDrawThis==TacticalLines.CATKBYFIRE && dist>45)
-            {
-                pUpperLinePoints[lUpperCounter-1].x=ptUpper0.x;
-                pUpperLinePoints[lUpperCounter-1].y=ptUpper0.y;
-                pLowerLinePoints[lLowerCounter-1].x=ptLower0.x;
-                pLowerLinePoints[lLowerCounter-1].y=ptLower0.y;
-                ArrowLinePoint.x=origArrowPt.x;
-                ArrowLinePoint.y=origArrowPt.y;
+            if (vbiDrawThis == TacticalLines.CATKBYFIRE && dist > 45) {
+                pUpperLinePoints[lUpperCounter - 1].x = ptUpper0.x;
+                pUpperLinePoints[lUpperCounter - 1].y = ptUpper0.y;
+                pLowerLinePoints[lLowerCounter - 1].x = ptLower0.x;
+                pLowerLinePoints[lLowerCounter - 1].y = ptLower0.y;
+                ArrowLinePoint.x = origArrowPt.x;
+                ArrowLinePoint.y = origArrowPt.y;
             }
             //end section
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetAXADDouble",
-                    new RendererException("Failed inside GetAXADDouble " + Integer.toString(vbiDrawThis), exc));
+        } catch (Exception ex) {
+            logger.error("channel error - get arrowhead: {}", vbiDrawThis, ex);
         }
         return;
     }
+
     /**
-     * Calculates a channel line and is called once each time for lower and upper channel lines.
+     * Calculates a channel line and is called once each time for lower and
+     * upper channel lines.
      *
      * @param nPrinter always 1
      * @param pLinePoints client points
@@ -1015,79 +1013,73 @@ public final class Channels {
                     break;
             }	//end switch
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetChannelArray2Double",
-                    new RendererException("Failed inside GetChannelArray2Double " + Integer.toString(vbiDrawThis), exc));
+        } catch (Exception ex) {
+            logger.error("channel error - line type: {}", vbiDrawThis, ex);
         }
         return pLinePoints;
     }
 
     private static CChannelPoints2 GetTrueEndPointDouble(int nWidth,
-                                        POINT2 EndLinePoint,
-                                        POINT2 NextLinePoint,
-                                        int lLast)
-    {
-        CChannelPoints2 cAnswers=new CChannelPoints2();
-        try
-        {
+            POINT2 EndLinePoint,
+            POINT2 NextLinePoint,
+            int lLast) {
+        CChannelPoints2 cAnswers = new CChannelPoints2();
+        try {
             //declarations
-            POINT2 LinePoint1=new POINT2(),LinePoint2=new POINT2();
+            POINT2 LinePoint1 = new POINT2(), LinePoint2 = new POINT2();
             double m = 0,
                     b = 0,
                     bPerpendicular = 0,
                     Upperb = 0,
                     Lowerb = 0,
-                    dWidth=(double)nWidth;
-            int bolVertical=0;
-            ref<double[]> pdResult=new ref();// double[6];
+                    dWidth = (double) nWidth;
+            int bolVertical = 0;
+            ref<double[]> pdResult = new ref();// double[6];
             //end declarations
 
-            bolVertical=lineutility.CalcTrueLinesDouble(nWidth,EndLinePoint,NextLinePoint,pdResult);
+            bolVertical = lineutility.CalcTrueLinesDouble(nWidth, EndLinePoint, NextLinePoint, pdResult);
             m = pdResult.value[0];
             b = pdResult.value[1];
             Upperb = pdResult.value[3];
             Lowerb = pdResult.value[5];
 
-            if(bolVertical==0)	//lines are vertical
+            if (bolVertical == 0) //lines are vertical
             {
-                switch(lLast)
-                {
+                switch (lLast) {
                     case 4:
                     case 6:
-                        cAnswers.m_Line1.x=EndLinePoint.x-dWidth;
-                        cAnswers.m_Line1.y=EndLinePoint.y;
-                        cAnswers.m_Line2.x=EndLinePoint.x+dWidth;
-                        cAnswers.m_Line2.y=EndLinePoint.y;
+                        cAnswers.m_Line1.x = EndLinePoint.x - dWidth;
+                        cAnswers.m_Line1.y = EndLinePoint.y;
+                        cAnswers.m_Line2.x = EndLinePoint.x + dWidth;
+                        cAnswers.m_Line2.y = EndLinePoint.y;
                         break;
                     case 5:
                     case 7:
-                        cAnswers.m_Line1.x=EndLinePoint.x+dWidth;
-                        cAnswers.m_Line1.y=EndLinePoint.y;
-                        cAnswers.m_Line2.x=EndLinePoint.x-dWidth;
-                        cAnswers.m_Line2.y=EndLinePoint.y;
+                        cAnswers.m_Line1.x = EndLinePoint.x + dWidth;
+                        cAnswers.m_Line1.y = EndLinePoint.y;
+                        cAnswers.m_Line2.x = EndLinePoint.x - dWidth;
+                        cAnswers.m_Line2.y = EndLinePoint.y;
                         break;
                     default:	//cases 0-3 should not occur if line is vertical
                         break;
                 }
             }
 
-            if(m==0)
-            {
-                switch(lLast)
-                {
+            if (m == 0) {
+                switch (lLast) {
                     case 0:	//line1 is above segment2
                     case 2:
-                        cAnswers.m_Line1.x=EndLinePoint.x;
-                        cAnswers.m_Line1.y=EndLinePoint.y-dWidth;
-                        cAnswers.m_Line2.x=EndLinePoint.x;
-                        cAnswers.m_Line2.y=EndLinePoint.y+dWidth;
+                        cAnswers.m_Line1.x = EndLinePoint.x;
+                        cAnswers.m_Line1.y = EndLinePoint.y - dWidth;
+                        cAnswers.m_Line2.x = EndLinePoint.x;
+                        cAnswers.m_Line2.y = EndLinePoint.y + dWidth;
                         break;
                     case 1:	//line1 is above segment2
                     case 3:
-                        cAnswers.m_Line1.x=EndLinePoint.x;
-                        cAnswers.m_Line1.y=EndLinePoint.y+dWidth;
-                        cAnswers.m_Line2.x=EndLinePoint.x;
-                        cAnswers.m_Line2.y=EndLinePoint.y-dWidth;
+                        cAnswers.m_Line1.x = EndLinePoint.x;
+                        cAnswers.m_Line1.y = EndLinePoint.y + dWidth;
+                        cAnswers.m_Line2.x = EndLinePoint.x;
+                        cAnswers.m_Line2.y = EndLinePoint.y - dWidth;
                         break;
                     default:	//cases 4-7 should not be passed since line not vertical
                         break;
@@ -1095,64 +1087,53 @@ public final class Channels {
             }
 
             //remaining cases, line is neither vertical nor horizontal
-            if(bolVertical!=0 && m!=0)	//lines are neither vertical nor horizontal
+            if (bolVertical != 0 && m != 0) //lines are neither vertical nor horizontal
             {
                 bPerpendicular = EndLinePoint.y + EndLinePoint.x / m;
-                LinePoint1=lineutility.CalcTrueIntersectDouble2(m,Upperb,-1/m,bPerpendicular,1,1,0,0);
-                LinePoint2=lineutility.CalcTrueIntersectDouble2(m,Lowerb,-1/m,bPerpendicular,1,1,0,0);
+                LinePoint1 = lineutility.CalcTrueIntersectDouble2(m, Upperb, -1 / m, bPerpendicular, 1, 1, 0, 0);
+                LinePoint2 = lineutility.CalcTrueIntersectDouble2(m, Lowerb, -1 / m, bPerpendicular, 1, 1, 0, 0);
 
-                switch(lLast)
-                {
+                switch (lLast) {
                     case 0:	//line1 is above segment2
                     case 2:
-                        if(LinePoint1.y<LinePoint2.y)
-                        {
-                            cAnswers.m_Line1=LinePoint1;
-                            cAnswers.m_Line2=LinePoint2;
-                        }
-                        else
-                        {
-                            cAnswers.m_Line1=LinePoint2;
-                            cAnswers.m_Line2=LinePoint1;
+                        if (LinePoint1.y < LinePoint2.y) {
+                            cAnswers.m_Line1 = LinePoint1;
+                            cAnswers.m_Line2 = LinePoint2;
+                        } else {
+                            cAnswers.m_Line1 = LinePoint2;
+                            cAnswers.m_Line2 = LinePoint1;
                         }
                         break;
                     case 1:	//line1 is below segment2
                     case 3:
-                        if(LinePoint1.y>LinePoint2.y)
-                        {
-                            cAnswers.m_Line1=LinePoint1;
-                            cAnswers.m_Line2=LinePoint2;
-                        }
-                        else
-                        {
-                            cAnswers.m_Line1=LinePoint2;
-                            cAnswers.m_Line2=LinePoint1;
+                        if (LinePoint1.y > LinePoint2.y) {
+                            cAnswers.m_Line1 = LinePoint1;
+                            cAnswers.m_Line2 = LinePoint2;
+                        } else {
+                            cAnswers.m_Line1 = LinePoint2;
+                            cAnswers.m_Line2 = LinePoint1;
                         }
                         break;
                     default:	//cases1-4 should not occur since line is not vertical
                         break;
                 }
             }
-            pdResult=null;
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(_className ,"GetTrueEndPointDouble",
-                    new RendererException("Failed inside GetTrueEndPointDouble", exc));
+            pdResult = null;
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return cAnswers;
     }
+
     private static CChannelPoints2 ConnectTrueDouble2(int nWidth,
-            POINT2  LinePoint1,
-            POINT2  LinePoint2,
-            POINT2  LinePoint3,
-            int  lOrient)
-    {
-        CChannelPoints2 pAnswerLinePoints=new CChannelPoints2();
-        try
-        {
+            POINT2 LinePoint1,
+            POINT2 LinePoint2,
+            POINT2 LinePoint3,
+            int lOrient) {
+        CChannelPoints2 pAnswerLinePoints = new CChannelPoints2();
+        try {
             //declarations
-            double  m1 = 0,
+            double m1 = 0,
                     b1 = 0,
                     m2 = 0,
                     b2 = 0,
@@ -1160,19 +1141,19 @@ public final class Channels {
                     Upperb1 = 0,
                     Lowerb2 = 0,
                     Upperb2 = 0,
-                    dWidth=(double)nWidth;
+                    dWidth = (double) nWidth;
 
-            ref<double[]> pdResult=new ref();//double[6];
+            ref<double[]> pdResult = new ref();//double[6];
             //pdResult.value=new double[6];
             //POINT2 AnswerLinePoint=new POINT2();
-            int bolVerticalSlope1=0,bolVerticalSlope2=0;
-            ref<double[]> x=new ref(),y=new ref();
+            int bolVerticalSlope1 = 0, bolVerticalSlope2 = 0;
+            ref<double[]> x = new ref(), y = new ref();
             //end declarations
 
             //Call CalcLines function for first two points (LinePoint1, LinePoint2)
             //and put parameters into the proper variables
             bolVerticalSlope1 = lineutility.CalcTrueLinesDouble(nWidth, LinePoint1, LinePoint2, pdResult);
-            if(bolVerticalSlope1!=0)	//line is not vertical
+            if (bolVerticalSlope1 != 0) //line is not vertical
             {
                 m1 = pdResult.value[0];
                 b1 = pdResult.value[1];
@@ -1182,7 +1163,7 @@ public final class Channels {
 
             //Call CalcLines function for next two points (LinePoint2, LinePoint3)
             bolVerticalSlope2 = lineutility.CalcTrueLinesDouble(nWidth, LinePoint2, LinePoint3, pdResult);
-            if(bolVerticalSlope2!=0)	//line is not vertical
+            if (bolVerticalSlope2 != 0) //line is not vertical
             {
                 m2 = pdResult.value[0];
                 b2 = pdResult.value[1];
@@ -1191,159 +1172,151 @@ public final class Channels {
             }
 
             //must alter dWidth from the standard if bolVerticalSlope is 0.
-            switch(lOrient)
-            {
+            switch (lOrient) {
                 case 0:
                     //line1 is above segment1 and above segment2
                     //use 0 for the orientation for Line 1
-                    lineutility.CalcTrueIntersectDouble(m1,Upperb1,m2,Upperb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,0,x,y);
-                    pAnswerLinePoints.m_Line1.x=x.value[0];
-                    pAnswerLinePoints.m_Line1.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Upperb1, m2, Upperb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 0, x, y);
+                    pAnswerLinePoints.m_Line1.x = x.value[0];
+                    pAnswerLinePoints.m_Line1.y = y.value[0];
                     //line 2 point:	line2 is below segment1 and below segment2
                     //use 3 for the orientation for Line 2
-                    lineutility.CalcTrueIntersectDouble(m1,Lowerb1,m2,Lowerb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,3,x,y);
-                    pAnswerLinePoints.m_Line2.x=x.value[0];
-                    pAnswerLinePoints.m_Line2.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Lowerb1, m2, Lowerb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 3, x, y);
+                    pAnswerLinePoints.m_Line2.x = x.value[0];
+                    pAnswerLinePoints.m_Line2.y = y.value[0];
                     break;
                 case 1:
                     //line1 is above segment1 and below segment2
                     //use 1 for the orientation for Line 1
-                    lineutility.CalcTrueIntersectDouble(m1,Upperb1,m2,Lowerb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,1,x,y);
-                    pAnswerLinePoints.m_Line1.x=x.value[0];
-                    pAnswerLinePoints.m_Line1.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Upperb1, m2, Lowerb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 1, x, y);
+                    pAnswerLinePoints.m_Line1.x = x.value[0];
+                    pAnswerLinePoints.m_Line1.y = y.value[0];
                     //line2 is below segment1 and above segment2
                     //use 2 for the orientation for Line 2
-                    lineutility.CalcTrueIntersectDouble(m1,Lowerb1,m2,Upperb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,2,x,y);
-                    pAnswerLinePoints.m_Line2.x=x.value[0];
-                    pAnswerLinePoints.m_Line2.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Lowerb1, m2, Upperb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 2, x, y);
+                    pAnswerLinePoints.m_Line2.x = x.value[0];
+                    pAnswerLinePoints.m_Line2.y = y.value[0];
                     break;
                 case 2:
                     //line1 is below segment1 and above segment2
                     //use 2 for the orientation for Line 1
-                    lineutility.CalcTrueIntersectDouble(m1,Lowerb1,m2,Upperb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,2,x,y);
-                    pAnswerLinePoints.m_Line1.x=x.value[0];
-                    pAnswerLinePoints.m_Line1.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Lowerb1, m2, Upperb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 2, x, y);
+                    pAnswerLinePoints.m_Line1.x = x.value[0];
+                    pAnswerLinePoints.m_Line1.y = y.value[0];
                     //line2 is above segment1 and below segment2
                     //use 1 for the orientation for Line 1
-                    lineutility.CalcTrueIntersectDouble(m1,Upperb1,m2,Lowerb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,1,x,y);
-                    pAnswerLinePoints.m_Line2.x=x.value[0];
-                    pAnswerLinePoints.m_Line2.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Upperb1, m2, Lowerb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 1, x, y);
+                    pAnswerLinePoints.m_Line2.x = x.value[0];
+                    pAnswerLinePoints.m_Line2.y = y.value[0];
                     break;
                 case 3:
                     //line1 is below segment1 and below segment2
                     //use 3 for the orientation for Line 1
-                    lineutility.CalcTrueIntersectDouble(m1,Lowerb1,m2,Lowerb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,3,x,y);
-                    pAnswerLinePoints.m_Line1.x=x.value[0];
-                    pAnswerLinePoints.m_Line1.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Lowerb1, m2, Lowerb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 3, x, y);
+                    pAnswerLinePoints.m_Line1.x = x.value[0];
+                    pAnswerLinePoints.m_Line1.y = y.value[0];
                     //line2 is above segment1 and above segment2
                     //use 0 for the orientation for Line 2
-                    lineutility.CalcTrueIntersectDouble(m1,Upperb1,m2,Upperb2,LinePoint2,bolVerticalSlope1,bolVerticalSlope2,dWidth,0,x,y);
-                    pAnswerLinePoints.m_Line2.x=x.value[0];
-                    pAnswerLinePoints.m_Line2.y=y.value[0];
+                    lineutility.CalcTrueIntersectDouble(m1, Upperb1, m2, Upperb2, LinePoint2, bolVerticalSlope1, bolVerticalSlope2, dWidth, 0, x, y);
+                    pAnswerLinePoints.m_Line2.x = x.value[0];
+                    pAnswerLinePoints.m_Line2.y = y.value[0];
                     break;
                 default:
                     break;
             }
-            pdResult=null;
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(_className ,"ConnectTrueDouble2",
-                    new RendererException("Failed inside ConnectTrueDouble2", exc));
+            pdResult = null;
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return pAnswerLinePoints;
     }
+
     /**
-     * @deprecated 
-     * Shift CounterAttack By Fire to not extend past the first point
+     * @deprecated Shift CounterAttack By Fire to not extend past the first
+     * point
      * @param vbiDrawThis
      * @param lpsaUpperVBPoints
      * @param vblLowerCounter
      * @param lpsaLowerVBPoints
-     * @param vblUpperCounter 
+     * @param vblUpperCounter
      */
     private static void shiftCATKBYFIREPoints(int vbiDrawThis,
             double[] lpsaUpperVBPoints,
             int vblLowerCounter,
             double[] lpsaLowerVBPoints,
-            int vblUpperCounter)
-    {
-        try
-        {
-            if(vbiDrawThis != TacticalLines.CATKBYFIRE)
+            int vblUpperCounter) {
+        try {
+            if (vbiDrawThis != TacticalLines.CATKBYFIRE) {
                 return;
-
-            POINT2 nextToLastPoint=new POINT2(lpsaUpperVBPoints[vblUpperCounter-4],lpsaUpperVBPoints[vblUpperCounter-3]);
-            POINT2 lastPoint=new POINT2(lpsaUpperVBPoints[vblUpperCounter-2],lpsaUpperVBPoints[vblUpperCounter-1]);
-            double dist=lineutility.CalcDistanceDouble(lastPoint, nextToLastPoint);
-            
-            if(dist<45)
-            {
-                nextToLastPoint=lineutility.ExtendAlongLineDouble(lastPoint,nextToLastPoint,45+2*dist);
-                lastPoint=lineutility.ExtendLineDouble(nextToLastPoint,lastPoint, -45);
-                lpsaUpperVBPoints[vblUpperCounter-4]=nextToLastPoint.x;
-                lpsaUpperVBPoints[vblUpperCounter-3]=nextToLastPoint.y;
-                lpsaLowerVBPoints[vblLowerCounter-4]=nextToLastPoint.x;
-                lpsaLowerVBPoints[vblLowerCounter-3]=nextToLastPoint.y;                                    
             }
-            //lastPoint=lineutility.ExtendAlongLineDouble(lastPoint, nextToLastPoint, 45);
-            else
-                lastPoint=lineutility.ExtendLineDouble(nextToLastPoint,lastPoint, -45);
-            
-            lpsaUpperVBPoints[vblUpperCounter-2]=lastPoint.x;
-            lpsaUpperVBPoints[vblUpperCounter-1]=lastPoint.y;
-            lpsaLowerVBPoints[vblLowerCounter-2]=lastPoint.x;
-            lpsaLowerVBPoints[vblLowerCounter-1]=lastPoint.y;                                    
+
+            POINT2 nextToLastPoint = new POINT2(lpsaUpperVBPoints[vblUpperCounter - 4], lpsaUpperVBPoints[vblUpperCounter - 3]);
+            POINT2 lastPoint = new POINT2(lpsaUpperVBPoints[vblUpperCounter - 2], lpsaUpperVBPoints[vblUpperCounter - 1]);
+            double dist = lineutility.CalcDistanceDouble(lastPoint, nextToLastPoint);
+
+            if (dist < 45) {
+                nextToLastPoint = lineutility.ExtendAlongLineDouble(lastPoint, nextToLastPoint, 45 + 2 * dist);
+                lastPoint = lineutility.ExtendLineDouble(nextToLastPoint, lastPoint, -45);
+                lpsaUpperVBPoints[vblUpperCounter - 4] = nextToLastPoint.x;
+                lpsaUpperVBPoints[vblUpperCounter - 3] = nextToLastPoint.y;
+                lpsaLowerVBPoints[vblLowerCounter - 4] = nextToLastPoint.x;
+                lpsaLowerVBPoints[vblLowerCounter - 3] = nextToLastPoint.y;
+            } //lastPoint=lineutility.ExtendAlongLineDouble(lastPoint, nextToLastPoint, 45);
+            else {
+                lastPoint = lineutility.ExtendLineDouble(nextToLastPoint, lastPoint, -45);
+            }
+
+            lpsaUpperVBPoints[vblUpperCounter - 2] = lastPoint.x;
+            lpsaUpperVBPoints[vblUpperCounter - 1] = lastPoint.y;
+            lpsaLowerVBPoints[vblLowerCounter - 2] = lastPoint.x;
+            lpsaLowerVBPoints[vblLowerCounter - 1] = lastPoint.y;
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
+
         }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(_className ,"ShiftCATKBYFIREPoints",
-                    new RendererException("Failed inside ShiftCATKBYFIREPoints", exc));
-        }
-        return;
     }
+
     /**
-     * @deprecated
-     * tester function to shift counterattack by fire point back to account for
-     * aligning the rotary arrow tip with the anchor point. the feature used to extend past 
-     * the anchor so the control point was shove forward. Intended to be called by the tester.
-     * note: this function is not used by the CPOF client, it is for tester use only
+     * @deprecated tester function to shift counterattack by fire point back to
+     * account for aligning the rotary arrow tip with the anchor point. the
+     * feature used to extend past the anchor so the control point was shove
+     * forward. Intended to be called by the tester. note: this function is not
+     * used by the CPOF client, it is for tester use only
      * @param linetype line type
      * @param pLinePoints
      * @param shift amount to shift back the existing control point
      */
     public static void shiftCATKBYFIREControlPoint(
             int linetype,
-            ArrayList<POINT2>pLinePoints,
-            double shift)
-    {
-        try
-        {
-            if(linetype != TacticalLines.CATKBYFIRE)
+            ArrayList<POINT2> pLinePoints,
+            double shift) {
+        try {
+            if (linetype != TacticalLines.CATKBYFIRE) {
                 return;
-            int controlPtIndex=pLinePoints.size()-1;
-            POINT2 pt0=pLinePoints.get(0);
-            POINT2 pt1=pLinePoints.get(1);
-            double dist=lineutility.CalcDistanceDouble(pLinePoints.get(0), pLinePoints.get(1));
-            if(dist<=45)
+            }
+            int controlPtIndex = pLinePoints.size() - 1;
+            POINT2 pt0 = pLinePoints.get(0);
+            POINT2 pt1 = pLinePoints.get(1);
+            double dist = lineutility.CalcDistanceDouble(pLinePoints.get(0), pLinePoints.get(1));
+            if (dist <= 45) {
                 return;
-            POINT2 controlPt=pLinePoints.get(controlPtIndex);
+            }
+            POINT2 controlPt = pLinePoints.get(controlPtIndex);
             //pt3 is the point on parallel line which contains the control point and corresponds to,
             //i.e. is perpendicular to, pt0.
-            POINT2 pt3=lineutility.PointRelativeToLine(pt0, pt1, pt0, controlPt);
+            POINT2 pt3 = lineutility.PointRelativeToLine(pt0, pt1, pt0, controlPt);
             //pt4 will be the shifted control point
-            POINT2 pt4=lineutility.ExtendLineDouble(pt3, controlPt, shift);
+            POINT2 pt4 = lineutility.ExtendLineDouble(pt3, controlPt, shift);
             //set the control point as the new shifted control point
             pLinePoints.set(controlPtIndex, pt4);
-        }
-        catch(Exception exc)
-        {
-            ErrorLogger.LogException(_className ,"shiftCATKBYFIREControlPoint",
-                    new RendererException("Failed inside shiftCATKBYFIREControlPoint", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
     }
+
     /**
      * Calculates the channel points
+     *
      * @param lpsaUpperVBPoints the client points as 2-tuples
      * @param lpsaLowerVBPoints the client points as 2 tuples
      * @param resultVBPoints the result points as 3-tuples x,y,linestyle
@@ -1351,7 +1324,8 @@ public final class Channels {
      * @param vblLowerCounter the number of client 2-tuples
      * @param vbiDrawThis the line type as a hierarchy
      * @param vblChannelWidth the channel width in pixels
-     * @param useptr the distance in pixels from the arrow tip to the back of the arrowhead
+     * @param useptr the distance in pixels from the arrow tip to the back of
+     * the arrowhead
      * @param shapes the ShapeInfo array, each object contains the GeneralPath
      * @param rev the Mil-Standard 2525 revision
      * @return
@@ -1364,7 +1338,7 @@ public final class Channels {
             int vbiDrawThis,
             int vblChannelWidth,
             int useptr,
-            ArrayList<Shape2>shapes,
+            ArrayList<Shape2> shapes,
             int rev) {
         int lResult = -1;
         try {
@@ -1377,7 +1351,7 @@ public final class Channels {
             int nPrinter = 1,
                     nArrowSize = 40 * nPrinter,
                     max = 0;
-            double dist = 0,remainder=0;
+            double dist = 0, remainder = 0;
             int vblUpperCounter2 = vblUpperCounter, vblLowerCounter2 = vblLowerCounter;
             int nReverseUpper = 0;
             int lUpperFlotCount = 0, lLowerFlotCount = 0;
@@ -1390,7 +1364,7 @@ public final class Channels {
             double dFactor = 0;
             int lEllipseCounter = 0;
             //double arrowOffsetFactor = 10;
-            double arrowOffsetFactor = vblChannelWidth/4;  //diagnostic was 10
+            double arrowOffsetFactor = vblChannelWidth / 4;  //diagnostic was 10
             POINT2[] pLowerLinePoints = new POINT2[vblLowerCounter],
                     pUpperLinePoints = new POINT2[vblUpperCounter],
                     pArrowLinePoints = new POINT2[1],
@@ -1456,9 +1430,8 @@ public final class Channels {
 
             pt0 = new POINT2(pLowerLinePoints[0]);
             //diagnostic 1-7-13            
-            boolean shiftLines=_shiftLines;
-            switch(vbiDrawThis)
-            {
+            boolean shiftLines = _shiftLines;
+            switch (vbiDrawThis) {
                 case TacticalLines.LC:
                 case TacticalLines.LC_HOSTILE:
                 case TacticalLines.UNSP:
@@ -1470,11 +1443,11 @@ public final class Channels {
                 case TacticalLines.TRIPLE:
                     break;
                 default:
-                    shiftLines=false;
+                    shiftLines = false;
                     break;
             }
             //end section
-            
+
             switch (vbiDrawThis) {
                 case TacticalLines.CATK:
                 case TacticalLines.AXAD:
@@ -1492,7 +1465,7 @@ public final class Channels {
                     nArrowSize = (int) Math.sqrt(dist * dist + vblChannelWidth / 2 * vblChannelWidth / 2);
                     //nArrowSize = (int) Math.sqrt(dist * dist + vblChannelWidth * vblChannelWidth);
                     //lineutility.WriteFile(Integer.toString(nArrowSize));
-                    
+
                     pUpperLinePoints[vblUpperCounter - 1] = lineutility.ExtendAlongLineDouble(pUpperLinePoints[vblUpperCounter - 1], pUpperLinePoints[vblUpperCounter - 2], dist);
                     pLowerLinePoints[vblLowerCounter - 1] = lineutility.ExtendAlongLineDouble(pLowerLinePoints[vblLowerCounter - 1], pLowerLinePoints[vblLowerCounter - 2], dist);
                     break;
@@ -1567,7 +1540,7 @@ public final class Channels {
                             pOriginalLinePoints = new POINT2[vblUpperCounter];
                             for (k = 0; k < vblUpperCounter2; k++) {
                                 pOriginalLinePoints[k] = new POINT2(pOriginalLinePoints2[k]);
-                            }                            
+                            }
                             break;
                         default:
                             //do not bound the points
@@ -1577,47 +1550,44 @@ public final class Channels {
                     lineutility.moveSingleCPixels(vbiDrawThis, pLowerLinePoints);
                     lineutility.MoveChannelPixels(pUpperLinePoints);
                     lineutility.MoveChannelPixels(pLowerLinePoints);
-                    
+
                     //diagnostic 1-7-13
                     //if(_shiftLines && vbiDrawThis != TacticalLines.DOUBLEC)
-                    if(shiftLines)
-                        vblChannelWidth *=2;
-                    //end section
-                    
-                    pUpperLinePoints = GetChannelArray2Double(nPrinter, pUpperLinePoints, 1, vblUpperCounter, vbiDrawThis, vblChannelWidth);
-                    pLowerLinePoints = GetChannelArray2Double(nPrinter, pLowerLinePoints, 0, vblLowerCounter, vbiDrawThis, vblChannelWidth);
-                    
-                    //diagnostic 1-7-13
-                    if(shiftLines)
-                    {
-                        //if(vbiDrawThis != TacticalLines.SINGLEC && vbiDrawThis != TacticalLines.DOUBLEC)
-                          //  pUpperLinePoints=pOriginalLinePoints;
-                        if(vbiDrawThis == TacticalLines.SINGLEC)                        
-                            pLowerLinePoints=pOriginalLinePoints;                        
-                        else if(vbiDrawThis == TacticalLines.DOUBLEC)                        
-                        {
-                            for(j=0;j<pUpperLinePoints.length;j++)
-                            {
-                                pUpperLinePoints[j]=lineutility.MidPointDouble(pLowerLinePoints[j], pOriginalLinePoints[j], 0);
-                            }
-                            //pOriginalLinePoints=pLowerLinePoints.clone();
-                        }
-                        else if(vbiDrawThis == TacticalLines.TRIPLE)                        
-                            pUpperLinePoints=pOriginalLinePoints;                        
-                        else
-                            pUpperLinePoints=pOriginalLinePoints;                        
+                    if (shiftLines) {
+                        vblChannelWidth *= 2;
                     }
                     //end section
-                    
+
+                    pUpperLinePoints = GetChannelArray2Double(nPrinter, pUpperLinePoints, 1, vblUpperCounter, vbiDrawThis, vblChannelWidth);
+                    pLowerLinePoints = GetChannelArray2Double(nPrinter, pLowerLinePoints, 0, vblLowerCounter, vbiDrawThis, vblChannelWidth);
+
+                    //diagnostic 1-7-13
+                    if (shiftLines) {
+                        //if(vbiDrawThis != TacticalLines.SINGLEC && vbiDrawThis != TacticalLines.DOUBLEC)
+                        //  pUpperLinePoints=pOriginalLinePoints;
+                        if (vbiDrawThis == TacticalLines.SINGLEC) {
+                            pLowerLinePoints = pOriginalLinePoints;
+                        } else if (vbiDrawThis == TacticalLines.DOUBLEC) {
+                            for (j = 0; j < pUpperLinePoints.length; j++) {
+                                pUpperLinePoints[j] = lineutility.MidPointDouble(pLowerLinePoints[j], pOriginalLinePoints[j], 0);
+                            }
+                            //pOriginalLinePoints=pLowerLinePoints.clone();
+                        } else if (vbiDrawThis == TacticalLines.TRIPLE) {
+                            pUpperLinePoints = pOriginalLinePoints;
+                        } else {
+                            pUpperLinePoints = pOriginalLinePoints;
+                        }
+                    }
+                    //end section
+
                     //AAFNT, MAIN, SPT, and CHANNEL_FLARED have flared first segment
                     //AAFNT_STRAIGHT, MAIN_STRAIGHT, SPT_STRAIGHT, and CHANNEL
                     //do not have flared first segment (except 2525 rev C has straight 1st segment)
-                    if(rev != RendererSettings.Symbology_2525C)
-                    {
-                        if (vbiDrawThis == TacticalLines.AAFNT ||
-                                vbiDrawThis == TacticalLines.MAIN ||
-                                vbiDrawThis ==  TacticalLines.SPT ||
-                                vbiDrawThis ==  TacticalLines.CHANNEL_FLARED) {
+                    if (rev != RendererSettings.Symbology_2525C) {
+                        if (vbiDrawThis == TacticalLines.AAFNT
+                                || vbiDrawThis == TacticalLines.MAIN
+                                || vbiDrawThis == TacticalLines.SPT
+                                || vbiDrawThis == TacticalLines.CHANNEL_FLARED) {
                             pUpperLinePoints[0] = lineutility.ExtendLineDouble(temp2LinePoint, pUpperLinePoints[0], 10);
                             pLowerLinePoints[0] = lineutility.ExtendLineDouble(temp1LinePoint, pLowerLinePoints[0], 10);
                         }
@@ -1626,8 +1596,7 @@ public final class Channels {
                 case TacticalLines.LC:
                 case TacticalLines.LC2:
                 case TacticalLines.LC_HOSTILE:
-                    if(shiftLines==true || vbiDrawThis == TacticalLines.LC2)
-                    {
+                    if (shiftLines == true || vbiDrawThis == TacticalLines.LC2) {
                         pOriginalLinePoints = new POINT2[vblUpperCounter];
                         for (k = 0; k < vblUpperCounter; k++) {
                             pOriginalLinePoints[k] = new POINT2(pUpperLinePoints[k]);
@@ -1646,29 +1615,30 @@ public final class Channels {
                             pUpperLinePoints[k] = new POINT2(pOriginalLinePoints[k]);
                         }
                     }
-                    
+
                     //diagnostic 1-7-13
-                    if(shiftLines)
+                    if (shiftLines) {
                         vblChannelWidth *= 2;
+                    }
                     //end section
-                    
+
                     pUpperLinePoints = GetChannelArray2Double(nPrinter, pUpperLinePoints, 1, vblUpperCounter, vbiDrawThis, vblChannelWidth);
                     pLowerLinePoints = GetChannelArray2Double(nPrinter, pLowerLinePoints, 0, vblLowerCounter, vbiDrawThis, vblChannelWidth);
-                    
+
                     //diagnostic 1-7-13
-                    if(shiftLines)   
-                    {                        
+                    if (shiftLines) {
 //                        if(_affiliation != null && _affiliation.equalsIgnoreCase("H"))
 //                            pLowerLinePoints=pOriginalLinePoints;
 //                        else
 //                            pUpperLinePoints=pOriginalLinePoints;
-                        if(vbiDrawThis==TacticalLines.LC_HOSTILE)
-                            pLowerLinePoints=pOriginalLinePoints;
-                        else
-                            pUpperLinePoints=pOriginalLinePoints;
+                        if (vbiDrawThis == TacticalLines.LC_HOSTILE) {
+                            pLowerLinePoints = pOriginalLinePoints;
+                        } else {
+                            pUpperLinePoints = pOriginalLinePoints;
+                        }
                     }
                     //end section
-                    
+
                     if ((pUpperLinePoints[0].x > pUpperLinePoints[1].x) && (pUpperLinePoints[0].y != pUpperLinePoints[1].y)) {
                         nReverseUpper = 1;
                         lineutility.ReversePointsDouble2(pLowerLinePoints, vblLowerCounter);
@@ -1696,15 +1666,14 @@ public final class Channels {
                     pUpperLinePoints = GetChannelArray2Double(nPrinter, pUpperLinePoints, 1, vblUpperCounter, vbiDrawThis, vblChannelWidth);
                     pLowerLinePoints = GetChannelArray2Double(nPrinter, pLowerLinePoints, 0, vblLowerCounter, vbiDrawThis, vblChannelWidth);
 
-
-            //end section
+                    //end section
                     //only allow the lines to cross if there is enough room
                     //if (lastSegmentLength > vblChannelWidth / 2)
                     //{
-                        temp1LinePoint = new POINT2(pLowerLinePoints[vblLowerCounter - 1]);
-                        temp2LinePoint = new POINT2(pUpperLinePoints[vblUpperCounter - 1]);
-                        pLowerLinePoints[vblLowerCounter - 1] = new POINT2(temp2LinePoint);
-                        pUpperLinePoints[vblUpperCounter - 1] = new POINT2(temp1LinePoint);
+                    temp1LinePoint = new POINT2(pLowerLinePoints[vblLowerCounter - 1]);
+                    temp2LinePoint = new POINT2(pUpperLinePoints[vblUpperCounter - 1]);
+                    pLowerLinePoints[vblLowerCounter - 1] = new POINT2(temp2LinePoint);
+                    pUpperLinePoints[vblUpperCounter - 1] = new POINT2(temp1LinePoint);
                     //}
                     break;
                 default:
@@ -1744,7 +1713,6 @@ public final class Channels {
                     }
                     for (k = 0; k < vblLowerCounter - 1; k++) {
                         pLinePoints[vblUpperCounter + k] = new POINT2(pLowerLinePoints[k]);
-
 
                         if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x) {
                             pLinePoints[vblUpperCounter + k].style = 25;
@@ -1834,23 +1802,26 @@ public final class Channels {
                             pLinePoints[k + lUpperFlotCount] = new POINT2(pLowerFlotPoints[k]);
                             pLinePoints[k + lUpperFlotCount].style = 26;    //was 0
                         }
-                        if (lUpperFlotCount+lLowerFlotCount > 0) {
-                            pLinePoints[lUpperFlotCount+lLowerFlotCount - 1].style = 5;}
+                        if (lUpperFlotCount + lLowerFlotCount > 0) {
+                            pLinePoints[lUpperFlotCount + lLowerFlotCount - 1].style = 5;
+                        }
                     }
                     if (nReverseUpper == 0) {
                         for (k = 0; k < lUpperFlotCount; k++) {
                             pLinePoints[k] = new POINT2(pUpperFlotPoints[k]);
                             pLinePoints[k].style = 26;  //was 0
                         }
-                        if(lUpperFlotCount>0)
+                        if (lUpperFlotCount > 0) {
                             pLinePoints[lUpperFlotCount - 1].style = 5;
+                        }
 
                         for (k = 0; k < lLowerFlotCount; k++) {
                             pLinePoints[k + lUpperFlotCount] = new POINT2(pLowerFlotPoints[k]);
                             pLinePoints[k + lUpperFlotCount].style = 25;    //was 26
                         }
-                        if(lUpperFlotCount+lLowerFlotCount>0)
-                            pLinePoints[lUpperFlotCount+lLowerFlotCount - 1].style = 5;
+                        if (lUpperFlotCount + lLowerFlotCount > 0) {
+                            pLinePoints[lUpperFlotCount + lLowerFlotCount - 1].style = 5;
+                        }
                     }
                     break;
                 case TacticalLines.TRIPLE2:
@@ -1885,24 +1856,18 @@ public final class Channels {
                         case TacticalLines.CHANNEL_DASHED:
                         case TacticalLines.SINGLEC2:  //added 7-10-07
                         case TacticalLines.SINGLEC:   //added 7-10-07
-                            for (k = 0; k < vblLowerCounter; k++) 
-                            {
+                            for (k = 0; k < vblLowerCounter; k++) {
                                 pLinePoints[k] = new POINT2(pLowerLinePoints[k]);   //don't shift here
                             }
                             break;
                         case TacticalLines.DOUBLEC2:
                         case TacticalLines.DOUBLEC:
-                            if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x) 
-                            {
-                                for (k = 0; k < vblLowerCounter; k++) 
-                                {
+                            if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x) {
+                                for (k = 0; k < vblLowerCounter; k++) {
                                     pLinePoints[k] = new POINT2(pOriginalLinePoints[k]);
                                 }
-                            } 
-                            else 
-                            {
-                                for (k = 0; k < vblLowerCounter; k++) 
-                                {
+                            } else {
+                                for (k = 0; k < vblLowerCounter; k++) {
                                     //diagnostic M. Deutch 10-20-11
                                     //pLinePoints[k] = new POINT2(pLowerLinePoints[k]);
                                     pLinePoints[k] = new POINT2(pUpperLinePoints[k]);
@@ -1913,10 +1878,10 @@ public final class Channels {
                         case TacticalLines.LWFENCE:
                             //remove block comment to restore line always below X
 //                            if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x){
-                                for (k = 0; k < vblLowerCounter; k++) {
-                                    pLinePoints[k] = new POINT2(pOriginalLinePoints[k]);
-                                    pLinePoints[k].style = 5;
-                                }
+                            for (k = 0; k < vblLowerCounter; k++) {
+                                pLinePoints[k] = new POINT2(pOriginalLinePoints[k]);
+                                pLinePoints[k].style = 5;
+                            }
 //                            } else {
 //                                for (k = 0; k < vblLowerCounter; k++) {
 //                                    pLinePoints[k] = new POINT2(pLowerLinePoints[k]);
@@ -1955,17 +1920,12 @@ public final class Channels {
                             break;
                         case TacticalLines.DOUBLEC2:
                         case TacticalLines.DOUBLEC:
-                            if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x) 
-                            {
-                                for (k = 0; k < vblUpperCounter; k++) 
-                                {
+                            if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x) {
+                                for (k = 0; k < vblUpperCounter; k++) {
                                     pLinePoints[vblLowerCounter + k] = new POINT2(pUpperLinePoints[k]);
                                 }
-                            } 
-                            else 
-                            {
-                                for (k = 0; k < vblUpperCounter; k++) 
-                                {
+                            } else {
+                                for (k = 0; k < vblUpperCounter; k++) {
                                     pLinePoints[vblLowerCounter + k] = new POINT2(pOriginalLinePoints[k]);
                                 }
                             }
@@ -1981,10 +1941,9 @@ public final class Channels {
                             //remove block to make channel line aoways below the X
 //                            if (pOriginalLinePoints[0].x < pOriginalLinePoints[1].x) 
 //                            {
-                                for (k = 0; k < vblUpperCounter; k++) 
-                                {
-                                    pLinePoints[vblLowerCounter + k] = new POINT2(pUpperLinePoints[k]);
-                                }
+                            for (k = 0; k < vblUpperCounter; k++) {
+                                pLinePoints[vblLowerCounter + k] = new POINT2(pUpperLinePoints[k]);
+                            }
 //                            } 
 //                            else 
 //                            {
@@ -1996,8 +1955,7 @@ public final class Channels {
 //                            }
                             break;
                         case TacticalLines.UNSP:
-                            for (k = 0; k < vblUpperCounter; k++) 
-                            {
+                            for (k = 0; k < vblUpperCounter; k++) {
                                 pLinePoints[vblLowerCounter + k] = new POINT2(pOriginalLinePoints[k]);
                                 pLinePoints[vblLowerCounter + k].style = 5;
                             }
@@ -2019,74 +1977,67 @@ public final class Channels {
                     lEllipseCounter = vblLowerCounter + vblUpperCounter;
                     //following section only for lines with repeating features, e.g. DOUBLEA
                     //if(segments!=null &&
-                    if (vbiDrawThis != TacticalLines.SINGLEC2 &&
-                            vbiDrawThis != TacticalLines.DOUBLEC2 &&
-                            vbiDrawThis != TacticalLines.TRIPLE2 &&
-                            vbiDrawThis != TacticalLines.BBS_LINE &&
-                            vbiDrawThis != TacticalLines.CHANNEL &&
-                            vbiDrawThis != TacticalLines.CHANNEL_DASHED &&
-                            vbiDrawThis != TacticalLines.CHANNEL_FLARED &&
-                            vbiDrawThis != TacticalLines.SPT_STRAIGHT &&
-                            vbiDrawThis != TacticalLines.MAIN_STRAIGHT &&
-                            vbiDrawThis != TacticalLines.AAFNT_STRAIGHT)
-                    {
+                    if (vbiDrawThis != TacticalLines.SINGLEC2
+                            && vbiDrawThis != TacticalLines.DOUBLEC2
+                            && vbiDrawThis != TacticalLines.TRIPLE2
+                            && vbiDrawThis != TacticalLines.BBS_LINE
+                            && vbiDrawThis != TacticalLines.CHANNEL
+                            && vbiDrawThis != TacticalLines.CHANNEL_DASHED
+                            && vbiDrawThis != TacticalLines.CHANNEL_FLARED
+                            && vbiDrawThis != TacticalLines.SPT_STRAIGHT
+                            && vbiDrawThis != TacticalLines.MAIN_STRAIGHT
+                            && vbiDrawThis != TacticalLines.AAFNT_STRAIGHT) {
                         for (j = 0; j < vblUpperCounter - 1; j++) {
                             d = lineutility.CalcDistanceDouble(pOriginalLinePoints[j], pOriginalLinePoints[j + 1]);
                             //lHowManyThisSegment = (int) ((d - 10) / 10);
-                            lHowManyThisSegment = (int)d/10;
-                            remainder=d-10*lHowManyThisSegment;
+                            lHowManyThisSegment = (int) d / 10;
+                            remainder = d - 10 * lHowManyThisSegment;
                             //lineutility.WriteFile(Double.toString(remainder));
                             //if(remainder>8)
-                              //  lHowManyThisSegment +=1;
+                            //  lHowManyThisSegment +=1;
                             dAngle = lineutility.CalcSegmentAngleDouble(pOriginalLinePoints[j], pOriginalLinePoints[j + 1]);
                             dAngle = dAngle + pi / 2;
                             for (k = 0; k < lHowManyThisSegment; k++) {
-                                
-                                if(vbiDrawThis==TacticalLines.SFENCE)
-                                {
-                                    if(k%4==0)
+
+                                if (vbiDrawThis == TacticalLines.SFENCE) {
+                                    if (k % 4 == 0) {
                                         continue;
-                                }
-                                else
-                                {
-                                    if(k%2==0)
+                                    }
+                                } else {
+                                    if (k % 2 == 0) {
                                         continue;
+                                    }
                                 }
 
-                                double f=k;
-                                f*=(1d+remainder/d);
-                                                                
+                                double f = k;
+                                f *= (1d + remainder / d);
+
                                 //diagnostic 1-7-13                                
                                 //note: for shiftLines upper line points were set to original line points ealier
                                 //ptCenter.x = pOriginalLinePoints[j].x + (int) ((double) (f) * ((double) pOriginalLinePoints[j + 1].x - (double) pOriginalLinePoints[j].x) / (double) lHowManyThisSegment);
                                 //ptCenter.y = pOriginalLinePoints[j].y + (int) ((double) (f) * ((double) pOriginalLinePoints[j + 1].y - (double) pOriginalLinePoints[j].y) / (double) lHowManyThisSegment);                                
-                                if(shiftLines==true && vbiDrawThis==TacticalLines.DOUBLEC)
-                                {
+                                if (shiftLines == true && vbiDrawThis == TacticalLines.DOUBLEC) {
                                     ptCenter.x = pUpperLinePoints[j].x + (int) ((double) (f) * ((double) pUpperLinePoints[j + 1].x - (double) pUpperLinePoints[j].x) / (double) lHowManyThisSegment);
                                     ptCenter.y = pUpperLinePoints[j].y + (int) ((double) (f) * ((double) pUpperLinePoints[j + 1].y - (double) pUpperLinePoints[j].y) / (double) lHowManyThisSegment);
-                                }
-                                else if(shiftLines==false)
-                                {
+                                } else if (shiftLines == false) {
                                     ptCenter.x = pOriginalLinePoints[j].x + (int) ((double) (f) * ((double) pOriginalLinePoints[j + 1].x - (double) pOriginalLinePoints[j].x) / (double) lHowManyThisSegment);
                                     ptCenter.y = pOriginalLinePoints[j].y + (int) ((double) (f) * ((double) pOriginalLinePoints[j + 1].y - (double) pOriginalLinePoints[j].y) / (double) lHowManyThisSegment);
-                                }
-                                else
-                                {
+                                } else {
                                     ptCenter.x = pUpperLinePoints[j].x + (int) ((double) (f) * ((double) pUpperLinePoints[j + 1].x - (double) pUpperLinePoints[j].x) / (double) lHowManyThisSegment);
                                     ptCenter.y = pUpperLinePoints[j].y + (int) ((double) (f) * ((double) pUpperLinePoints[j + 1].y - (double) pUpperLinePoints[j].y) / (double) lHowManyThisSegment);
-                                    POINT2 ptCenter2=new POINT2();
+                                    POINT2 ptCenter2 = new POINT2();
                                     ptCenter2.x = pLowerLinePoints[j].x + (int) ((double) (f) * ((double) pLowerLinePoints[j + 1].x - (double) pLowerLinePoints[j].x) / (double) lHowManyThisSegment);
                                     ptCenter2.y = pLowerLinePoints[j].y + (int) ((double) (f) * ((double) pLowerLinePoints[j + 1].y - (double) pLowerLinePoints[j].y) / (double) lHowManyThisSegment);
-                                    ptCenter=lineutility.MidPointDouble(ptCenter, ptCenter2, 0);
+                                    ptCenter = lineutility.MidPointDouble(ptCenter, ptCenter2, 0);
                                 }
                                 //end section
-                                
+
                                 switch (vbiDrawThis) {
                                     case TacticalLines.SINGLEC:
                                     case TacticalLines.DOUBLEC:
                                     case TacticalLines.TRIPLE:
                                         for (l = 1; l < 37; l++) {
-                                            dFactor = (10d * (double)l) * pi / 180d;
+                                            dFactor = (10d * (double) l) * pi / 180d;
                                             pEllipsePoints2[l - 1].x = ptCenter.x + a * Math.cos(dFactor);
                                             pEllipsePoints2[l - 1].y = ptCenter.y + b * Math.sin(dFactor);
                                             pEllipsePoints2[l - 1].style = 0;
@@ -2146,32 +2097,30 @@ public final class Channels {
                                 }
                             }//end how many this segment loop
                             if (lHowManyThisSegment == 0) {
-                                if(pLinePoints.length>lEllipseCounter)
-                                {
+                                if (pLinePoints.length > lEllipseCounter) {
                                     pLinePoints[lEllipseCounter] = new POINT2(pOriginalLinePoints[j]);
                                     lEllipseCounter++;
                                     pLinePoints[lEllipseCounter] = new POINT2(pOriginalLinePoints[j + 1]);
-                                    pLinePoints[lEllipseCounter].style=5;
+                                    pLinePoints[lEllipseCounter].style = 5;
                                     lEllipseCounter++;
                                 }
                             }
                         }
-                        pLinePoints=lineutility.ResizeArray(pLinePoints, lEllipseCounter);
-                        vblCounter=pLinePoints.length;  //added 11-2-09 M. Deutch
+                        pLinePoints = lineutility.ResizeArray(pLinePoints, lEllipseCounter);
+                        vblCounter = pLinePoints.length;  //added 11-2-09 M. Deutch
                     }
 
                     //if none of the segments were long enough to have features
                     //then make the style solid
                     if (FenceType(vbiDrawThis) == 1) {
                         if (lEllipseCounter <= vblLowerCounter + vblUpperCounter) {
-                            for (k = 0; k < vblLowerCounter + vblUpperCounter; k++) 
-                            {
-                                if(pLinePoints[k].style != 5)   //added 2-8-13
+                            for (k = 0; k < vblLowerCounter + vblUpperCounter; k++) {
+                                if (pLinePoints[k].style != 5) //added 2-8-13
+                                {
                                     pLinePoints[k].style = 0;
+                                }
                             }
-                        } 
-                        else 
-                        {
+                        } else {
                             for (k = lEllipseCounter - 1; k < pLinePoints.length; k++) {
                                 pLinePoints[k].style = 5;
                             }
@@ -2179,12 +2128,14 @@ public final class Channels {
                     }
                     break;
                 case TacticalLines.BBS_LINE:
-                    pLinePoints=new POINT2[vblLowerCounter+vblUpperCounter+1];
-                    for(j=0;j<vblLowerCounter;j++)
-                        pLinePoints[j]=pLowerLinePoints[j];
-                    for(j=0;j<vblUpperCounter;j++)
-                        pLinePoints[j+vblLowerCounter]=pUpperLinePoints[vblUpperCounter-1-j];
-                    pLinePoints[pLinePoints.length-1]=pLinePoints[0];
+                    pLinePoints = new POINT2[vblLowerCounter + vblUpperCounter + 1];
+                    for (j = 0; j < vblLowerCounter; j++) {
+                        pLinePoints[j] = pLowerLinePoints[j];
+                    }
+                    for (j = 0; j < vblUpperCounter; j++) {
+                        pLinePoints[j + vblLowerCounter] = pUpperLinePoints[vblUpperCounter - 1 - j];
+                    }
+                    pLinePoints[pLinePoints.length - 1] = pLinePoints[0];
                     break;
                 case TacticalLines.SPT:
                 case TacticalLines.SPT_STRAIGHT:
@@ -2213,11 +2164,9 @@ public final class Channels {
                         pLinePoints[j].y = lpsaUpperVBPoints[1];
                     }
 
-                    if (vbiDrawThis != (long) TacticalLines.CATK &&
-                            vbiDrawThis != (long) TacticalLines.CATKBYFIRE) 
-                    {
-                        for (k = 0; k < vblCounter; k++) 
-                        {
+                    if (vbiDrawThis != (long) TacticalLines.CATK
+                            && vbiDrawThis != (long) TacticalLines.CATKBYFIRE) {
+                        for (k = 0; k < vblCounter; k++) {
                             pLinePoints[k].style = 0;
                         }
                     }
@@ -2231,8 +2180,8 @@ public final class Channels {
                             vblUpperCounter, pArrowLinePoints[0],
                             pLinePoints, vbiDrawThis, arrowOffsetFactor);
 
-                    if (vbiDrawThis == (long) TacticalLines.CATK ||
-                            vbiDrawThis == (long) TacticalLines.CATKBYFIRE) {
+                    if (vbiDrawThis == (long) TacticalLines.CATK
+                            || vbiDrawThis == (long) TacticalLines.CATKBYFIRE) {
                         for (k = 0; k < vblCounter; k++) {
                             if (pLinePoints[k].style != 5) {
                                 pLinePoints[k].style = 1;
@@ -2241,9 +2190,8 @@ public final class Channels {
                     }
 
                     //get the rotary symbol for AAAAA
-                    if (vbiDrawThis == (long) TacticalLines.AAAAA)
-                    {
-                        Boolean rotaryTooShort=false;
+                    if (vbiDrawThis == (long) TacticalLines.AAAAA) {
+                        Boolean rotaryTooShort = false;
                         ref<double[]> mUpper = new ref(), mLower = new ref();
                         int bolVerticalUpper = 0, bolVerticalLower = 0;
                         double bUpper = 0, bLower = 0;
@@ -2268,133 +2216,126 @@ public final class Channels {
                         //both sides of the channel need to be long enough
                         //or the rotary sides will not work, but we still
                         //include the arrow by using a simpler midpoint
-                        if (dist1 <= vblChannelWidth || dist2 <= vblChannelWidth)
-                        {
-                            rotaryTooShort=true;
-                            midPt1=lineutility.MidPointDouble(pt0, pt1, 0);
+                        if (dist1 <= vblChannelWidth || dist2 <= vblChannelWidth) {
+                            rotaryTooShort = true;
+                            midPt1 = lineutility.MidPointDouble(pt0, pt1, 0);
                         }
 
-                            a = lineutility.CalcDistanceDouble(pt0, pt1);
-                            b = 30;
-                            if (a < 90) {
-                                b = a / 3;
-                            }
+                        a = lineutility.CalcDistanceDouble(pt0, pt1);
+                        b = 30;
+                        if (a < 90) {
+                            b = a / 3;
+                        }
 
-                            pt3 = new POINT2(pOriginalLinePoints[vblUpperCounter - 2]);
-                            pt4 = new POINT2(pOriginalLinePoints[vblUpperCounter - 1]);
-                            d = vblChannelWidth / 4;
-                            if (d > maxLength) {
-                                d = maxLength;
-                            }
-                            if (d < minLength) {
-                                d = minLength;
-                            }
+                        pt3 = new POINT2(pOriginalLinePoints[vblUpperCounter - 2]);
+                        pt4 = new POINT2(pOriginalLinePoints[vblUpperCounter - 1]);
+                        d = vblChannelWidth / 4;
+                        if (d > maxLength) {
+                            d = maxLength;
+                        }
+                        if (d < minLength) {
+                            d = minLength;
+                        }
 
-                            //for non-vertical lines extend above or below the line
-                            if (pt3.x != pt4.x) {
-                                //extend below the line
-                                pt0 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 3, 2 * d);
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 8] = pt0;
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 8].style = 0;
-                                //extend above the line
-                                pt1 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 2, 2 * d);
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 9] = pt1;
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 9].style = 5;
-                            }
-                            else //for vertical lines arrow points to the left
-                            {
-                                //extend right of the line
-                                pt0 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 1, 2 * d);
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 8] = pt0;
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 8].style = 0;
-                                //extend left of the line
-                                pt1 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 0, 2 * d);
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 9] = pt1;
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 9].style = 5;
-                                midPt1 = lineutility.MidPointDouble(pt0, pt1, 0);
-                            }
-                            //get the rotary symbol arrow
-                            lineutility.GetArrowHead4Double(pt0, pt1, (int) d, (int) d, arrowPts, 0);
+                        //for non-vertical lines extend above or below the line
+                        if (pt3.x != pt4.x) {
+                            //extend below the line
+                            pt0 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 3, 2 * d);
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 8] = pt0;
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 8].style = 0;
+                            //extend above the line
+                            pt1 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 2, 2 * d);
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 9] = pt1;
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 9].style = 5;
+                        } else //for vertical lines arrow points to the left
+                        {
+                            //extend right of the line
+                            pt0 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 1, 2 * d);
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 8] = pt0;
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 8].style = 0;
+                            //extend left of the line
+                            pt1 = lineutility.ExtendDirectedLine(pt3, pt4, midPt1, 0, 2 * d);
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 9] = pt1;
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 9].style = 5;
+                            midPt1 = lineutility.MidPointDouble(pt0, pt1, 0);
+                        }
+                        //get the rotary symbol arrow
+                        lineutility.GetArrowHead4Double(pt0, pt1, (int) d, (int) d, arrowPts, 0);
 
-                            for (k = 0; k < 3; k++) {
-                                pLinePoints[vblLowerCounter + vblUpperCounter + 10 + k] = arrowPts[k];
-                            }
+                        for (k = 0; k < 3; k++) {
+                            pLinePoints[vblLowerCounter + vblUpperCounter + 10 + k] = arrowPts[k];
+                        }
 
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 12].style = 5;
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 12].style = 5;
 
-                            //get the base points
-                            pt3 = lineutility.ExtendTrueLinePerpDouble(pt0, pt1, pt0, d / 2, 0);
-                            pt4 = lineutility.ExtendTrueLinePerpDouble(pt0, pt1, pt0, -d / 2, 0);
+                        //get the base points
+                        pt3 = lineutility.ExtendTrueLinePerpDouble(pt0, pt1, pt0, d / 2, 0);
+                        pt4 = lineutility.ExtendTrueLinePerpDouble(pt0, pt1, pt0, -d / 2, 0);
 
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 13] = pt3;
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 14] = pt4;
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 13] = pt3;
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 14] = pt4;
 
-                            //the side lines
-                            //first point
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 14].style = 5;
-                            pt0 = new POINT2(pLowerLinePoints[vblLowerCounter - 2]);
-                            pt1 = new POINT2(pLowerLinePoints[vblLowerCounter - 1]);
-                            pt3 = lineutility.ExtendLine2Double(pt0, midPt1, b, 0);	//line distance from midpt, a was 30
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 15] = new POINT2(pt3);
+                        //the side lines
+                        //first point
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 14].style = 5;
+                        pt0 = new POINT2(pLowerLinePoints[vblLowerCounter - 2]);
+                        pt1 = new POINT2(pLowerLinePoints[vblLowerCounter - 1]);
+                        pt3 = lineutility.ExtendLine2Double(pt0, midPt1, b, 0);	//line distance from midpt, a was 30
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 15] = new POINT2(pt3);
 
-                            //second point
-                            pt0 = new POINT2(pUpperLinePoints[vblLowerCounter - 2]);
-                            pt1 = new POINT2(pUpperLinePoints[vblLowerCounter - 1]);
-                            pt3 = lineutility.ExtendLine2Double(pt0, midPt1, b, 5);	//line distance from midpt, a was 30
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 16] = new POINT2(pt3);
+                        //second point
+                        pt0 = new POINT2(pUpperLinePoints[vblLowerCounter - 2]);
+                        pt1 = new POINT2(pUpperLinePoints[vblLowerCounter - 1]);
+                        pt3 = lineutility.ExtendLine2Double(pt0, midPt1, b, 5);	//line distance from midpt, a was 30
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 16] = new POINT2(pt3);
 
-                            //third point
-                            pt0 = new POINT2(pLowerLinePoints[vblLowerCounter - 2]);
-                            pt1 = new POINT2(pLowerLinePoints[vblLowerCounter - 1]);
-                            pt3 = lineutility.ExtendLine2Double(pt1, midPt1, b, 0);	//line distance from midpt, a was 30
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 17] = new POINT2(pt3);
+                        //third point
+                        pt0 = new POINT2(pLowerLinePoints[vblLowerCounter - 2]);
+                        pt1 = new POINT2(pLowerLinePoints[vblLowerCounter - 1]);
+                        pt3 = lineutility.ExtendLine2Double(pt1, midPt1, b, 0);	//line distance from midpt, a was 30
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 17] = new POINT2(pt3);
 
-                            //fourth point
-                            pt0 = new POINT2(pUpperLinePoints[vblLowerCounter - 2]);
-                            pt1 = new POINT2(pUpperLinePoints[vblLowerCounter - 1]);
-                            pt3 = lineutility.ExtendLine2Double(pt1, midPt1, b, 5);	//line distance from midpt, a was 30
-                            pLinePoints[vblLowerCounter + vblUpperCounter + 18] = new POINT2(pt3);
+                        //fourth point
+                        pt0 = new POINT2(pUpperLinePoints[vblLowerCounter - 2]);
+                        pt1 = new POINT2(pUpperLinePoints[vblLowerCounter - 1]);
+                        pt3 = lineutility.ExtendLine2Double(pt1, midPt1, b, 5);	//line distance from midpt, a was 30
+                        pLinePoints[vblLowerCounter + vblUpperCounter + 18] = new POINT2(pt3);
                         //}
                         //else
                         //{   //if last segment too short then don't draw the rotary features
-                            //if last segment too short then no side points
-                            if(rotaryTooShort)
-                            {
-                                for (l = vblLowerCounter + vblUpperCounter + 14; l < vblLowerCounter + vblLowerCounter + 19; l++)
-                                {
-                                    pLinePoints[l].style = 5;
-                                }
+                        //if last segment too short then no side points
+                        if (rotaryTooShort) {
+                            for (l = vblLowerCounter + vblUpperCounter + 14; l < vblLowerCounter + vblLowerCounter + 19; l++) {
+                                pLinePoints[l].style = 5;
                             }
+                        }
                         //}
                     }//end if (vbiDrawThis == (long) TacticalLines.AAAAA)
-                    
-                    double dFeature=0;
-                    double dist2=0;
-                    if (vbiDrawThis == TacticalLines.CATKBYFIRE) 
-                    {	    //dist is the distance to the back of the arrowhead                        
+
+                    double dFeature = 0;
+                    double dist2 = 0;
+                    if (vbiDrawThis == TacticalLines.CATKBYFIRE) {	    //dist is the distance to the back of the arrowhead                        
                         //10-19-12
                         //this line is part of the new requirement that the rotary feature must align 
                         //with the anchor point, it can  no longer stick out beond the anchor point
                         //so the points have to be shifted by 45 pixels.
-                        
+
                         //dist-=45;
                         //end section
                         dist2 = lineutility.CalcDistanceDouble(nextToLastPoint, lastPoint);
-                        if(dist2>45)
-                            dist-=45;
-                        if (dist2 > 20) 
-                        {                                                                                       //was 20+dist
-                            pt1 = lineutility.ExtendLineDouble(pUpperLinePoints[vblUpperCounter - 2], pUpperLinePoints[vblUpperCounter - 1], 5+dist);//distance from tip to back of rotary
-                            pt2 = lineutility.ExtendLineDouble(pLowerLinePoints[vblLowerCounter - 2], pLowerLinePoints[vblLowerCounter - 1], 5+dist);//distance from tip to back of rotary
-                        } 
-                        else 
-                        {
+                        if (dist2 > 45) {
+                            dist -= 45;
+                        }
+                        if (dist2 > 20) {                                                                                       //was 20+dist
+                            pt1 = lineutility.ExtendLineDouble(pUpperLinePoints[vblUpperCounter - 2], pUpperLinePoints[vblUpperCounter - 1], 5 + dist);//distance from tip to back of rotary
+                            pt2 = lineutility.ExtendLineDouble(pLowerLinePoints[vblLowerCounter - 2], pLowerLinePoints[vblLowerCounter - 1], 5 + dist);//distance from tip to back of rotary
+                        } else {
                             pt1 = lineutility.ExtendLineDouble(pUpperLinePoints[vblUpperCounter - 2], pUpperLinePoints[vblUpperCounter - 1], -50);//was -40
                             pt2 = lineutility.ExtendLineDouble(pLowerLinePoints[vblLowerCounter - 2], pLowerLinePoints[vblLowerCounter - 1], -50);//was -40
                         }
                         //was dist
-                        pt3 = lineutility.ExtendLine2Double(pt2, pt1, 10 + Math.abs(dist/2), 18); //vert height of rotary from horiz segment was dist/2.5
-                        pt4 = lineutility.ExtendLine2Double(pt1, pt2, 10 + Math.abs(dist/2), 5); //vert height of rotary from horiz segment was dist/2.5
+                        pt3 = lineutility.ExtendLine2Double(pt2, pt1, 10 + Math.abs(dist / 2), 18); //vert height of rotary from horiz segment was dist/2.5
+                        pt4 = lineutility.ExtendLine2Double(pt1, pt2, 10 + Math.abs(dist / 2), 5); //vert height of rotary from horiz segment was dist/2.5
                         midPt1 = lineutility.MidPointDouble(pt1, pt2, 17);
                         pLinePoints[vblCounter - 9] = new POINT2(pt3);
                         pLinePoints[vblCounter - 6] = new POINT2(pt4);
@@ -2407,9 +2348,9 @@ public final class Channels {
                             pt2 = lineutility.ExtendLineDouble(pLowerLinePoints[vblLowerCounter - 2], pLowerLinePoints[vblLowerCounter - 1], -50);//was -50
                         }
 
-                        pt3 = lineutility.ExtendLine2Double(pt2, pt1, Math.abs(dist/2), 18);//vert height of rotary from horiz segment was dist/2.5
-                        pt4 = lineutility.ExtendLine2Double(pt1, pt2, Math.abs(dist/2), 18);//vert height of rotary from horiz segment was dist/2.5
-                                                
+                        pt3 = lineutility.ExtendLine2Double(pt2, pt1, Math.abs(dist / 2), 18);//vert height of rotary from horiz segment was dist/2.5
+                        pt4 = lineutility.ExtendLine2Double(pt1, pt2, Math.abs(dist / 2), 18);//vert height of rotary from horiz segment was dist/2.5
+
                         midPt2 = lineutility.MidPointDouble(pt1, pt2, 18);
                         pLinePoints[vblCounter - 8] = new POINT2(pt3);
                         pLinePoints[vblCounter - 7] = new POINT2(pt4);
@@ -2417,12 +2358,12 @@ public final class Channels {
                         if (midPt1.x == midPt2.x && midPt1.y == midPt2.y) //last segment too short
                         {
                             //diagnostic 2-27-13
-                            if(_client.startsWith("cpof"))
-                                dFeature=30;
-                            else                            
-                                dFeature=15;
-                            
-                            
+                            if (_client.startsWith("cpof")) {
+                                dFeature = 30;
+                            } else {
+                                dFeature = 15;
+                            }
+
                             midPt1 = lineutility.ExtendLine2Double(nextToLastPoint, pArrowLinePoints[0], 10, 17);
                             //pt1 = lineutility.ExtendTrueLinePerpDouble(lastPoint, midPt1, midPt1, 30, 18);
                             //pt2 = lineutility.ExtendTrueLinePerpDouble(lastPoint, midPt1, midPt1, -30, 5);                            
@@ -2431,43 +2372,43 @@ public final class Channels {
                             //end section
                             pLinePoints[vblCounter - 9] = new POINT2(pt1);
                             pLinePoints[vblCounter - 6] = new POINT2(pt2);
-                            
-                            if(_client.startsWith("cpof"))
+
+                            if (_client.startsWith("cpof")) {
                                 midPt2 = lineutility.ExtendLine2Double(nextToLastPoint, pArrowLinePoints[0], 20, 17);
-                            else
-                            {
-                                if(dist2>30)
+                            } else {
+                                if (dist2 > 30) {
                                     midPt2 = lineutility.ExtendLine2Double(nextToLastPoint, pArrowLinePoints[0], 20, 17);
-                                else
+                                } else {
                                     midPt2 = lineutility.ExtendLine2Double(nextToLastPoint, pArrowLinePoints[0], dFeature, 17);
+                                }
                             }
                             //end section
-                            
+
                             //diagnostic 2-27-13                            
                             //pt1 = lineutility.ExtendTrueLinePerpDouble(lastPoint, midPt2, midPt2, 20, 18);
                             //pt2 = lineutility.ExtendTrueLinePerpDouble(lastPoint, midPt2, midPt2, -20, 18);
-                            dFeature -=10;
+                            dFeature -= 10;
                             pt1 = lineutility.ExtendTrueLinePerpDouble(lastPoint, midPt2, midPt2, dFeature, 18);
                             pt2 = lineutility.ExtendTrueLinePerpDouble(lastPoint, midPt2, midPt2, -dFeature, 18);
                             pLinePoints[vblCounter - 8] = new POINT2(pt1);
                             pLinePoints[vblCounter - 7] = new POINT2(pt2);
                             pLinePoints[vblCounter - 5] = new POINT2(midPt2);
                         }
-                        if(_client.startsWith("cpof"))
-                            dFeature=30;
-                        else
-                        {
-                            if(dist2>30)
-                                dFeature=30;
-                            else if(dist2>20)
-                                dFeature=10;
-                            else
-                                dFeature=10;
+                        if (_client.startsWith("cpof")) {
+                            dFeature = 30;
+                        } else {
+                            if (dist2 > 30) {
+                                dFeature = 30;
+                            } else if (dist2 > 20) {
+                                dFeature = 10;
+                            } else {
+                                dFeature = 10;
+                            }
                         }
 
-                        pt1 = lineutility.ExtendLine2Double(midPt1, midPt2, dFeature, (int)dFeature); //30, then 5
+                        pt1 = lineutility.ExtendLine2Double(midPt1, midPt2, dFeature, (int) dFeature); //30, then 5
                         pLinePoints[vblCounter - 4] = new POINT2(pt1);
-                        lineutility.GetArrowHead4Double(midPt2, pt1, (int)dFeature/2, (int)dFeature/2, arrowPts, 18);//15,15
+                        lineutility.GetArrowHead4Double(midPt2, pt1, (int) dFeature / 2, (int) dFeature / 2, arrowPts, 18);//15,15
                         //end section
                         for (k = 0; k < 3; k++) {
                             pLinePoints[vblCounter - k - 1] = new POINT2(arrowPts[k]);
@@ -2500,9 +2441,9 @@ public final class Channels {
             //these three need the original bounded points
             //because the linestyle assigned will cause the
             //client (tactical renderer) to draw ellipses
-            if (vbiDrawThis == (long) TacticalLines.SINGLEC2 ||
-                    vbiDrawThis == (long) TacticalLines.DOUBLEC2 ||
-                    vbiDrawThis == (long) TacticalLines.TRIPLE2) {
+            if (vbiDrawThis == (long) TacticalLines.SINGLEC2
+                    || vbiDrawThis == (long) TacticalLines.DOUBLEC2
+                    || vbiDrawThis == (long) TacticalLines.TRIPLE2) {
                 vblCounter = 3 * vblUpperCounter;
                 for (k = vblLowerCounter + vblUpperCounter; k < vblCounter; k++) {
                     pLinePoints[k] = new POINT2(pOriginalLinePoints[k - vblLowerCounter - vblUpperCounter]);
@@ -2524,88 +2465,78 @@ public final class Channels {
             }
 
             //if shapes is null it is not a CPOF client
-            if(shapes==null)
-            {
+            if (shapes == null) {
                 //load result points because client is using points, not shapes
-                for(j=0;j<pLinePoints.length;j++)
-                {
-                    resultVBPoints[3*j]=pLinePoints[j].x;
-                    resultVBPoints[3*j+1]=pLinePoints[j].y;
-                    resultVBPoints[3*j+2]=(double)pLinePoints[j].style;
+                for (j = 0; j < pLinePoints.length; j++) {
+                    resultVBPoints[3 * j] = pLinePoints[j].x;
+                    resultVBPoints[3 * j + 1] = pLinePoints[j].y;
+                    resultVBPoints[3 * j + 2] = (double) pLinePoints[j].style;
                 }
                 return pLinePoints.length;
             }
 
             //the shapes
-            Shape2 shape=null;
+            Shape2 shape = null;
             //Shape2 outline=null;
-            boolean beginLine=true;
-            boolean beginPath=true;
-            if(vbiDrawThis==TacticalLines.AAFNT || vbiDrawThis==TacticalLines.AAFNT_STRAIGHT)
-            {
+            boolean beginLine = true;
+            boolean beginPath = true;
+            if (vbiDrawThis == TacticalLines.AAFNT || vbiDrawThis == TacticalLines.AAFNT_STRAIGHT) {
                 //the solid lines
-                for (k = 0; k < vblCounter; k++)
-                {
-                    if(pLinePoints[k].style==2)
+                for (k = 0; k < vblCounter; k++) {
+                    if (pLinePoints[k].style == 2) {
                         continue;
+                    }
 
-                    if(shape==null)
-                        shape=new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                    if (shape == null) {
+                        shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                    }
 
-                    if(beginLine)
-                    {
-                        if(k>0) //doubled points with linestyle=5
-                            if(pLinePoints[k].style==5 && pLinePoints[k-1].style==5)
+                    if (beginLine) {
+                        if (k > 0) //doubled points with linestyle=5
+                        {
+                            if (pLinePoints[k].style == 5 && pLinePoints[k - 1].style == 5) {
                                 shape.lineTo(pLinePoints[k]);
+                            }
+                        }
 
-                        if(k==0)
+                        if (k == 0) {
                             shape.set_Style(pLinePoints[k].style);
+                        }
 
                         shape.moveTo(pLinePoints[k]);
-                        beginLine=false;
-                    }
-                    else
-                    {
+                        beginLine = false;
+                    } else {
                         shape.lineTo(pLinePoints[k]);
-                        if(pLinePoints[k].style==5)
-                        {
-                            beginLine=true;
+                        if (pLinePoints[k].style == 5) {
+                            beginLine = true;
                             //unless there are doubled points with style=5
                         }
                     }
-                    if(k==vblCounter-1) //non-LC should only have one shape
+                    if (k == vblCounter - 1) //non-LC should only have one shape
                     {
                         shapes.add(shape);
                     }
                 }
                 //the dotted lines
-                for (k = 0; k < vblCounter; k++)
-                {
-                    if(pLinePoints[k].style==2 && pLinePoints[k-1].style==5)
-                    {
-                        shape=new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                for (k = 0; k < vblCounter; k++) {
+                    if (pLinePoints[k].style == 2 && pLinePoints[k - 1].style == 5) {
+                        shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                         //shape.set_Style(pLinePoints[k].style);
                         shape.set_Style(2); //GraphicProperties uses 2 for dotted
                         shape.moveTo(pLinePoints[k]);
-                    }
-                    else if(pLinePoints[k].style==2 && pLinePoints[k-1].style==2)
-                    {
+                    } else if (pLinePoints[k].style == 2 && pLinePoints[k - 1].style == 2) {
                         shape.lineTo(pLinePoints[k]);
-                    }
-                    else if(pLinePoints[k].style==5 && pLinePoints[k-1].style==2)
-                    {
+                    } else if (pLinePoints[k].style == 5 && pLinePoints[k - 1].style == 2) {
                         shape.lineTo(pLinePoints[k]);
                         shapes.add(shape);
                         break;
-                    }
-                    else
+                    } else {
                         continue;
+                    }
                 }
             }
 
-
-            for (k = 0; k < vblCounter; k++)
-            {
+            for (k = 0; k < vblCounter; k++) {
 //                if (lResultCounter < resultVBPoints.length && k < pLinePoints.length) {
 //                    resultVBPoints[lResultCounter] = (int) pLinePoints[k].x;
 //                    lResultCounter++;
@@ -2623,67 +2554,58 @@ public final class Channels {
 //                }
                 //use shapes instead of pixels
 
-                if(shape==null)
-                {
-                    shape=new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                if (shape == null) {
+                    shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                 }
 
-                switch(vbiDrawThis)
-                {
+                switch (vbiDrawThis) {
                     case TacticalLines.CATK:
                     case TacticalLines.CATKBYFIRE:
                         shape.set_Style(1);
                         break;
                 }
 
-                switch(vbiDrawThis)
-                {
+                switch (vbiDrawThis) {
                     case TacticalLines.AAFNT:
                     case TacticalLines.AAFNT_STRAIGHT:
                         break;
                     case TacticalLines.LC:
                     case TacticalLines.LC_HOSTILE:
-                        if(beginPath==false)
-                        {
-                            if(k>0)
-                            {   //if the linestyle is changes on the next point then this point is end of the current path
+                        if (beginPath == false) {
+                            if (k > 0) {   //if the linestyle is changes on the next point then this point is end of the current path
                                 //because it's changing between friendly and enemy ellipses
-                                if(  pLinePoints[k].style == 5)
-                                {
+                                if (pLinePoints[k].style == 5) {
                                     //add the last point to the current path
                                     shape.lineTo(pLinePoints[k]);
                                     //add the shape
-                                    if(shape !=null && shape.getShape() != null)
-                                    {
+                                    if (shape != null && shape.getShape() != null) {
                                         shapes.add(shape);
                                     }
 
-                                    beginPath=true;
-                                }
-                                else    //continue the current path
+                                    beginPath = true;
+                                } else //continue the current path
                                 {
                                     shape.lineTo(pLinePoints[k]);
                                 }
-                            }
-                            else    //k=0
+                            } else //k=0
                             {
                                 shape.moveTo(pLinePoints[k]);
                             }
-                        }
-                        else    //start a new path
+                        } else //start a new path
                         {
-                            shape=new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                            shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                             shape.moveTo(pLinePoints[k]);
                             shape.set_Style(pLinePoints[k].style);
                             //assume friendly
-                            if(pLinePoints[k].style==25)
-                               shape.setLineColor(Color.RED);
-                            
-                            beginPath=false;
+                            if (pLinePoints[k].style == 25) {
+                                shape.setLineColor(Color.RED);
+                            }
+
+                            beginPath = false;
                         }
                         //if(k==vblCounter-1) //LC should have 2 shapes
-                          //  if(shape !=null && shape.get_Shape() != null)
-                            //    shapes.add(shape);
+                        //  if(shape !=null && shape.get_Shape() != null)
+                        //    shapes.add(shape);
                         break;
                     case TacticalLines.CATK:    //same as default except these have doubled 5's
                     case TacticalLines.CATKBYFIRE:
@@ -2692,30 +2614,26 @@ public final class Channels {
                     case TacticalLines.SPT_STRAIGHT:
                     case TacticalLines.AIRAOA:
                     case TacticalLines.AXAD:
-                        if(beginLine)
-                        {
-                            if(k>0) //doubled points with linestyle=5
+                        if (beginLine) {
+                            if (k > 0) //doubled points with linestyle=5
                             {
-                                if(pLinePoints[k].style==5 && pLinePoints[k-1].style==5 && k != vblCounter-1)
+                                if (pLinePoints[k].style == 5 && pLinePoints[k - 1].style == 5 && k != vblCounter - 1) {
                                     continue;
+                                }
                             }
 
                             shape.moveTo(pLinePoints[k]);
-                            beginLine=false;
-                        }
-                        else
-                        {
+                            beginLine = false;
+                        } else {
                             shape.lineTo(pLinePoints[k]);
-                            if(pLinePoints[k].style==5)
-                            {
-                                beginLine=true;
+                            if (pLinePoints[k].style == 5) {
+                                beginLine = true;
                                 //unless there are doubled points with style=5
                             }
                         }
-                        if(k==vblCounter-1) //non-LC should only have one shape
+                        if (k == vblCounter - 1) //non-LC should only have one shape
                         {
-                            if(shape !=null && shape.getShape() != null)
-                            {
+                            if (shape != null && shape.getShape() != null) {
                                 shapes.add(shape);
                             }
                         }
@@ -2725,32 +2643,30 @@ public final class Channels {
                     case TacticalLines.DFENCE:
                     case TacticalLines.LWFENCE:
                     case TacticalLines.HWFENCE:
-                        if(k==0)
-                        {
+                        if (k == 0) {
                             shape.moveTo(pLinePoints[k]);
-                            if(pLinePoints[k].style==5)
-                            {
+                            if (pLinePoints[k].style == 5) {
                                 continue;
                             }
                         }
-                        if(k>0 && k < vblCounter-1)
-                        {
-                            if(pLinePoints[k-1].style==5)
+                        if (k > 0 && k < vblCounter - 1) {
+                            if (pLinePoints[k - 1].style == 5) {
                                 shape.moveTo(pLinePoints[k]);
-                            else if(pLinePoints[k-1].style==0)
+                            } else if (pLinePoints[k - 1].style == 0) {
                                 shape.lineTo(pLinePoints[k]);
+                            }
 
-                            if(pLinePoints[k].style==5)
-                              shape.moveTo(pLinePoints[k]);
-
-                            if(k==vblCounter-2 && pLinePoints[k].style==0)
-                            {
+                            if (pLinePoints[k].style == 5) {
                                 shape.moveTo(pLinePoints[k]);
-                                shape.lineTo(pLinePoints[k+1]);
+                            }
+
+                            if (k == vblCounter - 2 && pLinePoints[k].style == 0) {
+                                shape.moveTo(pLinePoints[k]);
+                                shape.lineTo(pLinePoints[k + 1]);
                             }
                         }
 
-                        if(k==vblCounter-1) //non-LC should only have one shape
+                        if (k == vblCounter - 1) //non-LC should only have one shape
                         {
 //                            shape.lineTo(pLinePoints[k]);
 //                            if(k>=3)
@@ -2758,54 +2674,54 @@ public final class Channels {
 //                                shape.moveTo(pLinePoints[k-3]);
 //                                shape.lineTo(pLinePoints[k-2]);
 //                            }
-                            if(shape !=null && shape.getShape() != null)
+                            if (shape != null && shape.getShape() != null) {
                                 shapes.add(shape);
+                            }
                         }
                         break;
-                    default:                        
-                        if(beginLine)
-                        {
-                            if(k==0)
+                    default:
+                        if (beginLine) {
+                            if (k == 0) {
                                 shape.set_Style(pLinePoints[k].style);
+                            }
 
                             shape.moveTo(pLinePoints[k]);
-                            beginLine=false;
-                        }
-                        else
-                        {
+                            beginLine = false;
+                        } else {
                             shape.lineTo(pLinePoints[k]);
-                            if(pLinePoints[k].style==5)
-                            {
-                                beginLine=true;
+                            if (pLinePoints[k].style == 5) {
+                                beginLine = true;
                                 //unless there are doubled points with style=5
                             }
                         }
-                        if(k==vblCounter-1) //non-LC should only have one shape
+                        if (k == vblCounter - 1) //non-LC should only have one shape
                         {
-                            if(shape !=null && shape.getShape() != null)
+                            if (shape != null && shape.getShape() != null) {
                                 shapes.add(shape);
+                            }
                         }
                         break;
                 }//end switch
             }   //end for
             //a requirement was added to enable fill for the axis of advance line types
-            ArrayList<Shape2>fillShapes=getAXADFillShapes(vbiDrawThis, pLinePoints);
-            if(fillShapes != null && fillShapes.size()>0)
-                shapes.addAll(0,fillShapes);
-            
+            ArrayList<Shape2> fillShapes = getAXADFillShapes(vbiDrawThis, pLinePoints);
+            if (fillShapes != null && fillShapes.size() > 0) {
+                shapes.addAll(0, fillShapes);
+            }
+
             //diagnostic
-            if(vbiDrawThis==TacticalLines.BBS_LINE)
-            {
+            if (vbiDrawThis == TacticalLines.BBS_LINE) {
                 //shapes.remove(1);
-                shape=new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
+                shape = new Shape2(Shape2.SHAPE_TYPE_POLYLINE);
                 shape.moveTo(pOriginalLinePoints[0]);
-                for(j=1;j<pOriginalLinePoints.length;j++)
+                for (j = 1; j < pOriginalLinePoints.length; j++) {
                     shape.lineTo(pOriginalLinePoints[j]);
+                }
                 shapes.add(shape);
             }
             //end section
-            
-            lResult=lResultCounter;
+
+            lResult = lResultCounter;
             //FillPoints(pLinePoints,pLinePoints.length);
             //clean up
             pLinePoints = null;
@@ -2818,55 +2734,48 @@ public final class Channels {
             pEllipsePoints2 = null;
             pOriginalLinePoints = null;
             pOriginalLinePoints2 = null;
-        }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetChannel1Double",
-                    new RendererException("Failed inside GetChannel1Double " + Integer.toString(vbiDrawThis), exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return lResult;
     }
+
     /**
      * They decided that axis of advance must enable fill
+     *
      * @param lineType
      * @param pLinePoints
      * @return
      */
-    private static ArrayList<Shape2> getAXADFillShapes(int lineType, POINT2[]pLinePoints)
-    {
-        ArrayList<Shape2>shapes=null;
-        try
-        {
-            ArrayList<POINT2>newPts=new ArrayList();
-            int j=0;
-            Shape2 shape=null;
-            int n=pLinePoints.length;
-            switch(lineType)
-            {
+    private static ArrayList<Shape2> getAXADFillShapes(int lineType, POINT2[] pLinePoints) {
+        ArrayList<Shape2> shapes = null;
+        try {
+            ArrayList<POINT2> newPts = new ArrayList();
+            int j = 0;
+            Shape2 shape = null;
+            int n = pLinePoints.length;
+            switch (lineType) {
                 case TacticalLines.BBS_LINE:
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(pLinePoints[0]);
-                    for(j=1;j<pLinePoints.length;j++)
-                    {
+                    for (j = 1; j < pLinePoints.length; j++) {
                         shape.lineTo(pLinePoints[j]);
                     }
                     break;
                 case TacticalLines.CHANNEL:
                 case TacticalLines.CHANNEL_FLARED:
                 case TacticalLines.CHANNEL_DASHED:
-                    for(j=0;j<n/2;j++)
-                    {
+                    for (j = 0; j < n / 2; j++) {
                         newPts.add(pLinePoints[j]);
                     }
-                    for(j=n-1;j>=n/2;j--)
-                    {
+                    for (j = n - 1; j >= n / 2; j--) {
                         newPts.add(pLinePoints[j]);
                     }
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(newPts.get(0));
-                    for(j=1;j<newPts.size();j++)
-                    {
+                    for (j = 1; j < newPts.size(); j++) {
                         //shape.lineTo(newPts.get(j).x,newPts.get(j).y);
                         shape.lineTo(newPts.get(j));
                     }
@@ -2880,56 +2789,50 @@ public final class Channels {
                 case TacticalLines.CATK:
                 case TacticalLines.SPT_STRAIGHT:
                     //add the upper (lower) channel points
-                    for(j=0;j<(pLinePoints.length-8)/2;j++)
-                    {
+                    for (j = 0; j < (pLinePoints.length - 8) / 2; j++) {
                         newPts.add(pLinePoints[j]);
                     }
                     //add the arrow outline
-                    newPts.add(pLinePoints[n-6]);
-                    newPts.add(pLinePoints[n-7]);
-                    newPts.add(pLinePoints[n-8]);
-                    newPts.add(pLinePoints[n-3]);
-                    newPts.add(pLinePoints[n-4]);
+                    newPts.add(pLinePoints[n - 6]);
+                    newPts.add(pLinePoints[n - 7]);
+                    newPts.add(pLinePoints[n - 8]);
+                    newPts.add(pLinePoints[n - 3]);
+                    newPts.add(pLinePoints[n - 4]);
                     //add the upper (lower) channel points
-                    for(j=n-9;j>=(n-8)/2;j--)
-                    {
+                    for (j = n - 9; j >= (n - 8) / 2; j--) {
                         newPts.add(pLinePoints[j]);
                     }
                     //newPts.add(pLinePoints[0]);
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(newPts.get(0));
-                    for(j=1;j<newPts.size();j++)
-                    {
+                    for (j = 1; j < newPts.size(); j++) {
                         //shape.lineTo(newPts.get(j).x,newPts.get(j).y);
                         shape.lineTo(newPts.get(j));
                     }
-                    
+
                     //shapes=new ArrayList();
                     //shapes.add(shape);
                     break;
                 case TacticalLines.AAFNT:
                 case TacticalLines.AAFNT_STRAIGHT:
-                    for(j=0;j<(pLinePoints.length-8)/2;j++)
-                    {
+                    for (j = 0; j < (pLinePoints.length - 8) / 2; j++) {
                         newPts.add(pLinePoints[j]);
                     }
                     //add the arrow outline
-                    newPts.add(pLinePoints[n-8]);
-                    newPts.add(pLinePoints[n-7]);
-                    newPts.add(pLinePoints[n-6]);
-                    newPts.add(pLinePoints[n-5]);
-                    newPts.add(pLinePoints[n-4]);
-                    for(j=n-9;j>=(n-8)/2;j--)
-                    {
+                    newPts.add(pLinePoints[n - 8]);
+                    newPts.add(pLinePoints[n - 7]);
+                    newPts.add(pLinePoints[n - 6]);
+                    newPts.add(pLinePoints[n - 5]);
+                    newPts.add(pLinePoints[n - 4]);
+                    for (j = n - 9; j >= (n - 8) / 2; j--) {
                         newPts.add(pLinePoints[j]);
                     }
                     //newPts.add(pLinePoints[0]);
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(newPts.get(0));
-                    for(j=1;j<newPts.size();j++)
-                    {
+                    for (j = 1; j < newPts.size(); j++) {
                         //shape.lineTo(newPts.get(j).x,newPts.get(j).y);
                         shape.lineTo(newPts.get(j));
                     }
@@ -2939,24 +2842,21 @@ public final class Channels {
                     break;
                 case TacticalLines.MAIN_STRAIGHT:
                 case TacticalLines.MAIN:
-                    for(j=0;j<(pLinePoints.length-8)/2;j++)
-                    {
+                    for (j = 0; j < (pLinePoints.length - 8) / 2; j++) {
                         newPts.add(pLinePoints[j]);
                     }
                     //add the arrow outline
                     //newPts.add(pLinePoints[n-7]);
-                    newPts.add(pLinePoints[n-6]);
-                    newPts.add(pLinePoints[n-5]);
-                    for(j=n-9;j>=(n-8)/2;j--)
-                    {
+                    newPts.add(pLinePoints[n - 6]);
+                    newPts.add(pLinePoints[n - 5]);
+                    for (j = n - 9; j >= (n - 8) / 2; j--) {
                         newPts.add(pLinePoints[j]);
                     }
                     //newPts.add(pLinePoints[0]);
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(newPts.get(0));
-                    for(j=1;j<newPts.size();j++)
-                    {
+                    for (j = 1; j < newPts.size(); j++) {
                         //shape.lineTo(newPts.get(j).x,newPts.get(j).y);
                         shape.lineTo(newPts.get(j));
                     }
@@ -2965,26 +2865,23 @@ public final class Channels {
                     //shapes.add(shape);
                     break;
                 case TacticalLines.AAAAA:
-                    for(j=0;j<(pLinePoints.length-19)/2;j++)
-                    {
+                    for (j = 0; j < (pLinePoints.length - 19) / 2; j++) {
                         newPts.add(pLinePoints[j]);
                     }
                     //add the arrow outline
-                    newPts.add(pLinePoints[n-17]);
-                    newPts.add(pLinePoints[n-18]);
-                    newPts.add(pLinePoints[n-19]);
-                    newPts.add(pLinePoints[n-14]);
-                    newPts.add(pLinePoints[n-15]);
+                    newPts.add(pLinePoints[n - 17]);
+                    newPts.add(pLinePoints[n - 18]);
+                    newPts.add(pLinePoints[n - 19]);
+                    newPts.add(pLinePoints[n - 14]);
+                    newPts.add(pLinePoints[n - 15]);
 
-                    for(j=n-20;j>=(n-19)/2;j--)
-                    {
+                    for (j = n - 20; j >= (n - 19) / 2; j--) {
                         newPts.add(pLinePoints[j]);
                     }
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(newPts.get(0));
-                    for(j=1;j<newPts.size();j++)
-                    {
+                    for (j = 1; j < newPts.size(); j++) {
                         //shape.lineTo(newPts.get(j).x,newPts.get(j).y);
                         shape.lineTo(newPts.get(j));
                     }
@@ -2993,66 +2890,56 @@ public final class Channels {
                     //shapes.add(shape);
                     break;
                 case TacticalLines.CATKBYFIRE:
-                    for(j=0;j<(pLinePoints.length-17)/2;j++)
-                    {
+                    for (j = 0; j < (pLinePoints.length - 17) / 2; j++) {
                         newPts.add(pLinePoints[j]);
                     }
                     //add the arrow outline
-                    newPts.add(pLinePoints[n-15]);
-                    newPts.add(pLinePoints[n-16]);
-                    newPts.add(pLinePoints[n-17]);
-                    newPts.add(pLinePoints[n-12]);
-                    newPts.add(pLinePoints[n-13]);
-                    for(j=n-18;j>=(n-17)/2;j--)
-                    {
+                    newPts.add(pLinePoints[n - 15]);
+                    newPts.add(pLinePoints[n - 16]);
+                    newPts.add(pLinePoints[n - 17]);
+                    newPts.add(pLinePoints[n - 12]);
+                    newPts.add(pLinePoints[n - 13]);
+                    for (j = n - 18; j >= (n - 17) / 2; j--) {
                         newPts.add(pLinePoints[j]);
                     }
-                    shape=new Shape2(Shape2.SHAPE_TYPE_FILL);
+                    shape = new Shape2(Shape2.SHAPE_TYPE_FILL);
                     //shape.moveTo(newPts.get(0).x,newPts.get(0).y);
                     shape.moveTo(newPts.get(0));
-                    for(j=1;j<newPts.size();j++)
-                    {
+                    for (j = 1; j < newPts.size(); j++) {
                         //shape.lineTo(newPts.get(j).x,newPts.get(j).y);
                         shape.lineTo(newPts.get(j));
                     }
-                    
+
                     //shapes=new ArrayList();
                     //shapes.add(shape);
                     break;
                 default:
                     break;
             }
-            if(shape!=null)
-            {
-                shapes=new ArrayList();
+            if (shape != null) {
+                shapes = new ArrayList();
                 shape.setLineColor(null);
                 shapes.add(shape);
             }
-        }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"getAXADfillShapes",
-                    new RendererException("Failed inside getAXADFillShapes", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return shapes;
     }
+
     /**
-     * @deprecated
-     * sets shape2 properties to those of shape1
+     * @deprecated sets shape2 properties to those of shape1
      * @param shape1
      * @param shape2
      */
-    private static void SetShapeProperties(Shape2 shape1, Shape2 shape2)
-    {
-        try
-        {
+    private static void SetShapeProperties(Shape2 shape1, Shape2 shape2) {
+        try {
             shape2.setAffineTransform(shape1.getAffineTransform());
             shape2.setLineColor(shape1.getLineColor());
             shape2.setStroke(shape1.getStroke());
             shape2.setFillColor(shape1.getFillColor());
-        }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"GetChannel1Double",
-                    new RendererException("Failed inside SetShapeProperties", exc));
+        } catch (Exception ex) {
+            logger.error("channel error", ex);
         }
         return;
     }

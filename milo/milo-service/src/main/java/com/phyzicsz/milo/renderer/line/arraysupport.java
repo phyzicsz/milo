@@ -9,6 +9,7 @@ package com.phyzicsz.milo.renderer.line;
  *
  * @author Michael Deutch
  */
+import com.phyzicsz.milo.renderer.SinglePointRenderer;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.awt.BasicStroke;
@@ -16,17 +17,20 @@ import java.awt.Shape;
 //import java.awt.geom.GeneralPath;
 import java.awt.geom.Area;
 import java.awt.Polygon;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import java.awt.geom.Rectangle2D;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /*
  * A class to calculate the symbol points for the GeneralPath objects.
  * @author Michael Deutch
  */
 public final class arraysupport {
 
+    private static final Logger logger = LoggerFactory.getLogger(arraysupport.class);
+    
     private static final double maxLength = 100;
     private static final double minLength = 2.5;
     private static final double dACP = 0;
@@ -106,10 +110,8 @@ public final class arraysupport {
             //we have to adjust the autoshapes because they are instantiating with fewer points
             points = GetLineArray2Double(lineType, pLinePoints, vblCounter, vblSaveCounter, shapes, clipBounds, rev, converter);
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetLineArray2",
-                    new RendererException("GetLineArray2 " + Integer.toString(lineType), exc));
-
+        } catch (Exception ex) {
+            logger.error("error getting line array - linetype: {}", lineType, ex);
         }
         return points;
         //the caller can get points
@@ -230,9 +232,8 @@ public final class arraysupport {
             //clean up
             pSpikePoints = null;
             return nCounter;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetFORTLPointsDouble",
-                    new RendererException("GetFORTLPointsDouble " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("error getting line array - linetype: {}", lineType, ex);
         }
         return nCounter;
     }
@@ -309,9 +310,8 @@ public final class arraysupport {
             pShortLinePoints = null;
             pArcLinePoints = null;
             return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CoordFEBADouble",
-                    new RendererException("CoordFEBADouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - line array", ex);
         }
     }
 
@@ -398,9 +398,8 @@ public final class arraysupport {
 
             //clean up
             pSpikePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetATWallPointsDouble2",
-                    new RendererException("GetATWallPointsDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("error - line array", ex);
         }
         return nCounter;
     }
@@ -604,9 +603,8 @@ public final class arraysupport {
                 default:
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetInsideOutsideDouble2",
-                    new RendererException("GetInsideOutsideDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("error - line array", ex);
         }
         return nDirection;
     }
@@ -762,9 +760,8 @@ public final class arraysupport {
 
             //clean up
             pSpikePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetZONEPointsDouble2",
-                    new RendererException("GetZONEPointsDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("error - line array", ex);
         }
         return nCounter;
     }
@@ -792,9 +789,8 @@ public final class arraysupport {
             } else {
                 return false;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "IsTurnArcReversed",
-                    new RendererException("IsTurnArcReversed", exc));
+        } catch (Exception ex) {
+            logger.error("error - arc turn check", ex);
         }
         return false;
     }
@@ -1006,9 +1002,8 @@ public final class arraysupport {
             ptsSeize = null;
             ptsArc2 = null;
             //return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetIsolatePointsDouble",
-                    new RendererException("GetIsolatePointsDouble " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("error - isolate points", ex);
         }
         return;
     }
@@ -1049,9 +1044,8 @@ public final class arraysupport {
                 deltaMinX = minX - (pt.x - 25);
                 pt.x += deltaMinX;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getDummyHat",
-                    new RendererException("getDummyHat", exc));
+        } catch (Exception ex) {
+            logger.error("error - get hat", ex);
         }
         return pt;
     }
@@ -1163,9 +1157,8 @@ public final class arraysupport {
                     break;
             }
             return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "AreaWithCenterFeatureDouble",
-                    new RendererException("AreaWithCenterFeatureDouble " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("error - center feature", ex);
         }
     }
 
@@ -1347,9 +1340,8 @@ public final class arraysupport {
 
             //clean up
             pSpikePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetATWallPointsDouble",
-                    new RendererException("GetATWallPointsDouble " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("error - ta wall points", ex);
         }
         return nCounter;
     }
@@ -1434,9 +1426,8 @@ public final class arraysupport {
             //clean up
             //segments=null;
             pSpikePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetRidgePointsDouble",
-                    new RendererException("GetRidgePointsDouble " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("error - ridge points", ex);
         }
         return nCounter;
     }
@@ -1523,9 +1514,8 @@ public final class arraysupport {
             //clean up
             pSquallPts = null;
             pSquallSegPts = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSquallDouble",
-                    new RendererException("GetSquallDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - squall", ex);
         }
         return counter;
     }
@@ -1587,9 +1577,8 @@ public final class arraysupport {
                 }
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSevereSquall",
-                    new RendererException("GetSevereSquall", exc));
+        } catch (Exception ex) {
+            logger.error("error - severe squall", ex);
         }
         return l;
     }
@@ -1640,9 +1629,8 @@ public final class arraysupport {
                     pLinePoints[counter++] = new POINT2(tempPt);
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetConvergancePointsDouble",
-                    new RendererException("GetConvergancePointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - convergence", ex);
         }
         return counter;
     }
@@ -1699,9 +1687,8 @@ public final class arraysupport {
                     }
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetITDPointsDouble",
-                    new RendererException("GetITDPointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - td points", ex);
         }
         return counter;
     }
@@ -1740,9 +1727,8 @@ public final class arraysupport {
                     XPoints[xCounter++] = new POINT2(pt4);
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetXPointsDouble",
-                    new RendererException("GetXPointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - x points", ex);
         }
         return xCounter;
     }
@@ -1772,9 +1758,8 @@ public final class arraysupport {
                 pEllipsePoints[l - 1].style = 0;
             }
             pEllipsePoints[36] = new POINT2(pEllipsePoints[0]);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetEllipsePoints",
-                    new RendererException("GetEllipsePoints", exc));
+        } catch (Exception ex) {
+            logger.error("error - ellipse points", ex);
         }
         return pEllipsePoints;
     }
@@ -1815,9 +1800,8 @@ public final class arraysupport {
                 pResultPoints[j] = pEllipsePoints[j];
             }
             pResultPoints[36] = pEllipsePoints[0];
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetRotatedEllipsePoints",
-                    new RendererException("GetRotateEllipsePoints", exc));
+        } catch (Exception ex) {
+            logger.error("error - rotate ellipse", ex);
         }
         return pResultPoints;
     }
@@ -1885,9 +1869,8 @@ public final class arraysupport {
                     }
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetLVOPointsDouble",
-                    new RendererException("GetLVOPointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - vo points", ex);
         }
         return lEllipseCounter;
     }
@@ -1935,9 +1918,8 @@ public final class arraysupport {
                     counter += 4;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetIcingPointsDouble",
-                    new RendererException("GetIcingPointsDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - icing points", ex);
         }
         return counter;
     }
@@ -2054,9 +2036,8 @@ public final class arraysupport {
             vbPoints = null;
             points = null;
             points2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetAnchorageDouble",
-                    new RendererException("GetAnchorageDouble", exc));
+        } catch (Exception ex) {
+            logger.error("error - anchorage", ex);
         }
         return lFlotCounter;
     }
@@ -2114,9 +2095,8 @@ public final class arraysupport {
 
             pOriginalPoints = null;
             xPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetPipePoints",
-                    new RendererException("GetPipePoints", exc));
+        } catch (Exception ex) {
+            logger.error("error - pipe", ex);
         }
         return counter;
     }
@@ -2173,9 +2153,8 @@ public final class arraysupport {
             }
             pLinePoints[counter++] = new POINT2(pOriginalPoints[vblCounter - 1]);
             pOriginalPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetReefPoints",
-                    new RendererException("GetReefPoints", exc));
+        } catch (Exception ex) {
+            logger.error("error - reef", ex);
         }
         return counter;
     }
@@ -2225,9 +2204,8 @@ public final class arraysupport {
             pLinePoints[counter - 1].style = 0;
             pLinePoints[counter++] = new POINT2(pOriginalPoints[vblCounter - 1]);
             pOriginalPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetRestrictedAreaPoints",
-                    new RendererException("GetRestrictedAreaPoints", exc));
+        } catch (Exception ex) {
+            logger.error("error - retricted area", ex);
         }
         return counter;
     }
@@ -2326,9 +2304,8 @@ public final class arraysupport {
             for (j = counter; j < pLinePoints.length; j++) {
                 pLinePoints[j] = new POINT2(pLinePoints[counter - 1]);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetOverheadWire",
-                    new RendererException("GetOverheadWire", exc));
+        } catch (Exception ex) {
+            logger.error("error - overhead wire", ex);
         }
         return counter;
     }
@@ -5918,9 +5895,8 @@ public final class arraysupport {
             pUpperLinePoints = null;
             pLowerLinePoints = null;
             pUpperLowerLinePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetLineArray2Double",
-                    new RendererException("GetLineArray2Dboule " + Integer.toString(lineType), exc));
+        } catch (Exception ex) {
+            logger.error("error - line array for line type: {}",lineType, ex);
         }
         return points;
     }

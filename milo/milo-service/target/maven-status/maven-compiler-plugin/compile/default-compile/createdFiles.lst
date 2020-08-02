@@ -14,7 +14,6 @@ com/phyzicsz/milo/renderer/common/RendererException.class
 com/phyzicsz/milo/renderer/line/Shape2.class
 com/phyzicsz/milo/renderer/line/POINT2.class
 com/phyzicsz/milo/renderer/common/UnitFontLookupInfo.class
-com/phyzicsz/milo/renderer/common/ErrorLogger.class
 com/phyzicsz/milo/renderer/common/TacticalGraphicLookup.class
 com/phyzicsz/milo/renderer/info/SymbolInfo.class
 com/phyzicsz/milo/renderer/line/TacticalLines.class
@@ -35,8 +34,8 @@ com/phyzicsz/milo/renderer/tactical/clsChannelUtility.class
 com/phyzicsz/milo/renderer/common/SymbolID.class
 com/phyzicsz/milo/renderer/common/SinglePointFont.class
 com/phyzicsz/milo/renderer/common/MilStdSymbol.class
+com/phyzicsz/milo/renderer/tactical/TacticalGraphicText.class
 com/phyzicsz/milo/renderer/common/ShapeInfo.class
-com/phyzicsz/milo/renderer/tactical/Modifier2.class
 com/phyzicsz/milo/renderer/common/IMultiPointRenderer.class
 com/phyzicsz/milo/renderer/line/Channels.class
 com/phyzicsz/milo/renderer/tactical/clsUtility.class

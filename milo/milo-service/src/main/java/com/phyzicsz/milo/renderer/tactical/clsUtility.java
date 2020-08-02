@@ -4,6 +4,7 @@
  */
 package com.phyzicsz.milo.renderer.tactical;
 
+import com.phyzicsz.milo.renderer.SinglePointRenderer;
 import com.phyzicsz.milo.renderer.line.TacticalLines;
 import com.phyzicsz.milo.renderer.line.lineutility;
 import com.phyzicsz.milo.renderer.line.POINT2;
@@ -21,17 +22,20 @@ import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
 import java.awt.BasicStroke;
 import com.phyzicsz.milo.renderer.common.SymbolUtilities;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import com.phyzicsz.milo.renderer.common.ShapeInfo;
 import java.awt.Polygon;
 import java.awt.geom.Line2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * A general utility class for the tactical renderer
  * @author Michael Deutch
  */
 public final class clsUtility {
+    private static final Logger logger = LoggerFactory.getLogger(clsUtility.class);
+    
     private static Map<String,Object> linetypes=null;
     private static Map<String,Object> metocs=null;
     private static final String _className = "clsUtility";
@@ -98,10 +102,9 @@ public final class clsUtility {
                     return false;                
             }
         }
-        catch (Exception exc) 
+        catch (Exception ex) 
         {
-            ErrorLogger.LogException(_className ,"linesOutsideClipBounds",
-                    new RendererException("Failed inside linesOutsideClipBounds", exc));
+            logger.error("tactical renderer - lines outside clip bounds", ex);
         }    
         return true;
     }
@@ -145,10 +148,9 @@ public final class clsUtility {
             if(poly.contains(clipBounds))                
                 return true;            
         }
-        catch (Exception exc) 
+        catch (Exception ex) 
         {
-            ErrorLogger.LogException(_className ,"graphicContainsClipBounds",
-                    new RendererException("Failed inside graphicContainsClipBounds", exc));
+            logger.error("tactical renderer - failed lines inside clip bounds", ex);
         }    
         return false;
     }
@@ -596,10 +598,8 @@ public final class clsUtility {
             if (pt0.x != pt1.x || pt0.y != pt1.y) {
                 Pixels.add(new POINT2(pt0.x, pt0.y));
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsRenderer2.ClosePolygon");
-               ErrorLogger.LogException(_className ,"ClosePolygon",
-                    new RendererException("Failed inside ClosePolygon", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed closed polygon", ex);
         }
     }
     /**
@@ -630,11 +630,9 @@ public final class clsUtility {
             p2.x=pt2.x;
             p2.y=pt2.y;
         }
-        catch (Exception exc) {
-               ErrorLogger.LogException(_className ,"shiftModifiersLeft",
-                    new RendererException("Failed inside shiftModifiersLeft", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed to shift modifier left", ex);
         }
-        return;
     }
     /**
      * Overrides shape properties for symbols based on Mil-Std-2525
@@ -854,12 +852,9 @@ public final class clsUtility {
                     break;
             }
 
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsRenderer2.ResolveModifierShape");
-               ErrorLogger.LogException(_className ,"ResolveModifierShape",
-                    new RendererException("Failed inside ResolveModifierShape", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to resolve modifier", ex);
         }
-        return;
     }
     public static Color GetOpaqueColor(Color color)
     {
@@ -942,10 +937,9 @@ public final class clsUtility {
                     break;
             }
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-               ErrorLogger.LogException(_className ,"LinesWithFill",
-                    new RendererException("Failed inside LinesWithFill", exc));
+            logger.error("tactical renderer - failed lines with fill", ex);
         }
         return result;
     }
@@ -974,12 +968,10 @@ public final class clsUtility {
             fillColor=new Color(r,g,b,alpha);
             tg.set_FillColor(fillColor);
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-               ErrorLogger.LogException(_className ,"tweakFillColor",
-                    new RendererException("Failed inside tweakFillColor", exc));
+            logger.error("tactical renderer - failed tweak color", ex);
         }
-        return;
     }
     /**
      * @deprecated
@@ -1003,10 +995,9 @@ public final class clsUtility {
                     if(Math.abs(b1-b2)<5)
                         return true;
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-               ErrorLogger.LogException(_className ,"isSameColor",
-                    new RendererException("Failed inside isSameColor", exc));
+            logger.error("tactical renderer - failed is same color", ex);
         }
         return false;
     }
@@ -1063,10 +1054,9 @@ public final class clsUtility {
                     break;
             }
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-               ErrorLogger.LogException(_className ,"getLineStroke",
-                    new RendererException("Failed inside getLineStroke", exc));
+            logger.error("tactical renderer - failed to get line stroke", ex);
         }
         return stroke;
     }
@@ -1125,10 +1115,9 @@ public final class clsUtility {
                     break;
             }
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-               ErrorLogger.LogException(_className ,"getLineStroke",
-                    new RendererException("Failed inside getLineStroke", exc));
+            logger.error("tactical renderer - failed to get line stroke", ex);
         }
         return stroke;
     }
@@ -1431,12 +1420,9 @@ public final class clsUtility {
 //                }
             }
         }
-        catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsRenderer2.SetShapeProperties");
-               ErrorLogger.LogException(_className ,"SetShapeProperties",
-                    new RendererException("Failed inside SetShapeProperties", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed to get shape properties", ex);
         }
-        return;
     }
     /**
      * Returns a boolean indicating whether the line type is a change 1 area
@@ -1514,27 +1500,10 @@ public final class clsUtility {
                 default:
                     return false;
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.IsChange1Area");
-               ErrorLogger.LogException(_className ,"IsChange1Area",
-                    new RendererException("Failed inside IsChange1Area", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed is change area", ex);
         }
         return false;
-    }
-
-    public static void WriteFile(String str) {
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("Test.txt"));
-            bufferedWriter.write(str);
-            //bufferedWriter.newLine();
-            //bufferedWriter.write(pointType);
-            bufferedWriter.close();
-            bufferedWriter = null;
-        } 
-        catch (Exception exc) {
-               ErrorLogger.LogException(_className ,"WriteFile",
-                    new RendererException("Failed inside WriteFile", exc));
-        }
     }
 
     /**
@@ -1569,12 +1538,9 @@ public final class clsUtility {
 
             ptIntersect.x = x3;
             ptIntersect.y = y3;
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.CalcIntersectPt");
-            ErrorLogger.LogException(_className, "CalcIntersectPt",
-                    new RendererException("Failed inside CalcIntersectPt", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to calculate intersection", ex);
         }
-        return;
     }
 
     /**
@@ -1637,10 +1603,8 @@ public final class clsUtility {
             distanceToChannelPOINT2.value = new double[1];
             distanceToChannelPOINT2.value[0] = Math.sqrt(hypotenuse * hypotenuse - distance * distance);
 
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.ChannelWidth");
-            ErrorLogger.LogException(_className, "ChannelWidth",
-                    new RendererException("Failed inside ChannelWidth", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed inside channel width", ex);
         }
         return width;
     }
@@ -1657,10 +1621,8 @@ public final class clsUtility {
                 return true;
             }
 
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.InYOrder");
-            ErrorLogger.LogException(_className, "InYOrder",
-                    new RendererException("Failed inside InYOrder", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed inside y order", ex);
         }
         return false;
     }
@@ -1684,10 +1646,8 @@ public final class clsUtility {
                 return true;
             }
 
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.InXOrder");
-            ErrorLogger.LogException(_className, "InXOrder",
-                    new RendererException("Failed inside InXOrder", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed inside x order", ex);
         }
         return false;
     }
@@ -1743,10 +1703,8 @@ public final class clsUtility {
                     tg.set_H2(temp);
                 }
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.GetSectorRadiiFromPoints");
-            ErrorLogger.LogException(_className, "GetSectorRadiiFromPoints",
-                    new RendererException("Failed inside GetSectorRadiiFromPoints", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to get sector radii", ex);
         }
     }
 
@@ -1833,10 +1791,8 @@ public final class clsUtility {
                 }
                 radius = radius2;
             }
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.GetRadii");
-            ErrorLogger.LogException(_className, "GetRadii",
-                    new RendererException("Failed inside GetRadii", exc));
+        } catch (NumberFormatException ex) {
+            logger.error("tactical renderer - failed to get radii", ex);
         }
         return radius;
     }
@@ -1875,11 +1831,8 @@ public final class clsUtility {
                 pixels[j] = tempPixels[j];
             }
             tempPixels = null;
-            return;
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.ReorderPixels");
-            ErrorLogger.LogException(_className, "ReorderPixels",
-                    new RendererException("Failed inside ReorderPixels", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to reorder pixels", ex);
         }
     }
     /**
@@ -1939,13 +1892,11 @@ public final class clsUtility {
                 }
             }
         }
-        catch(Exception exc)
+        catch(Exception ex)
         {
-            ErrorLogger.LogException("clsUtility", "FilterVerticalSegments",
-                    new RendererException("Failed inside FilterVerticalSegments", exc));
+            logger.error("tactical renderer - failed to filter vertical segments", ex);
 
         }
-        return;
     }
     /**
      * @deprecated
@@ -1972,10 +1923,8 @@ public final class clsUtility {
                 pixels2.set(j, ptTemp);
             }
         }
-        catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.ReorderPixels");
-            ErrorLogger.LogException(_className, "MovePixels2",
-                    new RendererException("Failed inside MovePixels2", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed to move pixels", ex);
         }
     }
     /**
@@ -2029,12 +1978,8 @@ public final class clsUtility {
                 }
             }
             while (bolNoRepeats == false);
-            return;
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("Error in clsUtility.MovePixels");
-            ErrorLogger.LogException(_className, "MovePixels",
-                    new RendererException("Failed inside MovePixels", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to move pixels", ex);
         }
     }
 
@@ -2078,10 +2023,8 @@ public final class clsUtility {
             //Compute the last point in pixels.
             locD.x = (locC.x + dblWidth * Math.cos(dblAngle));
             locD.y = (locC.y - dblWidth * Math.sin(dblAngle));
-        } catch (Exception exc) {
-            //clsUtility.WriteFile("Error in clsUtility.ComputeLatPoint");
-            ErrorLogger.LogException(_className, "ComputeLastPoint",
-                    new RendererException("Failed inside ComputeLastPoint", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to compute last point", ex);
         }
         return locD;
     }
@@ -2143,14 +2086,10 @@ public final class clsUtility {
             }	//end for
             //int n=segments.length;
         }
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            //System.out.println(e.getMessage());
-            //clsUtility.WriteFile("Error in clsUtility.GetSegments");
-            ErrorLogger.LogException(_className, "GetSegments",
-                    new RendererException("Failed inside GetSegments", exc));
+            logger.error("tactical renderer - failed to get segments", ex);
         }
-        return;
     }
 
     /**
@@ -2175,10 +2114,9 @@ public final class clsUtility {
                 }
             }
 
-        } catch (Exception exc) {
-            //WriteFile("Error in clsUtility.SetLCColor");
-            ErrorLogger.LogException(_className, "SetLCColor",
-                    new RendererException("Failed inside SetLCColor", exc));
+        } catch (Exception ex) {
+            logger.error("tactical renderer - failed to get LC color", ex);
+
         }
     }
     /**
@@ -2234,13 +2172,12 @@ public final class clsUtility {
                     break;
             }//end switch linetype
         }
-        catch (Exception exc) {
-            //WriteFile("Error in clsUtility.SetLCColor");
-            ErrorLogger.LogException(_className, "ReverseUSASLCPointsByQuadrant",
-                    new RendererException("Failed inside ReverseUSASLCPointsByQuadrant", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed to reverse lines", ex);
+
         }
-        return;
-    }//end ReverseUSASLCPointsByQuadrant
+    }
+    
     /**
      * 
      * @param tg tactical graphic
@@ -2289,10 +2226,9 @@ public final class clsUtility {
             shape.setFillColor(new Color(0,0,0,0));
             grid.dispose();
         }
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            ErrorLogger.LogException(_className ,"GetHatchShape",
-                new RendererException("Failed inside GetHatchShape", exc));
+            logger.error("tactical renderer - failed to get hatch shape", ex);
         }
         return shape;
     }
@@ -2769,12 +2705,10 @@ public final class clsUtility {
             metocs.put("WO-DMOA-----A--",TacticalLines.OIL_RIG_FIELD);
             metocs.put("WO-DMPA----L---",TacticalLines.PIPE);
         }   
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            ErrorLogger.LogException(_className ,"initializeLinetypes",
-                new RendererException("Failed inside initializeLinetypes", exc));
+            logger.error("tactical renderer - failed to initialize line types", ex);
         }
-        return;
     }
     /**
      * use str if tg is null
@@ -2862,9 +2796,8 @@ public final class clsUtility {
                     return (Integer)objResult;
             }            
         }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className ,"CGetLinetypeFromString2",
-                    new RendererException("Failed inside CGetLinetypeFromString2", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed to get line type", ex);
         }
         return result;
     }
@@ -2947,12 +2880,10 @@ public final class clsUtility {
                     break;
             }//end switch            
         }//end try
-        catch (Exception exc) 
+        catch (Exception ex) 
         {
-            ErrorLogger.LogException(_className ,"setRevC",
-                    new RendererException("Failed inside setRevC", exc));
+            logger.error("tactical renderer - lines failed setRevC", ex);
         }
-        return;
     }
     /**
      * 
@@ -3054,10 +2985,9 @@ public final class clsUtility {
             }
 
         }
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            ErrorLogger.LogException(_className, "isAutoshape",
-                    new RendererException("Failed inside isAutoshape", exc));
+            logger.error("tactical renderer - failed is auto shape", ex);
         }
         return false;
     }
@@ -3103,10 +3033,9 @@ public final class clsUtility {
                 hMap.put(index, color);
             }
         }
-        catch (Exception exc)
+        catch (NumberFormatException ex)
         {
-            ErrorLogger.LogException(_className ,"getMSRSegmentColors",
-                    new RendererException("Failed inside getMSRSegmentColors", exc));
+            logger.error("tactical renderer - failed get segment colors", ex);
         }
         return hMap;
     }
@@ -3145,10 +3074,9 @@ public final class clsUtility {
                 hMap.put(new Integer(index), seg[1]);
             }            
         }
-        catch (Exception exc)
+        catch (NumberFormatException ex)
         {
-            ErrorLogger.LogException(_className ,"getMSRSegmentColorStrings",
-                    new RendererException("Failed inside getMSRSegmentColorStrings", exc));
+            logger.error("tactical renderer - failed get segment color string", ex);
         }
         return hMap;
     }
@@ -3274,9 +3202,8 @@ public final class clsUtility {
             h=h.substring(0, h.length()-1);
             tg.set_H(h);
         }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className, "reviseHModifer",
-                    new RendererException("Failed inside reviseHModifier", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed revise modifier", ex);
         }
     }
     /**
@@ -3420,9 +3347,8 @@ public final class clsUtility {
             tg.Pixels=pixels;
             tg.LatLongs=geo;
         }
-        catch (Exception exc) {
-            ErrorLogger.LogException(_className, "InterpolatePixels",
-                    new RendererException("Failed inside InterpolatePixels", exc));
+        catch (Exception ex) {
+            logger.error("tactical renderer - failed interpolate pixels", ex);
         }
     }
     /**
@@ -3485,11 +3411,10 @@ public final class clsUtility {
             pt4=lineutility.ExtendDirectedLine(pt0, pt1, pt1, extend, dist);
             line=new Line2D.Double(pt3.x, pt3.y, pt4.x, pt4.y);
         }
-        catch (Exception exc) {            
-            ErrorLogger.LogException(_className, "getExtendedLine",
-                    new RendererException("Failed inside getExtendedLine", exc));
+        catch (Exception ex) {   
+            logger.error("tactical renderer - failed get extended line", ex);
         }
         return line;
     }
 
-}//end clsUtility
+}

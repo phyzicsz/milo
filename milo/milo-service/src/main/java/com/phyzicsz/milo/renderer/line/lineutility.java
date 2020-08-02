@@ -14,16 +14,19 @@ import java.util.ArrayList;
 import java.awt.geom.PathIterator;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
-import com.phyzicsz.milo.renderer.common.ErrorLogger;
 import com.phyzicsz.milo.renderer.common.RendererException;
-import com.phyzicsz.milo.renderer.common.RendererSettings;
 import java.awt.geom.Path2D;
 import java.io.*;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import com.phyzicsz.milo.renderer.tactical.mdlGeodesic;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class lineutility {
+    
+    private static final Logger logger = LoggerFactory.getLogger(lineutility.class);
 
     private static String _className = "lineutility";
     public static final int extend_left = 0;
@@ -49,9 +52,8 @@ public final class lineutility {
             for (j = 0; j < length; j++) {
                 array[j] = new POINT2(pLinePoints[j]);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ResizeArray",
-                    new RendererException("Failed inside ResizeArray", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - resize array", ex);
         }
         return array;
     }
@@ -79,9 +81,8 @@ public final class lineutility {
                 shape.lineTo(pt);
             }
             shape.lineTo(pt1);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "SegmentLineShape",
-                    new RendererException("Failed inside SegmentLineShape", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - segment", ex);
         }
         return;
     }
@@ -114,9 +115,8 @@ public final class lineutility {
                     middleSegment = 2;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetDirAtkAirMiddleSegment",
-                    new RendererException("Failed inside GetDirAtkAirMiddleSegment", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - dir attk segment", ex);
         }
         return middleSegment;
     }
@@ -145,9 +145,8 @@ public final class lineutility {
                 dAngle = Math.atan(m.value[0]);
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcSegmentAngleDouble",
-                    new RendererException("Failed inside CalcSegmentAngleDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - segment angle", ex);
         }
         return dAngle;
     }
@@ -216,9 +215,8 @@ public final class lineutility {
 
             CenterLinePoint.x = (dMinX + dMaxX) / 2;
             CenterLinePoint.y = (dMinY + dMaxY) / 2;
-        } catch (Error exc) {
-            ErrorLogger.LogException(_className, "CalcCenterPointDouble",
-                    new RendererException("Failed inside CalcCenterPointDouble", exc));
+        } catch (Error ex) {
+            logger.error("line utility - center points", ex);
         }
         return CenterLinePoint;
     }
@@ -273,9 +271,8 @@ public final class lineutility {
 
             CenterLinePoint.x = (dMinX + dMaxX) / 2;
             CenterLinePoint.y = (dMinY + dMaxY) / 2;
-        } catch (Error exc) {
-            ErrorLogger.LogException(_className, "CalcCenterPointDouble2",
-                    new RendererException("Failed inside CalcCenterPointDouble2", exc));
+        } catch (Error ex) {
+            logger.error("line utility - center points", ex);
         }
         return CenterLinePoint;
     }
@@ -311,9 +308,8 @@ public final class lineutility {
                     returnValue = max;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcDistanceDouble",
-                    new RendererException("Failed inside CalcDistanceDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - distance", ex);
         }
         return returnValue;
     }
@@ -352,9 +348,8 @@ public final class lineutility {
             deltaY = firstLinePoint.y - lastLinePoint.y;
 
             slope.value[0] = deltaY / deltaX;	//cannot blow up
-        } catch (Error exc) {
-            ErrorLogger.LogException(_className, "CalcTrueSlopeDouble",
-                    new RendererException("Failed inside CalcTrueSlopeDouble", exc));
+        } catch (Error ex) {
+            logger.error("line utility - true slope", ex);
         }
         return result;
     }
@@ -367,9 +362,8 @@ public final class lineutility {
             //bufferedWriter.write(pointType);
             bufferedWriter.close();
             bufferedWriter = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "WriteFile",
-                    new RendererException("Failed inside WriteFile", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - write file", ex);
         }
     }
 
@@ -391,11 +385,9 @@ public final class lineutility {
                 pLowerLinePoints[k] = new POINT2(pResultPoints[k]);
             }
             pResultPoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ReversePointsDouble2",
-                    new RendererException("Failed inside ReversePointsDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - reverse points", ex);
         }
-        return;
     }
 
     public static boolean CalcTrueSlopeDoubleForRoutes(POINT2 firstLinePoint,
@@ -415,9 +407,8 @@ public final class lineutility {
             }
 
             slope.value[0] = deltaY / deltaX;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcTrueSlopeDoubleForRoutes",
-                    new RendererException("Failed inside CalcTrueSlopeDoubleForRoutes", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - true slope", ex);
         }
         return true;
     }
@@ -455,9 +446,8 @@ public final class lineutility {
             }
 
             slope.value[0] = deltaY / deltaX;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcTrueSlopeDouble2",
-                    new RendererException("Failed inside CalcTrueSlopeDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - true slope", ex);
         }
         return result;
     }
@@ -504,9 +494,8 @@ public final class lineutility {
                 pdResult.value[4] = m.value[0];    //upper line eq'n: y = mx + (b-dDistance)
                 pdResult.value[5] = b - delta;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcTrueLinesDouble",
-                    new RendererException("Failed inside CalcTrueLinesDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - true lines", ex);
         }
         return 1;
     }
@@ -568,9 +557,8 @@ public final class lineutility {
                 ptIntersect.y = y;
                 return ptIntersect;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcTrueIntersectDouble2",
-                    new RendererException("Failed inside CalcTrueIntersectDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - true intersect", ex);
         }
         return ptIntersect;
     }
@@ -635,9 +623,8 @@ public final class lineutility {
                 tempLinePoint.y = endLinePoint.y - dHypotenuse * Math.abs(Math.sin(dAngle));
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetOffsetPointDouble",
-                    new RendererException("Failed inside GetOffsetPointDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - point offset", ex);
         }
         return (tempLinePoint);
     }
@@ -683,9 +670,9 @@ public final class lineutility {
 
             pResultLinePoints[26 * vblCounter - 1].style = 5;
             pArcLinePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetArcFEBADouble",
-                    new RendererException("Failed inside GetArcFEBADouble", exc));
+        } catch (Exception ex) {
+            
+            logger.error("line utility - arc feb", ex);
         }
         return pResultLinePoints;
     }
@@ -728,9 +715,8 @@ public final class lineutility {
                     xPoints.add(extendFrontBelow);
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "LineOfXPoints",
-                    new RendererException("Failed inside LineOfXPoints", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - line of x", ex);
         }
         return xPoints;
     }
@@ -783,11 +769,8 @@ public final class lineutility {
 
                 nXcounter++;
             }   //end for
-
-            return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetXFEBADouble",
-                    new RendererException("Failed inside GetXFEBADouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - xfeba", ex);
         }
     }
 
@@ -808,9 +791,8 @@ public final class lineutility {
                 pLinePoints[j] = new POINT2(pt);
             }
             pLinePoints[n - 1] = new POINT2(pt1);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ReorderPoints",
-                    new RendererException("Failed inside ReorderPoints", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - reorder points", ex);
         }
         return;
     }
@@ -856,10 +838,9 @@ public final class lineutility {
             }
 
             dResult = CalcDistanceDouble(pt3, ptIntersect);
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "CaclDistanceToLineDouble",
-                    new RendererException("Failed inside CalcDistanceToLineDouble", exc));
+        } catch (Exception ex) {
+            
+            logger.error("line utility - distance to line", ex);
         }
         return dResult;
     }
@@ -886,10 +867,9 @@ public final class lineutility {
 
             pt3.x = (dOriginalDistance + dist) / dOriginalDistance * (pt2.x - pt1.x) + pt1.x;
             pt3.y = (dOriginalDistance + dist) / dOriginalDistance * (pt2.y - pt1.y) + pt1.y;
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendLineDouble",
-                    new RendererException("Failed inside ExtendLineDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extended line", ex);
+           
         }
         return pt3;
     }
@@ -913,10 +893,8 @@ public final class lineutility {
 
             pt3.x = ((dist / dOriginalDistance) * (pt2.x - pt1.x) + pt1.x);
             pt3.y = ((dist / dOriginalDistance) * (pt2.y - pt1.y) + pt1.y);
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendAlongLineDouble",
-                    new RendererException("Failed inside ExtendAlongLineDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extended along line", ex);
         }
         return pt3;
     }
@@ -931,10 +909,8 @@ public final class lineutility {
 
             pt3.x = (dist / dOriginalDistance * (pt2.x - pt1.x) + pt1.x);
             pt3.y = (dist / dOriginalDistance * (pt2.y - pt1.y) + pt1.y);
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendAlongLineDouble2",
-                    new RendererException("Failed inside ExtendAlongLineDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend along line", ex);
         }
         return pt3;
     }
@@ -950,10 +926,8 @@ public final class lineutility {
             pt3.x = (dist / dOriginalDistance * (pt2.x - pt1.x) + pt1.x);
             pt3.y = (dist / dOriginalDistance * (pt2.y - pt1.y) + pt1.y);
             pt3.style = styl;
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendAlongLineDouble",
-                    new RendererException("Failed inside ExtendAlongLineDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend along line", ex);
         }
         return pt3;
     }
@@ -1014,10 +988,8 @@ public final class lineutility {
             dx = -m.value[0] * dy;
             X.value[0] = pt3.x + dx;
             Y.value[0] = pt3.y + dy;
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendLineAbove",
-                    new RendererException("Failed inside ExtendLineAbove", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend line above", ex);
         }
         return 1;
     }
@@ -1081,10 +1053,8 @@ public final class lineutility {
 
             X.value[0] = pt3.x + dx;
             Y.value[0] = pt3.y + dy;
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendLineLeft",
-                    new RendererException("Failed inside ExtendLineLeft", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend line left", ex);
         }
         return 1;
     }
@@ -1193,10 +1163,8 @@ public final class lineutility {
             }
             ptResult.x = X.value[0];
             ptResult.y = Y.value[0];
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendDirectedLine",
-                    new RendererException("Failed inside ExtendDirectedLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend directed", ex);
         }
         return ptResult;
     }
@@ -1281,10 +1249,8 @@ public final class lineutility {
             }
             ptResult.x = X.value[0];
             ptResult.y = Y.value[0];
-        } catch (Exception exc) {
-            //System.out.println(e.getMessage());
-            ErrorLogger.LogException(_className, "ExtendDirectedLine",
-                    new RendererException("Failed inside ExtendDirectedLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend directed", ex);
         }
         return ptResult;
     }
@@ -1344,9 +1310,8 @@ public final class lineutility {
             ptResult.x = X.value[0];
             ptResult.y = Y.value[0];
             ptResult.style = style;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ExtendDirectedLine",
-                    new RendererException("Failed inside ExtendDirectedLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend directed", ex);
         }
         return ptResult;
     }
@@ -1376,9 +1341,8 @@ public final class lineutility {
                 pt3.y = ((dOriginalDistance + dist) / dOriginalDistance * (pt2.y - pt1.y) + pt1.y);
                 pt3.style = styl;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ExtendLine2Double",
-                    new RendererException("Failed inside ExtendLine2Double", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend", ex);
         }
         return pt3;
     }
@@ -1414,9 +1378,8 @@ public final class lineutility {
             double dy = d * Math.sin(theta);
             pt.x = pt2.x + dx;
             pt.y = pt2.y + dy;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ExtendAngledLine",
-                    new RendererException("Failed inside ExtendAngledLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend angled", ex);
         }
         return pt;
     }
@@ -1447,9 +1410,8 @@ public final class lineutility {
                 nQuadrant = 4;
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetQuadrantDouble",
-                    new RendererException("Failed inside GetQuadrantDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - quadrant", ex);
         }
         return nQuadrant;
     }
@@ -1479,9 +1441,8 @@ public final class lineutility {
             if (x2 <= x1 && y2 <= y1) {
                 nQuadrant = 4;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetQuadrantDouble",
-                    new RendererException("Failed inside GetQuadrantDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - quadrant", ex);
         }
         return nQuadrant;
     }
@@ -1516,11 +1477,9 @@ public final class lineutility {
             y.value = new double[1];
             x.value[0] = xmin;
             y.value[0] = ymin;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetPixelsMin",
-                    new RendererException("Failed inside GetPixelsMin", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - pixes min", ex);
         }
-        return;
     }
 
     /**
@@ -1626,9 +1585,8 @@ public final class lineutility {
             ptsSeize[1] = new POINT2(E);
 
             ptsTemp = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcClockwiseCenterDouble",
-                    new RendererException("Failed inside CalcClockwiseCenterDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - clockwise center", ex);
         }
         return dRadius;
     }
@@ -1744,9 +1702,8 @@ public final class lineutility {
                     break;
             }
             return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetArrowhead4Double",
-                    new RendererException("Failed inside GetArrowhead4Double", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - arrawhead", ex);
         }
     }
 
@@ -1767,9 +1724,8 @@ public final class lineutility {
             ptResult.x = (pt0.x + pt1.x) / 2;
             ptResult.y = (pt0.y + pt1.y) / 2;
             ptResult.style = styl;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "MidPointDouble",
-                    new RendererException("Failed inside MidPointDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - mid point", ex);
         }
         return ptResult;
     }
@@ -1819,9 +1775,8 @@ public final class lineutility {
 
                 return pLinePoints;
             }	//end if
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "RotateGeometryDoubleOrigin",
-                    new RendererException("Failed inside RotateGeometryDoubleOrigin", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - rotate", ex);
         }
         return pLinePoints;
     }  // end function
@@ -1894,9 +1849,8 @@ public final class lineutility {
             }
             ptResult.style = styl;
             pts = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ExtendTrueLinePerpDouble",
-                    new RendererException("Failed inside ExtendTrueLinePerpDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - extend true line perp", ex);
         }
         return ptResult;
     }
@@ -2114,11 +2068,11 @@ public final class lineutility {
             Y.value[0] = (m1 * (X.value[0]) + b1);
             return 1;
         }//end try
-        catch (Exception exc) {
+        catch (Exception ex) {
             X.value[0] = p2.x;
             Y.value[0] = p2.y;
-            ErrorLogger.LogException(_className, "CalcTrueIntersectDouble",
-                    new RendererException("Failed inside ExtendTrueIntersectDouble", exc));
+            
+            logger.error("line utility - true intersection", ex);
         }
         return 1;
     }
@@ -2154,9 +2108,8 @@ public final class lineutility {
                     dResult = max;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcDistance2",
-                    new RendererException("Failed inside CalcDistance2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - distance", ex);
         }
         return dResult;
     }
@@ -2199,9 +2152,8 @@ public final class lineutility {
                 }
             }
             
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSAAFRMiddleLine",
-                    new RendererException("Failed inside GetSAAFRMiddleLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - saafr middle", ex);
         }
         return pts;
     }
@@ -2271,9 +2223,8 @@ public final class lineutility {
 //                pLinePoints[0].style = 5;
 //            }
             pLinePoints[0].style = 5;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSAAFRSegment",
-                    new RendererException("Failed inside GetSAAFRSegment", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - saafr segment", ex);
         }
         return;
     }
@@ -2316,9 +2267,8 @@ public final class lineutility {
             pLinePoints[1] = new POINT2(pt3);
             pLinePoints[2] = new POINT2(pt5);
             pLinePoints[3] = new POINT2(pt4);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSAAFRFillSegment",
-                    new RendererException("Failed inside GetSAAFRFillSegment", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - saafr fill segment", ex);
         }
         //return;
     }
@@ -2589,9 +2539,8 @@ public final class lineutility {
                     break;
             }
             pArcLinePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "ArcArrayDouble",
-                    new RendererException("Failed inside ArcArrayDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - arc array", ex);
         }
         return pResultLinePoints;
     }
@@ -2636,9 +2585,8 @@ public final class lineutility {
             }
             CirclePoints[numpts - 1] = new POINT2(CirclePoints[0]);
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcCircleDouble2",
-                    new RendererException("Failed inside CalcCircleDouble2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - calc circle", ex);
         }
         return;
     }
@@ -2684,9 +2632,8 @@ public final class lineutility {
                     CirclePoints[numpts - 1].style = 5;
                     break;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcCircleDouble",
-                    new RendererException("Failed inside CalcCircleDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - calc circle", ex);
         }
         return;
     }
@@ -2711,9 +2658,8 @@ public final class lineutility {
             for (j = 1; j < numpts; j++) {
                 shape.lineTo(CirclePoints[j]);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcCircleShape",
-                    new RendererException("Failed inside CalcCircleShape", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - calc circle shape", ex);
         }
         return shape;
     }
@@ -2737,9 +2683,8 @@ public final class lineutility {
                 //calculate the sin value along the x axis
                 pSquallPts[j].y = ptTemp.y + amplitude * sign * Math.sin((double) j * 180 / (double) quantity * Math.PI / 180);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSquallShape",
-                    new RendererException("Failed inside GeSquallShape", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - squall shape", ex);
         }
         return;
     }
@@ -2815,9 +2760,8 @@ public final class lineutility {
             //the points are along the x axis. Rotate them about the first point as the origin
             RotateGeometryDoubleOrigin(pSquallPts, counter, lAngle);
             pSquallPts2 = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetSquallSegment",
-                    new RendererException("Failed inside GetSquallSegment", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - squall segment", ex);
         }
         return counter;
     }
@@ -2832,9 +2776,8 @@ public final class lineutility {
             } else {
                 return 0;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "PointInBounds",
-                    new RendererException("Failed inside PointInBounds", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - point in bounds", ex);
         }
         return 1;
     }
@@ -2860,9 +2803,8 @@ public final class lineutility {
             } else {
                 return 0;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "PointInBounds2",
-                    new RendererException("Failed inside PointInBounds2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - point in bounds", ex);
         }
         return 1;
     }
@@ -3026,9 +2968,8 @@ public final class lineutility {
                     }
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "intersectSegment",
-                    new RendererException("Failed inside intersectSegment", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - segment intesect", ex);
         }
         return null;
     }
@@ -3143,9 +3084,8 @@ public final class lineutility {
             } else {
                 line = null;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "BoundOneSegment",
-                    new RendererException("Failed inside BoundOneSegment", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - buond one segment", ex);
         }
         return line;
     }
@@ -3347,9 +3287,8 @@ public final class lineutility {
             pt2y.value[0] = pt2.y;
             pt3x.value[0] = pt3.x;
             pt3y.value[0] = pt3.y;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "DisplayIntersectPixels",
-                    new RendererException("Failed inside DisplayIntersectPixels", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - pixel intersection", ex);
         }
         return nResult;
     }
@@ -3587,9 +3526,8 @@ public final class lineutility {
             pt2y.value[0] = pt2.y;
             pt3x.value[0] = pt3.x;
             pt3y.value[0] = pt3.y;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "DisplayIntersectPixels2",
-                    new RendererException("Failed inside DisplayIntersectPixels2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - pixel intersection", ex);
         }
         return nResult;
     }
@@ -4131,9 +4069,8 @@ public final class lineutility {
             pdAnswer = null;
             pCirclePoints = null;
             pTempLinePoints = null;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "GetDitchSpikeDouble",
-                    new RendererException("Failed inside GetDitchSpikeDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - ditch spike", ex);
         }
         return nSpikeCounter;
     }
@@ -4186,9 +4123,8 @@ public final class lineutility {
                 pLinePoints[j].y = pixels[k++];
             }
             return;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "MoveChannelPixels",
-                    new RendererException("Failed inside MoveChannelPixels", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - move channel", ex);
         }
     }
 
@@ -4211,9 +4147,8 @@ public final class lineutility {
                     pLinePoints[1].y++;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "MoveSingleCPixels",
-                    new RendererException("Failed inside MoveSingleCPixels", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - move single cp", ex);
         }
     }
 
@@ -4272,11 +4207,9 @@ public final class lineutility {
 
                 return;
             }	//end if
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "RotateGeometryDouble",
-                    new RendererException("Failed inside RotateGeometryDouble", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - rotate", ex);
         }
-        return;
     }  // end
 
     /**
@@ -4316,9 +4249,8 @@ public final class lineutility {
                 b2 = ptRelative.y - m.value[0] * ptRelative.x;	//the line  ptRelative with the slope of pt1-pt2
                 ptResult = CalcTrueIntersectDouble2(-1 / m.value[0], b1, m.value[0], b2, 1, 1, 0, 0);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "PointRelativeToLine",
-                    new RendererException("Failed inside PointRelativeToLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - relative point", ex);
         }
         return ptResult;
     }
@@ -4354,9 +4286,9 @@ public final class lineutility {
             POINT2 pt4 = PointRelativeToLine(pt0, pt1, pt1, controlPt);
             pt = lineutility.ExtendLineDouble(pt4, controlPt, dist);
             pLinePoints.set(count - 1, pt);
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "adjustCATKBYFIREControlPoint",
-                    new RendererException("Failed inside adjustCATKBYFIREControlPoint", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - adjust catk by fire control point", ex);
+
         }
         return;
     }
@@ -4399,9 +4331,8 @@ public final class lineutility {
                 b2 = ptRelative.y - m.value[0] * ptRelative.x;	//the line  ptRelative with the slope of pt1-pt2
                 ptResult = CalcTrueIntersectDouble2(-1 / m.value[0], b1, m.value[0], b2, 1, 1, 0, 0);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "PointRelativeToLine",
-                    new RendererException("Failed inside PointRelativeToLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - relative point", ex);
         }
         return ptResult;
     }
@@ -4459,11 +4390,9 @@ public final class lineutility {
                 pt3.x = pt3Temp.x;
                 pt3.y = pt3Temp.y;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "LineRelativeToLine",
-                    new RendererException("Failed inside LineRelativeToLine", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - relative line", ex);
         }
-        return;
     }
 
     private static void CalcMBR(POINT2[] pLinePoints,
@@ -4497,9 +4426,8 @@ public final class lineutility {
                     uly.value[0] = pLinePoints[j].y;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcMBR",
-                    new RendererException("Failed inside CalcMBR", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - calc mbr", ex);
         }
         return;
     }
@@ -4528,11 +4456,9 @@ public final class lineutility {
                     ul.y = pLinePoints[j].y;
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "CalcMBRPoints",
-                    new RendererException("Failed inside CalcMBRPoints", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - calc mbr", ex);
         }
-        return;
     }
 
     /**
@@ -4567,9 +4493,8 @@ public final class lineutility {
                 }
             }
 
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "MBRDistance",
-                    new RendererException("Failed inside MBRDistance", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - mbr distance", ex);
         }
         return result;
     }
@@ -4591,9 +4516,8 @@ public final class lineutility {
             pt1.y = pt2.y;
             pt2.x = tempPt.x;
             pt2.y = tempPt.y;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "Reverse2Points",
-                    new RendererException("Failed inside Reverse2Points", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - reverse", ex);
         }
         return;
     }
@@ -4641,9 +4565,8 @@ public final class lineutility {
                 }
 
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "createStrokedShape",
-                    new RendererException("Failed inside createStrokedShape", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - create stroked", ex);
         }
         return newshape;
     }
@@ -4686,9 +4609,8 @@ public final class lineutility {
                 }
 
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "createStrokedShape",
-                    new RendererException("Failed inside createStrokedShape", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - create stroked", ex);
         }
         return newshape;
     }
@@ -4711,9 +4633,8 @@ public final class lineutility {
             int y2 = p2.y;
             int y3 = p3.y;
             return x1 * y2 + x3 * y1 + x2 * y3 - x3 * y2 - x2 * y1 - x1 * y3;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "distance",
-                    new RendererException("Failed inside distance", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - distance", ex);
         }
         return 0;
     }
@@ -4735,9 +4656,8 @@ public final class lineutility {
             double y2 = p2.y;
             double y3 = p3.y;
             return x1 * y2 + x3 * y1 + x2 * y3 - x3 * y2 - x2 * y1 - x1 * y3;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "distance2",
-                    new RendererException("Failed inside distance2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - distance2", ex);
         }
         return 0;
     }
@@ -4875,9 +4795,8 @@ public final class lineutility {
             path.add(r);
             cHull2(array, r, l, path);
             return path;
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "cHull2",
-                    new RendererException("Failed inside cHull2", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - c hull", ex);
         }
         return null;
     }
@@ -5022,9 +4941,8 @@ public final class lineutility {
                 pt = new POINT2(pts.get(j).x, pts.get(j).y, pts.get(j).style);
                 deepCopy.add(pt);
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException(_className, "getDeepCopy",
-                    new RendererException("Failed inside getDeepCopy", exc));
+        } catch (Exception ex) {
+            logger.error("line utility - deep copy", ex);
         }
         return deepCopy;
     }

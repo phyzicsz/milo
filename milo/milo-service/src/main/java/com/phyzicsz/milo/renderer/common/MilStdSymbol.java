@@ -19,6 +19,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -26,7 +28,9 @@ import java.util.Map;
  */
 public class MilStdSymbol {
 
-        //private SymbolDef _symbolDefinition = null;
+    private static final Logger logger = LoggerFactory.getLogger(MilStdSymbol.class);
+
+    //private SymbolDef _symbolDefinition = null;
     //private UnitDef _unitDefinition = null;
     /**
      * modifiers
@@ -88,7 +92,7 @@ public class MilStdSymbol {
     private static int _SymbologyStandard = 0;
 
     private static String _AltitudeMode = "";
-    
+
     private static boolean _HideOptionalLabels = false;
 
     private static boolean _UseDashArray = true;
@@ -96,7 +100,7 @@ public class MilStdSymbol {
     private static boolean _DrawAffiliationModifierAsLabel = true;
 
     private static boolean _UseLineInterpolation = false;
-    
+
     private boolean _wasClipped = false;
 
     Object _Tag = null;
@@ -105,8 +109,8 @@ public class MilStdSymbol {
      * Used to hold metadata for each segment of the symbol for multi-point
      * symbols. Each segment can contain one object.
      */
-		//private Map _segmentData;
-		// Constants for dynamic properties
+    //private Map _segmentData;
+    // Constants for dynamic properties
 /*
      public static final String SYMBOL_ID = "Symbol ID";
      //public static final String SOURCE = "Source";
@@ -120,7 +124,7 @@ public class MilStdSymbol {
      public static final String SEGMENT_DATA = "Segment Data";
      */
 
-    /*
+ /*
      public static final String GEO_POINT = "point";
      public static final String GEO_LINE = "line";
      public static final String GEO_POLYGON = "area";
@@ -130,7 +134,7 @@ public class MilStdSymbol {
      public static final String GEO_ARC = "arc";
      public static final String GEO_SQUARE = "square";
      */
-    /*
+ /*
      private static final String _COORDINATES = "Coordinates";
      private static final String _GEOMETRY = "Geometry";
      private static final String _FILL_COLOR = "Fill Color";
@@ -143,7 +147,7 @@ public class MilStdSymbol {
      private static final String _TEXT_FOREGROUND_COLOR = "Foreground Color";
      private static final String _USE_FILL = "Use Fill";
      */
-    /*
+ /*
      protected static const _COORDINATES:String = "Coordinates";
      protected static const _GEOMETRY:String = "Geometry";
      protected static const _FILL_COLOR:String = "Fill Color";
@@ -211,7 +215,7 @@ public class MilStdSymbol {
         if (SymbolUtilities.hasDefaultFill(_symbolID)) {
             setFillColor(SymbolUtilities.getFillColorOfAffiliation(_symbolID));
         }
-                        //if(SymbolUtilities.isNBC(_symbolID) && !(SymbolUtilities.isDeconPoint(symbolID)))
+        //if(SymbolUtilities.isNBC(_symbolID) && !(SymbolUtilities.isDeconPoint(symbolID)))
         //    setFillColor(SymbolUtilities.getFillColorOfAffiliation(_symbolID));
         setKeepUnitRatio(keepUnitRatio);
 
@@ -264,7 +268,7 @@ public class MilStdSymbol {
     public void setUseDashArray(boolean value) {
         _UseDashArray = value;
     }
-    
+
     public boolean getHideOptionalLabels() {
         return _HideOptionalLabels;
     }
@@ -537,22 +541,24 @@ public class MilStdSymbol {
     public TexturePaint getFillStyle() {
         return _FillStyle;
     }
+
     /**
-     * 
-     * @param value 
+     *
+     * @param value
      */
     public void setPatternFillType(int value) {
         _PatternFillType = value;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public int getPatternFillType()
-    {
+    public int getPatternFillType() {
         return _PatternFillType;
-    }    
-        /**
+    }
+
+    /**
      *
      * @param value
      */
@@ -807,54 +813,22 @@ public class MilStdSymbol {
                 //if hostile and specific TG, need to set 'N' to "ENY"
                 if (SymbolUtilities.getAffiliation(value).equals("H")) {
                     String basicID = SymbolUtilities.getBasicSymbolID(value);
-                    if (SymbolUtilities.isObstacle(basicID) || //any obstacle
-                            basicID.equals("G*M*NZ----****X") ||//ground zero
-                            basicID.equals("G*M*NEB---****X") ||//biological
+                    if (SymbolUtilities.isObstacle(basicID)
+                            || //any obstacle
+                            basicID.equals("G*M*NZ----****X")
+                            ||//ground zero
+                            basicID.equals("G*M*NEB---****X")
+                            ||//biological
                             basicID.equals("G*M*NEC---****X"))//chemical )
                     {
                         this.setModifier(ModifiersTG.N_HOSTILE, "ENY");
                     }
                 }
 
-                            // <editor-fold defaultstate="collapsed" desc="Old validity check">
-                            /* //used to do hardcore check and not even create milstdSymbol
-                 //if we couldn't draw it.
-
-                 if(value != null && !value.equals("") && !current.equals(value))
-                 {
-                 value = SymbolUtilities.ReconcileSymbolID(value);
-
-                 current = value;
-                 }
-                 if(SymbolUtilities.isTacticalGraphic(current) ||
-                 SymbolUtilities.isEngineeringOverlayGraphic(current) )
-                 {
-                 if(SymbolDefTable.getInstance().HasSymbolDef(SymbolUtilities.getBasicSymbolID(current)))
-                 {
-                 _symbolID = current;
-                 }
-                 else
-                 {
-                 ErrorLogger.LogMessage("MilStdSymbol", "setSymbolID", value + " is not a valid symbol ID.");
-                 }
-
-                 }
-                 else if(SymbolUtilities.isWarfighting(current))
-                 {
-                 if(UnitDefTable.getInstance().HasUnitDef(SymbolUtilities.getBasicSymbolID(current)))
-                 {
-                 _symbolID = current;
-                 }
-                 else
-                 {
-                 ErrorLogger.LogMessage("MilStdSymbol", "setSymbolID", value + " is not a valid symbol ID.");
-                 }
-                 }//*/
-                            // </editor-fold>
             }// End try
-            catch (Exception e) {
+            catch (Exception ex) {
                 // Log Error
-                ErrorLogger.LogException("MilStdSymbol", "setSymbolID" + " - Did not fall under TG or FE", e);
+                logger.error("symbol is not tg or fe", ex);
             }
         } else//plugin, don't alter
         {
@@ -874,13 +848,13 @@ public class MilStdSymbol {
      * @private
      */
     private void setSegmentData(Map value) {
-			// Do not check to see if segmentData already equals value, after we set this once it always will since
+        // Do not check to see if segmentData already equals value, after we set this once it always will since
         //	segmentData and value point to the same place in memory, and we always want to update
         //	segmentData so any properties binded to it get updated
         //this[SEGMENT_DATA] = value;
         //_Properties.put(SEGMENT_DATA, value);
         // NOTE: 9/24/09 - Temporarily comment out
-			/*switch(geometry)
+        /*switch(geometry)
          {
          case "line":
          // We have to create a new instance of segmentData, otherwise we are only able to set
@@ -1076,8 +1050,8 @@ public class MilStdSymbol {
                 }
 
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException("MilStdSymbol", "getFullSymbolExtent", exc);
+        } catch (Exception ex) {
+            logger.error("error getting symbol extent", ex);
         }
 
         return bounds;
@@ -1121,8 +1095,8 @@ public class MilStdSymbol {
                 }
 
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException("MilStdSymbol", "getFullSymbolExtent", exc);
+        } catch (Exception ex) {
+            logger.error("error getting symbol extent", ex);
         }
 
         return bounds;
@@ -1192,7 +1166,7 @@ public class MilStdSymbol {
                                 symbol = siTemp.getBounds();
                             }
 
-                                //fill either doesn't exist or has too low an alpha value
+                            //fill either doesn't exist or has too low an alpha value
                             //want a hit only if it intersects the line, not contained
                             //by the shape
                             Path2D gp = null;
@@ -1217,7 +1191,7 @@ public class MilStdSymbol {
                                     if (start.equals(end)) {
                                         return true;//polygon, points are valid
                                     } else {
-                                            //not a polygon, check what would
+                                        //not a polygon, check what would
                                         //be the closing line if it were
                                         //a polygon
                                         Line2D tempLine = new java.awt.geom.Line2D.Double(start, end);
@@ -1242,8 +1216,8 @@ public class MilStdSymbol {
                     }
                 }
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException("MilStdSymbol", "HitTest", exc);
+        } catch (Exception ex) {
+            logger.error("hit test error", ex);
         }
         return false;
     }
@@ -1382,9 +1356,9 @@ public class MilStdSymbol {
                 bounds = getSymbolExtent();
                 boundsFull = getSymbolExtentFull();
 
-                    //System.out.println("bounds: " + bounds.toString());
+                //System.out.println("bounds: " + bounds.toString());
                 //System.out.println("full bounds: " + boundsFull.toString());
-                    //getSymbolExtent() seems to properly account for
+                //getSymbolExtent() seems to properly account for
                 //anti-aliasing, below may no longer be necessary 
                 //add some room for anti-aliasing
                 if (addBuffer) {
@@ -1395,7 +1369,7 @@ public class MilStdSymbol {
                     offsetY += 1;//1;
                 }
 
-                    //anti-aliasing gets cut off for some reason on mobility
+                //anti-aliasing gets cut off for some reason on mobility
                 //no choice here, must add buffer
                 if (SymbolUtilities.isMobility(_symbolID)) {
                     //add some room for anti-aliasing
@@ -1423,25 +1397,24 @@ public class MilStdSymbol {
                 int height = boundsFull.height + heightBuffer;
 //                BufferedImage image = new BufferedImage(Math.round(boundsFull.width) + widthBuffer, Math.round(boundsFull.height) + heightBuffer, type);
                 BufferedImage image = new BufferedImage(width, height, type);
-                
 
                 Graphics2D g2d = (Graphics2D) image.createGraphics();
-                    //set antialiasing. if not, buffers & offsets should be 0
+                //set antialiasing. if not, buffers & offsets should be 0
                 //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 //AffineTransform oldTransform = g2d.getTransform(); 
 
                 int newX = boundsFull.x - offsetX;
                 int newY = boundsFull.y - offsetY;
-                    //g2d.translate(-(newX), -(newY));
+                //g2d.translate(-(newX), -(newY));
 
-                    //test
+                //test
 //                    g2d.setColor(Color.white);
 //                    g2d.fill(boundsFull);
-                    //draw symbol to bufferedImage
+                //draw symbol to bufferedImage
                 //SymbolDraw.Draw(this, g2d, 0, 0);
                 SymbolDraw.Draw(this, g2d, -(newX), -(newY));
 
-                    //System.out.println("image dimensions: width " + String.valueOf(image.getWidth()) + " height " + String.valueOf(image.getHeight()));
+                //System.out.println("image dimensions: width " + String.valueOf(image.getWidth()) + " height " + String.valueOf(image.getHeight()));
                 //create ImageInfo which holds image and coords to draw at
                 int centerX = 0;
                 int centerY = 0;
@@ -1455,23 +1428,19 @@ public class MilStdSymbol {
                         //centerY = offsetY + boundsFull.height;// + offsetY;
                         ///////////////////////////////////////////////////////////////////////////////////////////////
                         String affiliation = this.getSymbolID().substring(1, 2);
-                        if(affiliation.equals("F") ||
-                                affiliation.equals("A") ||
-                                affiliation.equals("D") ||
-                                affiliation.equals("M") ||
-                                affiliation.equals("J") ||
-                                affiliation.equals("K") ||
-                                affiliation.equals("N") ||
-                                affiliation.equals("L"))
-                        {
-                            centerY = (int)((bounds.y - boundsFull.y + (bounds.height / 2)) + bounds.height * 1.5);
+                        if (affiliation.equals("F")
+                                || affiliation.equals("A")
+                                || affiliation.equals("D")
+                                || affiliation.equals("M")
+                                || affiliation.equals("J")
+                                || affiliation.equals("K")
+                                || affiliation.equals("N")
+                                || affiliation.equals("L")) {
+                            centerY = (int) ((bounds.y - boundsFull.y + (bounds.height / 2)) + bounds.height * 1.5);
+                        } else {
+                            centerY = (int) ((bounds.y - boundsFull.y + (bounds.height / 2)) + bounds.height);
                         }
-                        else
-                        {
-                            centerY = (int)((bounds.y - boundsFull.y + (bounds.height / 2)) + bounds.height);
-                        }
-                        
-                        
+
                     } else {//else center of the symbol in the image
                         centerX = offsetX + bounds.x - boundsFull.x + (bounds.width / 2);
                         centerY = offsetY + bounds.y - boundsFull.y + (bounds.height / 2);
@@ -1510,8 +1479,8 @@ public class MilStdSymbol {
             } else {
                 return null;
             }
-        } catch (Exception exc) {
-            ErrorLogger.LogException("MilStdSymbol", "ConvertShapesToImageInfo()", exc);
+        } catch (Exception ex) {
+            logger.error("error converting to imageinfo", ex);
         }
         return returnVal;
     }
