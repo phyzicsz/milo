@@ -25,9 +25,6 @@ import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
 import com.phyzicsz.milo.renderer.IJavaRenderer;
 import com.phyzicsz.milo.renderer.JavaRenderer;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Map;
 import javax.print.DocFlavor.BYTE_ARRAY;
 import com.phyzicsz.milo.renderer.SinglePoint2525Renderer;
@@ -53,12 +50,7 @@ public class MiloRenderService {
         sprs = SinglePointRendererService.getInstance();
     }
 
-    /**
-     * Not meant to be changed on the fly. Let's user choose between 2525Bch2
-     * and 2525C. 2525Bch2 = 0, 2525C = 1.
-     *
-     * @param symStd
-     */
+
     public void setDefaultSymbologyStandard(int symStd) {
         RendererSettings.getInstance().setSymbologyStandard(symStd);
     }
@@ -82,28 +74,7 @@ public class MiloRenderService {
         jr.setSinglePointTGSymbolSize(size);
     }
 
-    /**
-     * Generates an image for a milstd symbol
-     *
-     * @param url assumes url ends like:
-     * "/SFGP-----------?T=uniquedesignation_1&H=blah&H1=etc"
-     * @return
-     */
-    public PNGInfo getMilStdSymbolImageFromURL(String url) {
-        MilStdSymbol ms = null;
-        try {
-            String symbolID = (url.startsWith("/") ? url.substring(url.lastIndexOf("/") + 1) : url);
-            ms = JavaRendererUtilities.createMilstdSymbol(symbolID);
-        } catch (Exception ex) {
-            logger.error("error rendering symbol", ex);
-        }
-
-        if (ms != null) {
-            return getMilStdSymbolImage(ms);
-        } else {
-            return null;
-        }
-    }
+   
 
     /**
      * Generates an image for a milstd symbol

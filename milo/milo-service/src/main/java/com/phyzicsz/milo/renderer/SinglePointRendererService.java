@@ -34,14 +34,16 @@ public class SinglePointRendererService {
     private static final Logger logger = LoggerFactory.getLogger(SinglePointRendererService.class);
 
     private static SinglePointRendererService service;
-    private static ServiceLoader<ISinglePointRenderer> loader;
+//    private static ServiceLoader<ISinglePointRenderer> loader;
     private static Map<String, ISinglePointRenderer> spRenderers = new HashMap<String, ISinglePointRenderer>();
 
     private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock(true);
 
     private SinglePointRendererService() {
         try {
-            loader = ServiceLoader.load(com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer.class);
+            SinglePoint2525Renderer renderer = new SinglePoint2525Renderer();
+            spRenderers.put(SinglePoint2525Renderer.RENDERER_ID, renderer);
+//            loader = ServiceLoader.load(com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer.class);
         } catch (Exception ex) {
             logger.error("error creating rendering serice", ex);
 

@@ -16,6 +16,7 @@
 package com.phyzicsz.milo.core;
 
 import com.phyzicsz.milo.MiloRenderService;
+import com.phyzicsz.milo.renderer.SinglePoint2525Renderer;
 import com.phyzicsz.milo.renderer.common.MilStdAttributes;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import java.io.IOException;
@@ -80,9 +81,10 @@ public class MiloRenderServiceTest {
 
         params.put(MilStdAttributes.PixelSize, "50");
         params.put(MilStdAttributes.KeepUnitRatio, "true");//default is true
+        params.put(MilStdAttributes.Renderer, SinglePoint2525Renderer.RENDERER_ID);
 
         String symbolCode = "SFUPSK----*****";
-        PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
+        PNGInfo pi = service.getSymbolImage(symbolCode, params);
 
         byte[] expected = getClass().getClassLoader().getResourceAsStream(symbolCode + ".png").readAllBytes();
         byte[] actual = pi.getImageAsByteArray();
