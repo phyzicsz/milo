@@ -28,6 +28,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.phyzicsz.milo.renderer.info.PNGInfo;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -35,11 +42,15 @@ import com.phyzicsz.milo.renderer.info.PNGInfo;
  */
 public class MiloRenderServiceTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(MiloRenderServiceTest.class);
+
     public MiloRenderServiceTest() {
+
     }
 
     @BeforeAll
     public static void setUpClass() {
+
     }
 
     @AfterAll
@@ -59,8 +70,7 @@ public class MiloRenderServiceTest {
      */
     @Test
     public void testSetDefaultSymbologyStandard() throws IOException {
-        System.out.println("setDefaultSymbologyStandard");
-
+        logger.info("testSetDefaultSymbologyStandard");
         MiloRenderService service = new MiloRenderService();
         service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
         service.setSinglePointUnitsFontSize(24);
@@ -73,11 +83,165 @@ public class MiloRenderServiceTest {
         String symbolCode = "SFUPSK----*****";
         PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
 
-        byte[] expected = getClass().getClassLoader().getResourceAsStream(symbolCode+".png").readAllBytes();
+        byte[] expected = getClass().getClassLoader().getResourceAsStream(symbolCode + ".png").readAllBytes();
         byte[] actual = pi.getImageAsByteArray();
-        
+
         assertThat(expected).contains(actual);
 
+    }
+
+    @Test
+    public void testUnknownSymbology() throws IOException {
+        logger.info("testUnknownSymbology");
+        List<String> unknown = Arrays.asList(
+                "SUPP------*****",
+                "SUPPS-----*****",
+                "SUPPV-----*****",
+                "SUPPT-----*****",
+                "SUPPL-----*****",
+                "SUAP------*****",
+                "SUAPM-----*****",
+                "SUAPMFKB--*****",
+                "SUAPMFO---*****",
+                "SUAPMFQA--*****",
+                "SUAPMFM---*****",
+                "SUAPML----*****",
+                "SUAPWMS---*****",
+                "SUGPUUSO--*****");
+
+        MiloRenderService service = new MiloRenderService();
+        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setSinglePointUnitsFontSize(24);
+
+        Map<String, String> params = new HashMap<>();
+
+        params.put(MilStdAttributes.PixelSize, "24");
+        params.put(MilStdAttributes.KeepUnitRatio, "true");//default is true
+
+        for (String symbolCode : unknown) {
+            logger.info("testing symbolCode: {}", symbolCode);
+            PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
+            Path testFile = Paths.get("src", "test", "resources", "2525", "unknown", symbolCode + ".png");
+            byte[] expected = Files.readAllBytes(testFile);
+            byte[] actual = pi.getImageAsByteArray();
+            assertThat(expected).contains(actual);
+        }
+    }
+
+    @Test
+    public void testNeutralSymbology() throws IOException {
+        logger.info("testNeutralSymbology");
+        List<String> neutral = Arrays.asList(
+                "SNPP------*****",
+                "SNPPS-----*****",
+                "SNPPV-----*****",
+                "SNPPT-----*****",
+                "SNPPL-----*****",
+                "SNAP------*****",
+                "SNAPM-----*****",
+                "SNAPMFKB--*****",
+                "SNAPMFO---*****",
+                "SNAPMFQA--*****",
+                "SNAPMFM---*****",
+                "SNAPML----*****",
+                "SNAPWMS---*****",
+                "SNGPUUSO--*****");
+
+        MiloRenderService service = new MiloRenderService();
+        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setSinglePointUnitsFontSize(24);
+
+        Map<String, String> params = new HashMap<>();
+
+        params.put(MilStdAttributes.PixelSize, "24");
+        params.put(MilStdAttributes.KeepUnitRatio, "true");//default is true
+
+        for (String symbolCode : neutral) {
+            logger.info("testing symbolCode: {}", symbolCode);
+            PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
+            Path testFile = Paths.get("src", "test", "resources", "2525", "neutral", symbolCode + ".png");
+            byte[] expected = Files.readAllBytes(testFile);
+            byte[] actual = pi.getImageAsByteArray();
+            assertThat(expected).contains(actual);
+        }
+    }
+
+    @Test
+    public void testHostileSymbology() throws IOException {
+        logger.info("testHostileSymbology");
+
+        List<String> hostile = Arrays.asList(
+                "SHPP------*****",
+                "SHPPS-----*****",
+                "SHPPV-----***** ",
+                "SHPPT-----*****",
+                "SHPPL-----*****",
+                "SHAP------*****",
+                "SHAPM-----*****",
+                "SHAPMFKB--*****",
+                "SHAPMFO---*****",
+                "SHAPMFQA--*****",
+                "SHAPMFM---*****",
+                "SHAPML----*****",
+                "SHAPWMS---*****",
+                "SHGPUUSO--*****");
+
+        MiloRenderService service = new MiloRenderService();
+        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setSinglePointUnitsFontSize(24);
+
+        Map<String, String> params = new HashMap<>();
+
+        params.put(MilStdAttributes.PixelSize, "24");
+        params.put(MilStdAttributes.KeepUnitRatio, "true");//default is true
+
+        for (String symbolCode : hostile) {
+            logger.info("testing symbolCode: {}", symbolCode);
+            PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
+            Path testFile = Paths.get("src", "test", "resources", "2525", "hostile", symbolCode + ".png");
+            byte[] expected = Files.readAllBytes(testFile);
+            byte[] actual = pi.getImageAsByteArray();
+            assertThat(expected).contains(actual);
+        }
+    }
+
+    @Test
+    public void testFriendlySymbology() throws IOException {
+        logger.info("testFriendlySymbology");
+
+        List<String> friend = Arrays.asList(
+                "SFPP------*****",
+                "SFPPS-----*****",
+                "SFPPV-----*****",
+                "SFPPT-----*****",
+                "SFPPL-----*****",
+                "SFAP------*****",
+                "SFAPM-----*****",
+                "SFAPMFKB--*****",
+                "SFAPMFO---*****",
+                "SFAPMFQA--*****",
+                "SFAPMFM---*****",
+                "SFAPML----*****",
+                "SFAPWMS---*****",
+                "SFGPUUSO--*****");
+
+        MiloRenderService service = new MiloRenderService();
+        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setSinglePointUnitsFontSize(24);
+
+        Map<String, String> params = new HashMap<>();
+
+        params.put(MilStdAttributes.PixelSize, "24");
+        params.put(MilStdAttributes.KeepUnitRatio, "true");//default is true
+
+        for (String symbolCode : friend) {
+            logger.info("testing symbolCode: {}", symbolCode);
+            PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
+            Path testFile = Paths.get("src", "test", "resources", "2525", "friend", symbolCode + ".png");
+            byte[] expected = Files.readAllBytes(testFile);
+            byte[] actual = pi.getImageAsByteArray();
+            assertThat(expected).contains(actual);
+        }
     }
 
 }
