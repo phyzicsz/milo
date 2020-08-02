@@ -4,7 +4,6 @@
  */
 package com.phyzicsz.milo.renderer;
 
-import com.phyzicsz.milo.MiloRenderService;
 import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
 import com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer;
 import com.phyzicsz.milo.renderer.plugin.SinglePointInfo;
@@ -20,7 +19,6 @@ import com.phyzicsz.milo.renderer.common.SymbolDefTable;
 import com.phyzicsz.milo.renderer.common.SymbolUtilities;
 import java.awt.Color;
 import java.util.Map;
-import java.util.logging.Level;
 import com.phyzicsz.milo.renderer.utilities.JavaRendererUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

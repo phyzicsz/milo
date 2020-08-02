@@ -1031,10 +1031,7 @@ public class MilStdSymbol {
                 for (int lcv = 1; lcv < symbolCount; lcv++) {
                     siTemp = _SymbolShapes.get(lcv);
                     temp = siTemp.getBounds();
-
-                    //System.out.println("temp: " + bounds.toString());
                     bounds = bounds.union(temp);
-                    //System.out.println("union: " + bounds.toString());
                 }
 
             }
@@ -1184,15 +1181,9 @@ public class MilStdSymbol {
         try {
 
             if (this._SymbolShapes != null && this._SymbolShapes.size() > 0) {
-                Rectangle bounds = null;
-                Rectangle boundsFull = null;
-                //int symbolCount = shapes.size();
+                Rectangle bounds = getSymbolExtent();
+                Rectangle boundsFull = getSymbolExtentFull();
 
-                bounds = getSymbolExtent();
-                boundsFull = getSymbolExtentFull();
-
-                //System.out.println("bounds: " + bounds.toString());
-                //System.out.println("full bounds: " + boundsFull.toString());
                 //getSymbolExtent() seems to properly account for
                 //anti-aliasing, below may no longer be necessary 
                 //add some room for anti-aliasing
@@ -1240,20 +1231,11 @@ public class MilStdSymbol {
 
                 int newX = boundsFull.x - offsetX;
                 int newY = boundsFull.y - offsetY;
-                //g2d.translate(-(newX), -(newY));
 
-                //test
-//                    g2d.setColor(Color.white);
-//                    g2d.fill(boundsFull);
-                //draw symbol to bufferedImage
-                //SymbolDraw.Draw(this, g2d, 0, 0);
                 SymbolDraw.Draw(this, g2d, -(newX), -(newY));
-
-                //System.out.println("image dimensions: width " + String.valueOf(image.getWidth()) + " height " + String.valueOf(image.getHeight()));
                 //create ImageInfo which holds image and coords to draw at
-                int centerX = 0;
-                int centerY = 0;
-
+                int centerX;
+                int centerY;
                 if (SymbolUtilities.isWarfighting(_symbolID)) {
 
                     if (SymbolUtilities.isHQ(_symbolID) && RendererSettings.getInstance().getCenterOnHQStaff() == true) {

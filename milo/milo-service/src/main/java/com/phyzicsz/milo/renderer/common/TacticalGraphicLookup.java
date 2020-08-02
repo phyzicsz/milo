@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +19,10 @@ public class TacticalGraphicLookup {
 
     private static final Logger logger = LoggerFactory.getLogger(TacticalGraphicLookup.class);
 
-    private ArrayList<String> alSymbolID = new ArrayList<String>();
-    private ArrayList<Integer> alMapping = new ArrayList<Integer>();
+    private final ArrayList<String> alSymbolID = new ArrayList<>();
+    private final ArrayList<Integer> alMapping = new ArrayList<>();
 
-    private Map<String, Integer> lookup = new HashMap<String, Integer>();
+    private final Map<String, Integer> lookup = new HashMap<>();
 
     private static TacticalGraphicLookup _instance = null;
 
@@ -81,8 +80,6 @@ public class TacticalGraphicLookup {
             String mapping = XMLUtil.parseTagValue(data, "<MAPPING>", "</MAPPING>");
 
             mapping = checkMappingIndex(mapping);
-
-            //System.out.println(basicID + ": " + mapping);
             lookup.put(basicID, Integer.parseInt(mapping));
 
         }
@@ -95,7 +92,7 @@ public class TacticalGraphicLookup {
      * @return
      */
     private static String checkMappingIndex(String index) {
-        int i = -1;
+        int i;
         if (SymbolUtilities.isNumber(index)) {
             i = Integer.valueOf(index);
 

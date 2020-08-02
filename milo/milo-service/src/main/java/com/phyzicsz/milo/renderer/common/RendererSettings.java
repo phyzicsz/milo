@@ -279,9 +279,6 @@ public class RendererSettings {
      */
     public void setSymbologyStandard(int standard) {
         _SymbologyStandard = standard;
-
-        /*ErrorLogger.LogMessage("symStd set to: " + String.valueOf(standard));
-        System.out.println(ErrorLogger.getStackTrace(new Exception()));//*/
     }
 
     /**
@@ -623,23 +620,6 @@ public class RendererSettings {
         _ModifierFontTracking = tracking;
     }
 
-    /*public void setLabelFont(Font font)
-    {
-        Map<TextAttribute, Object> temp = (Map<TextAttribute, Object>) font.getAttributes();
-        System.out.println(temp.toString());
-        _ModifierFontSize = font.getSize();
-        _ModifierFontName = temp.get(TextAttribute.FAMILY).toString();
-        Object weight = null;
-        float fWeight = 2;
-        if(temp.containsKey(TextAttribute.WEIGHT))
-        {
-            weight = temp.get(TextAttribute.WEIGHT);
-            if(weight != null)
-                fWeight = (Float)weight;
-            //convert weight to font type    
-        }
-        _ModifierFontType
-    }//*/
     /**
      * the font name to be used for modifier labels
      *

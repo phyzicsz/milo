@@ -604,9 +604,7 @@ public final class DISMSupport
             else if(pt1.x < pt2.x && quadrant == 4)
                 sign=-1;
             //end section
-            
-            //System.out.print(Integer.toString(quadrant));
-            //System.out.print("\n");
+
             if(linetype==TacticalLines.SARA)
                 t=0;
             
@@ -1289,160 +1287,6 @@ public final class DISMSupport
         }
         return counter;
     }
-//    protected int GetDISMSARADouble(POINT2[] points, int linetype, int vblCounter) {
-//        int counter = 0;
-//        try {
-//            int i = 0, j = 0;
-//            float scale = (float) 0.9;
-//            float iSymbolSize = scale * (float) 10; // size left for symbol centered within this graphic
-//            POINT2[] pts = new POINT2[2];
-//            POINT2[] savepoints = new POINT2[3];
-//            // locate point near center where jaggy lines should begin
-//            POINT2[] ptCenter = new POINT2[2];
-//            // four possible center points
-//            POINT2[] ptsBegin = new POINT2[4];
-//            int iLengthTemp = 0;
-//            int iLengthCntPt1 = 0;
-//            int iLengthCntPt2 = 0;
-//            int iDelta = 0;
-//            double dAngle0 = 0, dDeltaX0 = 0, dDeltaY0 = 0, dDeltaX1 = 0, dDeltaY1 = 0;
-//            POINT2[] ptsJaggyLine = new POINT2[4];
-//
-//            for (j = 0; j < 3; j++) {
-//                savepoints[j] = new POINT2(points[j]);
-//            }
-//
-//            lineutility.InitializePOINT2Array(ptsBegin);
-//            lineutility.InitializePOINT2Array(ptCenter);
-//            lineutility.InitializePOINT2Array(pts);
-//            lineutility.InitializePOINT2Array(ptsJaggyLine);
-//
-//            ptsBegin[0].x = savepoints[0].x - iSymbolSize;
-//            ptsBegin[0].y = savepoints[0].y - iSymbolSize; // top left
-//            ptsBegin[1].x = savepoints[0].x + iSymbolSize;
-//            ptsBegin[1].y = savepoints[0].y - iSymbolSize; // top right
-//            ptsBegin[2].x = savepoints[0].x + iSymbolSize;
-//            ptsBegin[2].y = savepoints[0].y + iSymbolSize; // bottom right
-//            ptsBegin[3].x = savepoints[0].x - iSymbolSize;
-//            ptsBegin[3].y = savepoints[0].y + iSymbolSize; // bottom left
-//            ptCenter[0] = ptCenter[1] = ptsBegin[0];
-//            // locate begin point for Point1
-//            iLengthCntPt1 = (int) Math.sqrt(
-//                    (savepoints[1].x - ptsBegin[0].x) * (savepoints[1].x - ptsBegin[0].x) +
-//                    (savepoints[1].y - ptsBegin[0].y) * (savepoints[1].y - ptsBegin[0].y));
-//            for (i = 1; i < 4; i++) {
-//                iLengthTemp = (int) Math.sqrt(
-//                        (savepoints[1].x - ptsBegin[i].x) * (savepoints[1].x - ptsBegin[i].x) +
-//                        (savepoints[1].y - ptsBegin[i].y) * (savepoints[1].y - ptsBegin[i].y));
-//            }
-//            // locate begin point for Point2
-//            iLengthCntPt2 = (int) Math.sqrt(
-//                    (savepoints[2].x - ptsBegin[0].x) * (savepoints[2].x - ptsBegin[0].x) +
-//                    (savepoints[2].y - ptsBegin[0].y) * (savepoints[2].y - ptsBegin[0].y));
-//            for (i = 1; i < 4; i++) {
-//                iLengthTemp = (int) Math.sqrt(
-//                        (savepoints[2].x - ptsBegin[i].x) * (savepoints[2].x - ptsBegin[i].x) +
-//                        (savepoints[2].y - ptsBegin[i].y) * (savepoints[2].y - ptsBegin[i].y));
-//            }
-//            // calculate length of jaggy within the line
-//            if (iLengthCntPt1 < iLengthCntPt2) {
-//                iDelta = iLengthCntPt1 / 12;
-//            } else {
-//                iDelta = iLengthCntPt2 / 12;
-//            }
-//
-//            //M. Deutch 8-18-04
-//            if (iDelta > (int) maxLength) {
-//                iDelta = (int) maxLength;
-//            }
-//            if (iDelta < (int) minLength) {
-//                iDelta = (int) minLength;
-//            }
-//
-//            // draw line from center to Point1
-//            ptsJaggyLine[0] = ptCenter[0];
-//            dAngle0 = Math.atan2(ptsJaggyLine[0].y - savepoints[1].y, ptsJaggyLine[0].x - savepoints[1].x);
-//            pts[0].x = (ptsJaggyLine[0].x + savepoints[1].x) / 2;
-//            pts[0].y = (ptsJaggyLine[0].y + savepoints[1].y) / 2;
-//            dDeltaX0 = Math.cos(dAngle0 + CONST_PI / 4) * iDelta;
-//            dDeltaY0 = Math.sin(dAngle0 + CONST_PI / 4) * iDelta;
-//            ptsJaggyLine[1].x = pts[0].x - dDeltaX0;
-//            ptsJaggyLine[1].y = pts[0].y - dDeltaY0;
-//            ptsJaggyLine[2].x = pts[0].x + dDeltaX0;
-//            ptsJaggyLine[2].y = pts[0].y + dDeltaY0;
-//            ptsJaggyLine[3] = new POINT2(savepoints[1]);
-//            //	DrawLine(destination, mask, color, ptsJaggyLine, 4, iLineThickness);
-//            for (j = 0; j < 4; j++) {
-//                points[counter] = new POINT2(ptsJaggyLine[j]);
-//                //points[counter].style=0;
-//                counter++;
-//            }
-//            points[counter - 1].style = 5;
-//
-//            // draw arrow at end of line
-//            dDeltaX1 = Math.cos(dAngle0 - CONST_PI / 4) * iDelta;
-//            dDeltaY1 = Math.sin(dAngle0 - CONST_PI / 4) * iDelta;
-//            ptsJaggyLine[0].x = savepoints[1].x + dDeltaX0;
-//            ptsJaggyLine[0].y = savepoints[1].y + dDeltaY0;
-//            ptsJaggyLine[1] = new POINT2(savepoints[1]);
-//            ptsJaggyLine[2].x = savepoints[1].x + dDeltaX1;
-//            ptsJaggyLine[2].y = savepoints[1].y + dDeltaY1;
-//            //	DrawFilledArrowhead(destination, mask, ptsJaggyLine, color);
-//            for (j = 0; j < 3; j++) {
-//                points[counter] = new POINT2(ptsJaggyLine[j]);
-//                points[counter].style = 9;
-//                counter++;
-//            }
-//            points[counter - 1].style = 10;
-//
-//            // draw line from center to Point2
-//            ptsJaggyLine[0] = new POINT2(ptCenter[1]);
-//            dAngle0 = Math.atan2(ptsJaggyLine[0].y - savepoints[2].y, ptsJaggyLine[0].x - savepoints[2].x);
-//            //	dAngle0 = atan2(ptsJaggyLine[0].y - savepoints[2].y, ptsJaggyLine[0].x - savepoints[2].x);
-//            pts[0].x = (ptsJaggyLine[0].x + savepoints[2].x) / 2;
-//            pts[0].y = (ptsJaggyLine[0].y + savepoints[2].y) / 2;
-//            dDeltaX0 = Math.cos(dAngle0 + CONST_PI / 4) * iDelta;
-//            dDeltaY0 = Math.sin(dAngle0 + CONST_PI / 4) * iDelta;
-//            ptsJaggyLine[1].x = pts[0].x - dDeltaX0;
-//            ptsJaggyLine[1].y = pts[0].y - dDeltaY0;
-//            ptsJaggyLine[2].x = pts[0].x + dDeltaX0;
-//            ptsJaggyLine[2].y = pts[0].y + dDeltaY0;
-//            ptsJaggyLine[3] = new POINT2(savepoints[2]);
-//            //	DrawLine(destination, mask, color, ptsJaggyLine, 4, iLineThickness);
-//            for (j = 0; j < 4; j++) {
-//                points[counter] = new POINT2(ptsJaggyLine[j]);
-//                //points[counter].style=0;
-//                counter++;
-//            }
-//            points[counter - 1].style = 5;
-//
-//            // draw arrow at end of line
-//            dDeltaX1 = Math.cos(dAngle0 - CONST_PI / 4) * iDelta;
-//            dDeltaY1 = Math.sin(dAngle0 - CONST_PI / 4) * iDelta;
-//            ptsJaggyLine[0].x = savepoints[2].x + dDeltaX0;
-//            ptsJaggyLine[0].y = savepoints[2].y + dDeltaY0;
-//            ptsJaggyLine[1] = new POINT2(savepoints[2]);
-//            ptsJaggyLine[2].x = savepoints[2].x + dDeltaX1;
-//            ptsJaggyLine[2].y = savepoints[2].y + dDeltaY1;
-//            //	DrawFilledArrowhead(destination, mask, ptsJaggyLine, color);
-//            for (j = 0; j < 3; j++) {
-//                points[counter] = new POINT2(ptsJaggyLine[j]);
-//                points[counter].style = 9;
-//                counter++;
-//            }
-//            points[counter - 1].style = 10;
-//            //clean up
-//            pts = null;
-//            savepoints = null;
-//            ptCenter = null;
-//            ptsBegin = null;
-//            ptsJaggyLine = null;
-//            //return;
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return counter;
-//    }
 
     /**
      * Calculates the points for CONTAIN
@@ -3377,38 +3221,7 @@ public final class DISMSupport
         }
         return 12;
     }
-    /**
-     * Calculates the points for DECEIVE.
-     *
-     * @param points - OUT - the client points, also used for the returned points.
-     * @param linetype the line type.
-     */
-//    protected static void GetDISMDeceiveDouble(POINT2[] points,
-//            int linetype) {
-//        try {
-//            POINT2[] savepoints = new POINT2[3];
-//            int j = 0;
-//
-//            for (j = 0; j < 3; j++) {
-//                savepoints[j] = new POINT2(points[j]);
-//            }
-//
-//            points[0] = new POINT2(savepoints[0]);
-//            points[0].style = 17;
-//            points[1] = new POINT2(savepoints[1]);
-//            points[1].style = 5;
-//            points[2] = new POINT2(savepoints[2]);
-//            points[2].style = 17;
-//            points[3] = new POINT2(savepoints[0]);
-//            points[3].style = 5;
-//
-//            savepoints = null;
-//            //return;
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return;
-//    }
+
     /**
      * Calculates the points for MNFLDDIS
      *

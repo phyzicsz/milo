@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
  * @author michael.spinelli
  */
 public class SymbolUtilities {
+
     private static final Logger logger = LoggerFactory.getLogger(SymbolUtilities.class);
 
     private static SimpleDateFormat dateFormatFront = new SimpleDateFormat("ddHHmmss", Locale.US);
@@ -156,7 +157,7 @@ public class SymbolUtilities {
                 return strSymbolID;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return "";
     }
@@ -935,7 +936,7 @@ public class SymbolUtilities {
         } // End try
         catch (Exception ex) {
             logger.error("error getting affiliation line color", ex);
-        }	
+        }
         return retColor;
     }	// End get LineColorOfAffiliation
 
@@ -1601,7 +1602,7 @@ public class SymbolUtilities {
                 return true;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -1636,7 +1637,7 @@ public class SymbolUtilities {
                 return true;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -1652,7 +1653,7 @@ public class SymbolUtilities {
             boolean blRetVal = strSymbolID.substring(0, 1).equals("W");
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -1817,7 +1818,7 @@ public class SymbolUtilities {
             boolean blRetVal = strSymbolID.substring(0, 4).equals("ESRI");
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -1834,7 +1835,7 @@ public class SymbolUtilities {
             boolean blRetVal = (isBridge(strSymbolID) || isEngineeringOverlayObstacle(strSymbolID));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -1851,7 +1852,7 @@ public class SymbolUtilities {
                     && strSymbolID.substring(2, 3).equals("G"));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -1978,7 +1979,7 @@ public class SymbolUtilities {
             }
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsCheckPoint
@@ -2034,7 +2035,7 @@ public class SymbolUtilities {
             }
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     }
@@ -2057,7 +2058,7 @@ public class SymbolUtilities {
             }
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsRoute
@@ -2080,7 +2081,7 @@ public class SymbolUtilities {
             }
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsRoad
@@ -2102,7 +2103,7 @@ public class SymbolUtilities {
                 return false;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsJWARN
@@ -2125,7 +2126,7 @@ public class SymbolUtilities {
                 return false;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsMOOTW
@@ -2149,7 +2150,7 @@ public class SymbolUtilities {
                 return false;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isStabilityOperations
@@ -2185,7 +2186,7 @@ public class SymbolUtilities {
                 }
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsMOOTW
@@ -2215,7 +2216,7 @@ public class SymbolUtilities {
 
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isHQ
@@ -2238,7 +2239,7 @@ public class SymbolUtilities {
                     || (strSymbolID.substring(10, 11).equals("E")) || (strSymbolID.substring(10, 11).equals("G")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsTaskForce
@@ -2261,7 +2262,7 @@ public class SymbolUtilities {
                     || (strSymbolID.substring(10, 11).equals("F")) || (strSymbolID.substring(10, 11).equals("G")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsFeintDummy
@@ -2285,7 +2286,7 @@ public class SymbolUtilities {
                     && strSymbolID.substring(10, 11).equals("M")
                     && strSymbolID.substring(11, 12).equals("O"));
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         // Return whether or not the mobility wheeled modifier is on.
         return mobilityWheeledIsOn;
@@ -2320,7 +2321,7 @@ public class SymbolUtilities {
             }
             //}
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         // Return whether or not the mobility wheeled modifier is on.
         return mobilityIsOn;
@@ -2379,7 +2380,7 @@ public class SymbolUtilities {
             boolean blRetVal = ((isTacticalGraphic(strSymbolID)) && ((strSymbolID.substring(2, 3).equals("M")) && (strSymbolID.substring(4, 5).equals("O"))));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isObstacle
@@ -2400,7 +2401,7 @@ public class SymbolUtilities {
             boolean blRetVal = ((isNBC(strSymbolID)) && (strSymbolID.substring(4, 6).equals("ND")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isDeconPoint
@@ -2451,7 +2452,7 @@ public class SymbolUtilities {
 
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isEchelonGraphic
@@ -2518,7 +2519,7 @@ public class SymbolUtilities {
                     && (strSymbolID.substring(4, 5).equals("U")));
             return isGroundUnit || isSOF(strSymbolID);
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isUnit
@@ -2538,7 +2539,7 @@ public class SymbolUtilities {
             boolean blRetVal = ((isTacticalGraphic(strSymbolID)) && (temp.substring(0, 5).equals("G*M*N")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isNBC
@@ -2782,7 +2783,7 @@ public class SymbolUtilities {
             boolean blRetVal = ((strSymbolID.substring(0, 1).equals("S")) && (strSymbolID.substring(2, 3).equals("F")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isSOF
@@ -2801,7 +2802,7 @@ public class SymbolUtilities {
             boolean blRetVal = (basic.substring(0, 8) == "G*G*GPUY");
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isSOF
@@ -2820,7 +2821,7 @@ public class SymbolUtilities {
             boolean blRetVal = ((strSymbolID.substring(0, 1).equals("S")) && (strSymbolID.substring(2, 3).equals("S")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isSOF
@@ -2839,7 +2840,7 @@ public class SymbolUtilities {
             boolean blRetVal = ((strSymbolID.substring(0, 1).equals("S")) && (strSymbolID.substring(2, 3).equals("U")));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isSOF
@@ -2863,7 +2864,7 @@ public class SymbolUtilities {
                     || isChangeOneCircular(strBasicSymbolID) || isChangeOneRectangular(strBasicSymbolID));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isChangeOne
@@ -2902,7 +2903,7 @@ public class SymbolUtilities {
                 }
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isChangeOneRectangular
@@ -2941,7 +2942,7 @@ public class SymbolUtilities {
                 }
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End isChangeOneCircular }}
@@ -2962,7 +2963,7 @@ public class SymbolUtilities {
             // || isEMSEquipment(strSymbolID); //uncomment when supporting 2525C
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsEquipment
@@ -3010,15 +3011,16 @@ public class SymbolUtilities {
                 }
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return blRetVal;
     } // End IsEquipment
 
     /**
      * determines if an symbol code represents an EMS (Emergency Management
-     * Symbol). Returns true only for those that start with 'E'
+     * Symbol).Returns true only for those that start with 'E'
      *
+     * @param strSymbolID
      * @return
      */
     public static boolean isEMS(String strSymbolID) {
@@ -3029,7 +3031,7 @@ public class SymbolUtilities {
                 blRetVal = true;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return blRetVal;
     }
@@ -3047,7 +3049,7 @@ public class SymbolUtilities {
                 blRetVal = true;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return blRetVal;
     }
@@ -3111,7 +3113,7 @@ public class SymbolUtilities {
                 }
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return blRetVal;
     }
@@ -3129,7 +3131,7 @@ public class SymbolUtilities {
                 blRetVal = true;
             }
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return blRetVal;
     }
@@ -3152,7 +3154,7 @@ public class SymbolUtilities {
             }
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsInstallation
@@ -3171,7 +3173,7 @@ public class SymbolUtilities {
             boolean blRetVal = (strSymbolID.substring(0, 1).equals("I"));
             return blRetVal;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return false;
     } // End IsInstallation
@@ -3192,7 +3194,7 @@ public class SymbolUtilities {
             // See if the feint dummy installation is on.
             feintDummyInstallationIsOn = (strSymbolID.substring(10, 11).equals("H") && strSymbolID.substring(11, 12).equals("B"));
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         // Return whether or not the feint dummy installation is on.
         return feintDummyInstallationIsOn;
@@ -3211,7 +3213,7 @@ public class SymbolUtilities {
             // See if the feint dummy installation is on.
             hasInstallationModifier = (strSymbolID.charAt(10) == ('H'));
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         // Return whether or not the feint dummy installation is on.
         return hasInstallationModifier;
@@ -3233,7 +3235,7 @@ public class SymbolUtilities {
             return strAffiliation;
         } // End try
         catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return "U";
     } // End GetAffiliation
@@ -3253,7 +3255,7 @@ public class SymbolUtilities {
             String strStatus = strSymbolID.substring(3, 4);
             return strStatus;
         } catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return "P";
     } // End getStatus
@@ -3276,7 +3278,7 @@ public class SymbolUtilities {
             return strSubEch;
         } // End try
         catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return "-";
     } // End getEchelon
@@ -3482,7 +3484,7 @@ public class SymbolUtilities {
             }
         } // End try
         catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return "";
     } // End SetAffiliation }
@@ -3514,7 +3516,7 @@ public class SymbolUtilities {
             // !SymbolUtilities.IsDrawingPrimitive(strSymbolID))
         } // End try
         catch (Throwable t) {
-            System.out.println(t);
+            logger.error("error", t);
         }
         return strChangedID;
     } // End SetEchelon }}}}

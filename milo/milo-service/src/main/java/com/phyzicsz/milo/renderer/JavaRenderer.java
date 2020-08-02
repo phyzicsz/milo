@@ -77,40 +77,21 @@ public class JavaRenderer implements IJavaRenderer {
     private JavaRenderer() {
 
         try {
-//            ErrorLogger.LogMessage("TEST");
-//            ErrorLogger.LogException("JavaRenderer", "constructor", new Exception("exception!"), Level.WARNING);
-//            ErrorLogger.setLevel(Level.ALL);
-//            ErrorLogger.Entering(_className, "nit");
-            //System.out.println("v0.0.5b-2:36 PM 11/15/2012");
-            /*
-            ErrorLogger.LogMessage("TEST");
-            ErrorLogger.LogMessage("JR " ,"JR()","TEST",false);
-            ErrorLogger.LogException(this.getClass().getName() ,"JR()",new RendererException("YAR!", null));
-             */
 
             _SPR = SinglePointRenderer.getInstance();
-
-//            _MPR = MultiPointRenderer.getInstance();
             _TGIR = TacticalGraphicIconRenderer.getInstance();
 
             _className = this.getClass().getName();
 
             if (_SPR == null) {
-                //ErrorLogger.LogException(this.getClass().getName() ,"JavaRenderer()",
-                //    new RendererException("JavaRenderer failed to initialize - SinglePointRenderer didn't load.", null));
-                System.err.println("JavaRenderer failed to initialize - SinglePointRenderer didn't load.");
+                logger.error("failed to initialize single point renderer");
             }
             if (_TGIR == null) {
-                //ErrorLogger.LogException(this.getClass().getName() ,"JavaRenderer()",
-                //    new RendererException("JavaRenderer failed to initialize - TacticalGraphicIconRenderer didn't load.", null));
-                System.err.println("JavaRenderer failed to initialize - TacticalGraphicIconRenderer didn't load.");
+                logger.error("failed to initialize tactical renderer");
             }
 
         } catch (Exception exc) {
-            //ErrorLogger.LogException(_className ,"JavaRenderer()",
-            //        new RendererException("JavaRenderer failed to initialize", exc));
-            System.err.println("JavaRenderer failed to initialize");
-            System.err.println(exc.getMessage());
+            logger.error("failed to initialize");
         }
     }
 
@@ -222,9 +203,8 @@ public class JavaRenderer implements IJavaRenderer {
             if (message != null && !message.equals("")) {
                 logger.error(message);
             }
-        } catch (Exception exc) {
-            System.err.println(String.valueOf(message));
-            System.err.println(exc.getMessage());
+        } catch (Exception ex) {
+            logger.error("java renderer error");
         }
         return false;
     }
@@ -478,8 +458,7 @@ public class JavaRenderer implements IJavaRenderer {
 
             returnVal = tmp;
         } catch (Exception exc) {
-            //ErrorLogger.LogException("JavaRenderer", "RenderMilStdSymbolAsIcon", exc);
-            System.err.println(exc.getMessage());
+            logger.error("java renderer - render as icon");
         }
         return returnVal;
     }
@@ -574,10 +553,9 @@ public class JavaRenderer implements IJavaRenderer {
                 throw re;
             }
 
-        } catch (RendererException exc) {
-            RendererException re2 = new RendererException("Draw Operation Failed", exc);
-            //ErrorLogger.LogException(this.getClass().getName() ,"DrawDB()",re2);
-            System.err.println(exc.getMessage());
+        } catch (RendererException ex) {
+            RendererException re2 = new RendererException("Draw Operation Failed", ex);
+            logger.error("java renderer - draw operation failed", re2);
             throw re2;
         }
     }
@@ -639,8 +617,7 @@ public class JavaRenderer implements IJavaRenderer {
                 }
 
                 RendererException re = new RendererException(badValues, null);
-                //ErrorLogger.LogException(this.getClass().getName() ,"Draw()",re);
-                System.err.println(re.getMessage());
+                logger.error("java renderer - render error", re);
                 throw re;
 
             }

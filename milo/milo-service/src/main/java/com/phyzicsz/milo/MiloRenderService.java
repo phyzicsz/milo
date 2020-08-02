@@ -83,72 +83,6 @@ public class MiloRenderService {
     }
 
     /**
-     * Will attempt to download and load a plugin given a specific url Call
-     * refreshPlugins() after you've loaded all the plugins you want the service
-     * to make available.
-     *
-     * @param url
-     */
-    public void loadPluginsFromUrl(String url) {
-        try {
-            SinglePointRendererService.getInstance().AddRenderersToPath(url);
-            // SinglePointRendererService.getInstance().LoadSPRendererServices();
-        } catch (Exception ex) {
-            logger.error("error loading plugins,", ex);
-        }
-    }
-
-    /**
-     * Attemps to Load a specfic file as a plugin Call refreshPlugins() after
-     * you've loaded all the plugins you want the service to make available.
-     *
-     * @param file
-     */
-    public void loadPluginsFromFile(File file) {
-        try {
-            SinglePointRendererService.getInstance().AddRenderersToPathByFile(file);
-            // SinglePointRendererService.getInstance().LoadSPRendererServices();
-        } catch (Exception ex) {
-            logger.error("error loading plugins,", ex);
-        }
-    }
-
-    /**
-     * Scans a directory and loads any plugins located there. Call
-     * refreshPlugins() after you've loaded all the plugins you want the service
-     * to make available.
-     *
-     * @param directory
-     */
-    public void loadPluginsFromDirectory(File directory) {
-        try {
-            SinglePointRendererService.getInstance().AddRenderersToPathByDirectory(directory);
-            //SinglePointRendererService.getInstance().LoadSPRendererServices();
-        } catch (Exception ex) {
-            logger.error("error loading plugins", ex);
-        }
-    }
-
-    /**
-     * After loading plugins, you need to refresh the service so that it's aware
-     * of the plugins that were made available.
-     */
-    public void refreshPlugins() {
-        SinglePointRendererService.getInstance().LoadSPRendererServices();
-    }
-
-    /**
-     * Gets a list of the loaded plugins
-     *
-     * @return a list of the currently loaded plugins.
-     */
-    public ArrayList<String> getListOfLoadedPlugins() {
-        return SinglePointRendererService.getInstance().getSinglePointRendererIDs();
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Single Point Functions">
-    /**
      * Generates an image for a milstd symbol
      *
      * @param url assumes url ends like:
@@ -205,35 +139,10 @@ public class MiloRenderService {
         if (ii != null) {
             pi = new PNGInfo(ii);
         } else {
-            //System.out.println("ii is null");
+
         }
 
         return pi;
-    }
-
-    /**
-     * Works the same as getMilStdSymbolImageFromURL but if you specify a
-     * renderer, the function will tried to get the image from the specified
-     * renderer plugin.
-     *
-     * @param url
-     * @return
-     */
-    public PNGInfo getSymbolImageFromURL(String url) {
-        String symbolID = "";
-        Map<String, String> params = null;
-        try {
-            symbolID = (url.startsWith("/") ? url.substring(url.lastIndexOf("/") + 1) : url);
-            params = JavaRendererUtilities.createParameterMapFromURL(symbolID);
-
-            int questionIndex = symbolID.lastIndexOf('?');
-            if (questionIndex != -1) {
-                symbolID = java.net.URLDecoder.decode(symbolID.substring(0, questionIndex), "UTF-8");
-            }
-        } catch (UnsupportedEncodingException ex) {
-            logger.error("unsupported encoding", ex);
-        }
-        return getSymbolImage(symbolID, params);
     }
 
     /**
@@ -255,7 +164,6 @@ public class MiloRenderService {
             } else if (symbolInfoMap.containsKey("RENDERER")) {
                 rendererID = symbolInfoMap.get("RENDERER");
             }
-            //System.out.println("Requested Renderer ID: " + rendererID);
 
             // check if plugin renderer was requested
             if (rendererID == null || rendererID.equals("")) {
@@ -267,9 +175,6 @@ public class MiloRenderService {
             }
 
             if (sprs.hasRenderer(rendererID)) {
-                //System.out.println("Renderer ID: " + rendererID);
-                //System.out.println("Symbol ID: " + symbolId);
-                //ErrorLogger.PrintStringMap(symbolInfoMap);
                 spi = sprs.render(rendererID, symbolId, symbolInfoMap);
                 if (spi != null) {
                     pi = new PNGInfo(spi);

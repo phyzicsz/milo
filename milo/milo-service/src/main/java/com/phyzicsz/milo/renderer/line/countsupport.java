@@ -536,28 +536,7 @@ public final class countsupport
         }
         return count;
     }
-    //for DMAF, not currently used
-//    protected static int GetXPointsCount(POINT2[] pLinePoints)
-//    {
-//        int total=0;
-//        try
-//        {
-//            int j=0,iterations=0;
-//            double dist=0;
-//            for(j=0;j<pLinePoints.length-1;j++)
-//            {
-//                dist=lineutility.CalcDistanceDouble(pLinePoints[j],pLinePoints[j+1]);
-//                iterations=(int)(dist-5)/10;
-//                total += iterations *4;
-//            }
-//        }
-//        catch(Exception e)
-//        {
-//            System.out.println(e.getMessage());
-//        }
-//        return total;
-//    }
-
+ 
     private static int GetReefCount(POINT2[] pLinePoints,
             int vblCounter) {
         int count = 0;

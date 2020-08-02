@@ -347,13 +347,6 @@ public class SinglePointRenderer {
                     symbolBounds2D = new Rectangle2D.Double(pixel.getX() - (pixelSize / 2), pixel.getY() - (pixelSize / 2), pixelSize, pixelSize);
                 }
             }
-
-            //Get symbol dimensions
-//            if(gvFrame != null)
-//            {
-//                System.out.println("Pixel Bounds: " + gvFrame.getPixelBounds(frc, pixel.x, pixel.y).toString());
-//                System.out.println("Visual Bounds: " + gvFrame.getVisualBounds().toString());
-//            }
             //if symbol is HQ, we must move symbol and draw the staff
             if (SymbolUtilities.isHQ(symbol.getSymbolID())
                     && RendererSettings.getInstance().getCenterOnHQStaff() == true) {
