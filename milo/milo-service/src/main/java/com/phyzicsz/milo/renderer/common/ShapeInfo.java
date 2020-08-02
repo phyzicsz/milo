@@ -340,24 +340,6 @@ public class ShapeInfo {
         return lineColor;
     }
 
-//    /**
-//     *
-//     * @param value
-//     * @deprecated Use setStroke
-//     */
-//    public void setLineWidth(int value)
-//    {
-//        lineWidth=value;
-//    }
-//    /**
-//     * @deprecated Use getStroke
-//     * @return
-//     */
-//    public int getLineWidth()
-//    {
-//        return lineWidth;
-//    }
-
     public void setFillColor(Color value)
     {
         fillColor=value;

@@ -216,16 +216,6 @@ public class UnitFontLookup {
     }
 
     /**
-     * @deprecated @param original
-     * @return
-     */
-    public static UnitFontLookupInfo adjustSubSurfaceIfNot2525C(UnitFontLookupInfo original) {
-        UnitFontLookupInfo result = null;
-
-        return result;
-    }
-
-    /**
      * 2525C returns the character index for the fill frame based on the symbol
      * code.
      *
@@ -815,16 +805,6 @@ public class UnitFontLookup {
         }
 
         return returnVal;
-    }
-
-    /**
-     *
-     * @param SymbolID
-     * @return
-     * @deprecated
-     */
-    public UnitFontLookupInfo getLookupInfo(String SymbolID) {
-        return getLookupInfo(SymbolID, RendererSettings.getInstance().getSymbologyStandard());
     }
 
     /**

@@ -3350,51 +3350,6 @@ public final class clsMETOC {
     }
 
     /**
-     *
-     * Called by Splines2TG to get straight channel lines for splines.
-     *
-     * @param tg - TGlight
-     * @deprecated
-     *
-     * @return An ArrayList to use for building the parallel splines
-     */
-    private static ArrayList ParallelLines(TGLight tg, int rev) {
-        ArrayList<POINT2> channelPoints2 = new ArrayList();
-        try {
-            double[] pLinePoints = new double[tg.Pixels.size() * 2];
-            double[] channelPoints = new double[6 * tg.Pixels.size()];
-            int j = 0;
-            for (j = 0; j < tg.Pixels.size(); j++) {
-                pLinePoints[2 * j] = tg.Pixels.get(j).x;
-                pLinePoints[2 * j + 1] = tg.Pixels.get(j).y;
-            }
-            //POINT2 pt=new POINT2(null);
-            int numPoints = tg.Pixels.size();
-            int channelWidth = 20;
-            int usePtr = 0;
-            ArrayList<Shape2> shapes = null;
-            //double distanceToChannelPoint=20;
-            //Channels.GetChannel1Double(pLinePoints, numPoints, numPoints, TacticalLines.CHANNEL, channelWidth, distanceToChannelPoint );
-
-            try {
-                CELineArray.CGetChannel2Double(pLinePoints, pLinePoints, channelPoints, numPoints, numPoints, (int) TacticalLines.CHANNEL, channelWidth, usePtr, shapes, rev);
-            } catch (Exception ex) {
-                logger.error("weather symbols - failed parallel lines", ex);
-            }
-
-            POINT2 pt2 = null;
-            int style = 0;
-            for (j = 0; j < channelPoints.length / 3; j++) {
-                pt2 = new POINT2(channelPoints[3 * j], channelPoints[3 * j + 1], style);
-                channelPoints2.add(pt2);
-            }
-        } catch (Exception ex) {
-            logger.error("weather symbols - failed parallel lines", ex);
-        }
-        return channelPoints2;
-    }
-
-    /**
      * Call this function with segment
      *
      * @param Pixels a segment of tg.Pixels

@@ -21,7 +21,6 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/UnitFontLookup.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/TacticalGraphicText.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/PointConversionDummy.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/SymbolDisplayProperties.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/tactical/TGLight.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/MilStdAttributes.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/XMLUtil.java
@@ -48,7 +47,6 @@
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/TacticalGraphicLookup.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/TextInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/TacticalGraphicIconRenderer.java
-/home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/common/TBCRendererException.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/SymbolInfo.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/IJavaRenderer.java
 /home/pborawski/development/milo/milo/milo-service/src/main/java/com/phyzicsz/milo/renderer/info/LineInfo.java

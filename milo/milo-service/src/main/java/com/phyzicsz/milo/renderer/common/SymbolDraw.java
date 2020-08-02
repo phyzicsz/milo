@@ -874,20 +874,6 @@ public class SymbolDraw {
      * @param modifierValue
      * @param x
      * @param y
-     * @param textColor
-     * @deprecated
-     * @return
-     */
-    public static ShapeInfo CreateModifierShapeInfo(TextLayout text, String modifierValue, double x, double y, Color textColor) {
-        return CreateModifierShapeInfo(text, modifierValue, x, y, textColor, null);
-    }
-
-    /**
-     *
-     * @param text
-     * @param modifierValue
-     * @param x
-     * @param y
      * @param textColor Null == Black
      * @param textBackgroundColor null == renderer decides
      * @return

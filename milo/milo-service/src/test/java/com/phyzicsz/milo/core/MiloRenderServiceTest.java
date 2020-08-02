@@ -67,6 +67,7 @@ public class MiloRenderServiceTest {
 
     /**
      * Test of setDefaultSymbologyStandard method, of class MiloRenderService.
+     * @throws java.io.IOException
      */
     @Test
     public void testSetDefaultSymbologyStandard() throws IOException {

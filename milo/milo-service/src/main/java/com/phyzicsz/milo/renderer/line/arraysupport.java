@@ -1008,48 +1008,6 @@ public final class arraysupport {
         return;
     }
 
-    /**
-     * @deprecated returns the location for the Dummy Hat
-     * @param pLinePoints
-     * @return
-     */
-    private static POINT2 getDummyHat(POINT2[] pLinePoints) {
-        POINT2 pt = null;
-        try {
-            int j = 0;
-            double minY = Double.MAX_VALUE;
-            double minX = Double.MAX_VALUE, maxX = -Double.MAX_VALUE;
-            int index = -1;
-            //get the highest point
-            for (j = 0; j < pLinePoints.length - 3; j++) {
-                if (pLinePoints[j].y < minY) {
-                    minY = pLinePoints[j].y;
-                    index = j;
-                }
-                if (pLinePoints[j].x < minX) {
-                    minX = pLinePoints[j].x;
-                }
-                if (pLinePoints[j].x > maxX) {
-                    maxX = pLinePoints[j].x;
-                }
-            }
-            pt = new POINT2(pLinePoints[index]);
-            double deltaMaxX = 0;
-            double deltaMinX = 0;
-            if (pt.x + 25 > maxX) {
-                deltaMaxX = pt.x + 25 - maxX;
-                pt.x -= deltaMaxX;
-            }
-            if (pt.x - 25 < minX) {
-                deltaMinX = minX - (pt.x - 25);
-                pt.x += deltaMinX;
-            }
-        } catch (Exception ex) {
-            logger.error("error - get hat", ex);
-        }
-        return pt;
-    }
-
     private static void AreaWithCenterFeatureDouble(POINT2[] pLinePoints,
             int vblCounter,
             int lineType) {

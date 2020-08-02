@@ -101,12 +101,6 @@ public class RendererSettings {
     public static final int Symbology_2525B = 0;
 
     /**
-     * 2525Bch2 and USAS 13/14 symbology
-     *
-     * @deprecated use Symbology_2525B, 13-14 applies to 2525C
-     */
-    public static final int Symbology_2525Bch2_USAS_13_14 = 0;
-    /**
      * 2525C, which includes 2525Bch2 & USAS 13/14
      */
     public static final int Symbology_2525C = 1;

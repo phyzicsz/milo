@@ -20,7 +20,6 @@ com/phyzicsz/milo/renderer/line/TacticalLines.class
 com/phyzicsz/milo/renderer/line/arraysupport.class
 com/phyzicsz/milo/renderer/common/PointConversionDummy.class
 com/phyzicsz/milo/renderer/JavaRenderer.class
-com/phyzicsz/milo/renderer/common/SymbolDisplayProperties.class
 com/phyzicsz/milo/renderer/common/XMLUtil.class
 com/phyzicsz/milo/renderer/common/ModifiersTG.class
 com/phyzicsz/milo/renderer/info/TextInfo.class
@@ -42,7 +41,6 @@ com/phyzicsz/milo/renderer/tactical/clsUtility.class
 com/phyzicsz/milo/renderer/utilities/JavaRendererUtilities.class
 com/phyzicsz/milo/renderer/common/RendererSettings.class
 com/phyzicsz/milo/renderer/common/ModifiersUnits.class
-com/phyzicsz/milo/renderer/common/TBCRendererException.class
 com/phyzicsz/milo/renderer/plugin/ISinglePointRenderer.class
 com/phyzicsz/milo/renderer/line/CELineArray.class
 com/phyzicsz/milo/renderer/SinglePointRenderer.class

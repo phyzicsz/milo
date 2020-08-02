@@ -1232,89 +1232,6 @@ public final class Channels {
     }
 
     /**
-     * @deprecated Shift CounterAttack By Fire to not extend past the first
-     * point
-     * @param vbiDrawThis
-     * @param lpsaUpperVBPoints
-     * @param vblLowerCounter
-     * @param lpsaLowerVBPoints
-     * @param vblUpperCounter
-     */
-    private static void shiftCATKBYFIREPoints(int vbiDrawThis,
-            double[] lpsaUpperVBPoints,
-            int vblLowerCounter,
-            double[] lpsaLowerVBPoints,
-            int vblUpperCounter) {
-        try {
-            if (vbiDrawThis != TacticalLines.CATKBYFIRE) {
-                return;
-            }
-
-            POINT2 nextToLastPoint = new POINT2(lpsaUpperVBPoints[vblUpperCounter - 4], lpsaUpperVBPoints[vblUpperCounter - 3]);
-            POINT2 lastPoint = new POINT2(lpsaUpperVBPoints[vblUpperCounter - 2], lpsaUpperVBPoints[vblUpperCounter - 1]);
-            double dist = lineutility.CalcDistanceDouble(lastPoint, nextToLastPoint);
-
-            if (dist < 45) {
-                nextToLastPoint = lineutility.ExtendAlongLineDouble(lastPoint, nextToLastPoint, 45 + 2 * dist);
-                lastPoint = lineutility.ExtendLineDouble(nextToLastPoint, lastPoint, -45);
-                lpsaUpperVBPoints[vblUpperCounter - 4] = nextToLastPoint.x;
-                lpsaUpperVBPoints[vblUpperCounter - 3] = nextToLastPoint.y;
-                lpsaLowerVBPoints[vblLowerCounter - 4] = nextToLastPoint.x;
-                lpsaLowerVBPoints[vblLowerCounter - 3] = nextToLastPoint.y;
-            } //lastPoint=lineutility.ExtendAlongLineDouble(lastPoint, nextToLastPoint, 45);
-            else {
-                lastPoint = lineutility.ExtendLineDouble(nextToLastPoint, lastPoint, -45);
-            }
-
-            lpsaUpperVBPoints[vblUpperCounter - 2] = lastPoint.x;
-            lpsaUpperVBPoints[vblUpperCounter - 1] = lastPoint.y;
-            lpsaLowerVBPoints[vblLowerCounter - 2] = lastPoint.x;
-            lpsaLowerVBPoints[vblLowerCounter - 1] = lastPoint.y;
-        } catch (Exception ex) {
-            logger.error("channel error", ex);
-
-        }
-    }
-
-    /**
-     * @deprecated tester function to shift counterattack by fire point back to
-     * account for aligning the rotary arrow tip with the anchor point. the
-     * feature used to extend past the anchor so the control point was shove
-     * forward. Intended to be called by the tester. note: this function is not
-     * used by the CPOF client, it is for tester use only
-     * @param linetype line type
-     * @param pLinePoints
-     * @param shift amount to shift back the existing control point
-     */
-    public static void shiftCATKBYFIREControlPoint(
-            int linetype,
-            ArrayList<POINT2> pLinePoints,
-            double shift) {
-        try {
-            if (linetype != TacticalLines.CATKBYFIRE) {
-                return;
-            }
-            int controlPtIndex = pLinePoints.size() - 1;
-            POINT2 pt0 = pLinePoints.get(0);
-            POINT2 pt1 = pLinePoints.get(1);
-            double dist = lineutility.CalcDistanceDouble(pLinePoints.get(0), pLinePoints.get(1));
-            if (dist <= 45) {
-                return;
-            }
-            POINT2 controlPt = pLinePoints.get(controlPtIndex);
-            //pt3 is the point on parallel line which contains the control point and corresponds to,
-            //i.e. is perpendicular to, pt0.
-            POINT2 pt3 = lineutility.PointRelativeToLine(pt0, pt1, pt0, controlPt);
-            //pt4 will be the shifted control point
-            POINT2 pt4 = lineutility.ExtendLineDouble(pt3, controlPt, shift);
-            //set the control point as the new shifted control point
-            pLinePoints.set(controlPtIndex, pt4);
-        } catch (Exception ex) {
-            logger.error("channel error", ex);
-        }
-    }
-
-    /**
      * Calculates the channel points
      *
      * @param lpsaUpperVBPoints the client points as 2-tuples
@@ -2925,22 +2842,5 @@ public final class Channels {
             logger.error("channel error", ex);
         }
         return shapes;
-    }
-
-    /**
-     * @deprecated sets shape2 properties to those of shape1
-     * @param shape1
-     * @param shape2
-     */
-    private static void SetShapeProperties(Shape2 shape1, Shape2 shape2) {
-        try {
-            shape2.setAffineTransform(shape1.getAffineTransform());
-            shape2.setLineColor(shape1.getLineColor());
-            shape2.setStroke(shape1.getStroke());
-            shape2.setFillColor(shape1.getFillColor());
-        } catch (Exception ex) {
-            logger.error("channel error", ex);
-        }
-        return;
     }
 }
