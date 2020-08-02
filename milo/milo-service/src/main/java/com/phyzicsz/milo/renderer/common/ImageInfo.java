@@ -14,6 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 import javax.imageio.IIOImage;
@@ -207,7 +208,7 @@ public class ImageInfo {
             File outFile = new File(filePath);
             return ImageIO.write(_Image, imageFormat,outFile);
         }
-        catch(Exception exc)
+        catch(IOException exc)
         {
             ErrorLogger.LogException("ImageInfo", "SaveImageToFile", exc);
             return false;
