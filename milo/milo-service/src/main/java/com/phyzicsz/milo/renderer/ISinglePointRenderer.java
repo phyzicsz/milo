@@ -1,5 +1,6 @@
-package com.phyzicsz.milo.renderer.plugin;
+package com.phyzicsz.milo.renderer;
 
+import com.phyzicsz.milo.renderer.info.ISinglePointInfo;
 import java.util.Map;
 
 /**

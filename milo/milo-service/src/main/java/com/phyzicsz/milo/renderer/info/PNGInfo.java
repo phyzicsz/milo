@@ -26,7 +26,6 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Node;
 
-import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
 import com.phyzicsz.milo.renderer.common.ImageInfo;
 import com.phyzicsz.milo.renderer.common.MilStdSymbol;
 import java.io.IOException;

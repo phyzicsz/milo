@@ -4,9 +4,8 @@
  */
 package com.phyzicsz.milo.renderer;
 
-import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
-import com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer;
-import com.phyzicsz.milo.renderer.plugin.SinglePointInfo;
+import com.phyzicsz.milo.renderer.info.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.info.SinglePointInfo;
 import com.phyzicsz.milo.renderer.common.IPointConversion;
 import com.phyzicsz.milo.renderer.common.ImageInfo;
 import com.phyzicsz.milo.renderer.common.MilStdAttributes;

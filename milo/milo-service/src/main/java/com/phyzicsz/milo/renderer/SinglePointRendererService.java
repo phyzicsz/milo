@@ -4,7 +4,7 @@
  */
 package com.phyzicsz.milo.renderer;
 
-import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.info.ISinglePointInfo;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -16,7 +16,7 @@
 package com.phyzicsz.milo;
 
 import com.phyzicsz.milo.renderer.common.RendererSettings;
-import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
+import com.phyzicsz.milo.renderer.info.ISinglePointInfo;
 import java.util.Map;
 import javax.print.DocFlavor.BYTE_ARRAY;
 import com.phyzicsz.milo.renderer.SinglePointRendererService;

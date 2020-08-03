@@ -1,5 +1,6 @@
-package com.phyzicsz.milo.renderer.plugin;
+package com.phyzicsz.milo.renderer.info;
 
+import com.phyzicsz.milo.renderer.info.ISinglePointInfo;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
