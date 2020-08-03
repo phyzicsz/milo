@@ -19,7 +19,6 @@ import com.phyzicsz.milo.renderer.common.SymbolDefTable;
 import com.phyzicsz.milo.renderer.common.SymbolUtilities;
 import java.awt.Color;
 import java.util.Map;
-import com.phyzicsz.milo.renderer.utilities.JavaRendererUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,14 +30,32 @@ public class SinglePoint2525Renderer implements ISinglePointRenderer {
 
     private static final Logger logger = LoggerFactory.getLogger(SinglePoint2525Renderer.class);
 
-    private static IJavaRenderer jr = null;
+    private static JavaRenderer jr = null;
     private static TacticalGraphicIconRenderer tgir = null;
     public static final String RENDERER_ID = "2525";
 
     public SinglePoint2525Renderer() {
-        jr = JavaRenderer.getInstance();
-        tgir = TacticalGraphicIconRenderer.getInstance();
+        jr = new JavaRenderer();
     }
+    
+    /**
+     * Determines size of the symbol assuming no pixel size is specified
+     *
+     * @param size default 50
+     */
+    public void setSinglePointUnitsFontSize(int size) {
+        jr.setUnitSymbolSize(size);
+    }
+   
+   /**
+     * Determines size of the symbol assuming no pixel size is specified
+     *
+     * @param size default 60
+     */
+    public void setSinglePointTacticalGraphicFontSize(int size) {
+        jr.setSinglePointTGSymbolSize(size);
+    }
+
 
     @Override
     public String getRendererID() {
@@ -47,7 +64,7 @@ public class SinglePoint2525Renderer implements ISinglePointRenderer {
 
     @Override
     public Boolean canRender(String symbolID, Map<String, String> params) {
-        MilStdSymbol ms = JavaRendererUtilities.createMilstdSymbol(symbolID, params);
+        MilStdSymbol ms = jr.createMilstdSymbol(symbolID, params);
         return jr.canRender(ms);
     }
 
@@ -120,7 +137,7 @@ public class SinglePoint2525Renderer implements ISinglePointRenderer {
                 //call TG icon renderer for multipoints
                 ii = tgir.getIcon(symbolID, size, lineColor, symStd);
             } else {
-                ms = JavaRendererUtilities.createMilstdSymbol(symbolID, params);
+                ms = jr.createMilstdSymbol(symbolID, params);
                 jr.Render(ms, pConverter, null);
                 ii = ms.toImageInfo();
             }
@@ -128,7 +145,7 @@ public class SinglePoint2525Renderer implements ISinglePointRenderer {
             //in case rendering on the given symbolID fails.
             if (ii == null) {
                 if (ms == null) {
-                    ms = JavaRendererUtilities.createMilstdSymbol(symbolID, params);
+                    ms = jr.createMilstdSymbol(symbolID, params);
                 }
                 String tempID = "S" + symbolID.charAt(1) + "Z" + symbolID.charAt(3) + symbolID.substring(4);
                 tempID = SymbolUtilities.reconcileSymbolID(tempID, false);

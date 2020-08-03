@@ -30,16 +30,15 @@ public class TacticalGraphicIconRenderer {
 
     private static final Logger logger = LoggerFactory.getLogger(TacticalGraphicIconRenderer.class);
 
-    private static TacticalGraphicIconRenderer _instance = null;
+//    private static TacticalGraphicIconRenderer _instance = null;
 
-    private static String _className = "TacticalGraphicIconRenderer";
     private Font _TacticalGraphicFont = null;
     private RendererSettings _RendererSettings = null;
     private final Object _tgFontMutex = new Object();
     private BufferedImage _buffer = null;
     private FontRenderContext _fontRenderContext = null;
 
-    private TacticalGraphicIconRenderer() {
+    public TacticalGraphicIconRenderer() {
         try {
             //font size of 60 produces a 40x40 pixel image.
             float fontSizeForTGIcons = 60;
@@ -47,7 +46,6 @@ public class TacticalGraphicIconRenderer {
             _RendererSettings = RendererSettings.getInstance();
             _TacticalGraphicFont = SinglePointFont.getInstance().getTGFont(fontSizeForTGIcons);
 
-            _className = this.getClass().getName();
 
             if (_TacticalGraphicFont == null) {
                 RendererException ex = new RendererException("TacticalGraphicIconRenderer failed to initialize - _TacticalGraphicFont didn't load.", null);
@@ -79,13 +77,13 @@ public class TacticalGraphicIconRenderer {
      *
      * @return the instance
      */
-    public static synchronized TacticalGraphicIconRenderer getInstance() {
-        if (_instance == null) {
-            _instance = new TacticalGraphicIconRenderer();
-        }
-
-        return _instance;
-    }
+//    public static synchronized TacticalGraphicIconRenderer getInstance() {
+//        if (_instance == null) {
+//            _instance = new TacticalGraphicIconRenderer();
+//        }
+//
+//        return _instance;
+//    }
 
     /**
      * default size to 25x25 and color to affiliation color

@@ -29,13 +29,13 @@ import com.phyzicsz.milo.renderer.common.IPointConversion;
 import com.phyzicsz.milo.renderer.common.SymbolUtilities;
 import com.phyzicsz.milo.renderer.common.SinglePointLookup;
 import com.phyzicsz.milo.renderer.common.MilStdAttributes;
-import com.phyzicsz.milo.renderer.common.PointConversion;
 import com.phyzicsz.milo.renderer.common.MilStdSymbol;
 import com.phyzicsz.milo.renderer.common.UnitFontLookup;
 import com.phyzicsz.milo.renderer.common.SymbolDef;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +49,10 @@ public class JavaRenderer implements IJavaRenderer {
 
     private static final Logger logger = LoggerFactory.getLogger(JavaRenderer.class);
 
-    private static JavaRenderer _instance = null;
-    private static String _className = "";
-    private static SinglePointRenderer _SPR = null;
-//    private static IMultiPointRenderer _MPR = null;
-    private static TacticalGraphicIconRenderer _TGIR = null;
+    private static SinglePointRenderer singlePointRenderer = null;
+    private static TacticalGraphicIconRenderer tacticalGraphicsRenderer = null;
 
     private SymbolDefTable _SymbolDefTable = null;
-
-    PointConversion _PointConverter = null;
 
     //Unit 2525C sizes
     public static final int UnitSizeMedium = 40;
@@ -74,38 +69,41 @@ public class JavaRenderer implements IJavaRenderer {
     /**
      *
      */
-    private JavaRenderer() {
+    public JavaRenderer() {
 
         try {
 
-            _SPR = SinglePointRenderer.getInstance();
-            _TGIR = TacticalGraphicIconRenderer.getInstance();
+            singlePointRenderer = new SinglePointRenderer();
+            tacticalGraphicsRenderer = new TacticalGraphicIconRenderer();
 
-            _className = this.getClass().getName();
-
-            if (_SPR == null) {
+            if (singlePointRenderer == null) {
                 logger.error("failed to initialize single point renderer");
             }
-            if (_TGIR == null) {
+            if (tacticalGraphicsRenderer == null) {
                 logger.error("failed to initialize tactical renderer");
             }
 
-        } catch (Exception exc) {
-            logger.error("failed to initialize");
+        } catch (Exception ex) {
+            logger.error("failed to initialize", ex);
         }
     }
-
+    
     /**
-     * Instance of the JavaRenderer
+     * Determines size of the symbol assuming no pixel size is specified
      *
-     * @return the instance
+     * @param size default 50
      */
-    public static synchronized JavaRenderer getInstance() {
-        if (_instance == null) {
-            _instance = new JavaRenderer();
-        }
-
-        return _instance;
+    public void setSinglePointUnitsFontSize(int size) {
+        setUnitSymbolSize(size);
+    }
+    
+   /**
+     * Determines size of the symbol assuming no pixel size is specified
+     *
+     * @param size default 60
+     */
+    public void setSinglePointTacticalGraphicFontSize(int size) {
+        setSinglePointTGSymbolSize(size);
     }
 
     /**
@@ -207,6 +205,297 @@ public class JavaRenderer implements IJavaRenderer {
             logger.error("java renderer error");
         }
         return false;
+    }
+    
+     /**
+     * Takes a string and parses information to build a MilStdSymbol
+     *
+     * @param SymbolInfo something like
+     * "SymbolID?LineColor=0x000000&FillColor=0xFFFFFF&size=35"
+     * @return
+     * @author Spinelli
+     */
+    public MilStdSymbol createMilstdSymbol(String SymbolInfo) {
+        String symbolID = null;
+        String parameters = null;
+        String key = null;
+        String value = null;
+        String arrParameters[] = null;
+        String arrKeyValue[] = null;
+        String temp = null;
+
+        Map<String, String> modifiers = new HashMap<String, String>();
+
+        int questionIndex = SymbolInfo.lastIndexOf('?');
+        try {
+            if (questionIndex == -1) {
+                symbolID = java.net.URLDecoder.decode(SymbolInfo, "UTF-8");
+            } else {
+                symbolID = java.net.URLDecoder.decode(SymbolInfo.substring(0, questionIndex), "UTF-8");
+            }
+            //if we're getting good codes, should never get here
+            if (symbolID.length() < 15) {
+                while (symbolID.length() < 15) {
+                    symbolID += "-";
+                }
+            }
+        } catch (Exception ex) {
+            logger.error("error parsing symbolId: {}", symbolID, ex);
+        }
+
+        try {   //build a map for the other createMilstdSymbol function to use
+            //to build a milstd symbol.
+            if (questionIndex > 0 && (questionIndex + 1 < SymbolInfo.length())) {
+                parameters = SymbolInfo.substring(questionIndex + 1, SymbolInfo.length());
+                arrParameters = parameters.split("&");
+
+                for (int i = 0; i < arrParameters.length; i++) {
+                    arrKeyValue = arrParameters[i].split("=");
+                    if (arrKeyValue.length == 2 && arrKeyValue[1] != null && arrKeyValue[1].equals("") == false) {
+
+                        key = arrKeyValue[0];
+                        value = arrKeyValue[1];
+
+                        temp = java.net.URLDecoder.decode(value, "UTF-8");
+                        modifiers.put(key, temp);
+                    }
+                }
+            }
+        } catch (UnsupportedEncodingException ex) {
+            logger.error("error parsing key: {}", key, ex);
+        }
+
+        return createMilstdSymbol(symbolID, modifiers);
+
+    }
+    
+    /**
+     * Takes a string and parses information to build a MilStdSymbol
+     *
+     * @param SymbolID
+     * @param params
+     * @return
+     * @author Spinelli
+     */
+    public MilStdSymbol createMilstdSymbol(String symbolID, Map<String, String> params) {
+        MilStdSymbol symbol = null;
+        String key = null;
+        String value = null;
+        String iconColor = null;
+        String lineColor = null;
+        String fillColor = null;
+        String textColor = null;
+        String textBackgroundColor = null;
+        String size = null;
+        String scale = null;
+        String keepUnitRatio = null;
+        String alpha = null;
+        String symbolOutlineWidth = null;
+        String symbolOutlineColor = null;
+        String symbologyStandard = null;
+        String temp = null;
+
+        //ArrayList<String> tgModifier = ModifiersTG.GetModifierList();
+        //ArrayList<String> feModifier = ModifiersUnits.GetModifierList();
+        Map<String, String> modifiers = new HashMap<String, String>();
+
+        try {
+            if (params != null && params.isEmpty() == false) {
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+
+                    key = entry.getKey();
+                    value = entry.getValue();
+
+                    if (key.equalsIgnoreCase(MilStdAttributes.LineColor)) {
+                        lineColor = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.FillColor)) {
+                        fillColor = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.IconColor)) {
+                        iconColor = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.TextColor)) {
+                        textColor = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.TextBackgroundColor)) {
+                        textBackgroundColor = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.PixelSize)) {
+                        size = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.Scale)) {
+                        if (SymbolUtilities.isNumber(value)) {
+                            scale = value;
+                        }
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.KeepUnitRatio)) {
+                        keepUnitRatio = value;
+                    } else if (key.equalsIgnoreCase(MilStdAttributes.Alpha)) {
+                        if (SymbolUtilities.isNumber(value)) {
+                            alpha = value;
+                        }
+                    } else if ((key.equalsIgnoreCase(MilStdAttributes.OutlineSymbol))) {
+                        symbolOutlineWidth = value;
+                    } else if ((key.equalsIgnoreCase(MilStdAttributes.OutlineColor))) {
+                        symbolOutlineColor = value;
+                    } else if ((key.equalsIgnoreCase(MilStdAttributes.SymbologyStandard))) {
+                        symbologyStandard = value;
+                    }
+
+                    //temp = value.toString();
+                    modifiers.put(key, value);
+                }
+            }
+        } catch (Exception ex) {
+            logger.error("error parsing key: {}", key, ex);
+        }
+
+        try {
+            //BUILD SYMBOL AND SET PROPERTIES
+            ArrayList<Point2D.Double> coordinates = new ArrayList<Point2D.Double>();
+            coordinates.add(new Point2D.Double(0.0, 0.0));
+            //create modifiers
+
+            symbol = new MilStdSymbol(symbolID, null, coordinates, modifiers);
+
+            //Set Symbology Standard////////////////////////////////////////
+            if (symbologyStandard != null) {
+                if (symbologyStandard.equalsIgnoreCase("2525B")) {
+                    symbol.setSymbologyStandard(RendererSettings.SYMBOLOGY_2525B);
+                } else {
+                    symbol.setSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
+                }
+            }
+
+            SymbolDef sd = null;
+            Boolean isMultiPoint = false;
+            if (SymbolUtilities.isTacticalGraphic(symbolID)) {
+                sd = SymbolDefTable.getInstance().getSymbolDef(SymbolUtilities.getBasicSymbolID(symbolID), symbol.getSymbologyStandard());
+                if (sd != null && sd.getDrawCategory() != SymbolDef.DRAW_CATEGORY_POINT) {
+                    if (tacticalGraphicsRenderer.CanRender(symbolID));
+                    {
+                        isMultiPoint = true;
+                    }
+                }
+            }
+            if (isMultiPoint == false) {
+                if (canRender(symbolID, null, symbol.getSymbologyStandard()) == false) {
+                    symbolID = SymbolUtilities.reconcileSymbolID(symbolID, isMultiPoint);
+                    symbol.setSymbolID(symbolID);
+                    symbol.setLineColor(SymbolUtilities.getLineColorOfAffiliation(symbolID));
+                    symbol.setFillColor(SymbolUtilities.getFillColorOfAffiliation(symbolID));
+                }
+            }
+
+            //set image size in pixels//////////////////////////////////////
+            int unitSize;
+            if (size != null && SymbolUtilities.isNumber(size)) {
+                unitSize = Integer.valueOf(size);
+                symbol.setUnitSize(unitSize);
+            } else if (SymbolUtilities.isTacticalGraphic(symbolID) == false
+                    && SymbolUtilities.isWeather(symbolID) == false) {
+                unitSize = 35;
+                symbol.setUnitSize(unitSize);
+            }
+
+            //set scaling value for single point tactical graphics
+            if (scale != null && SymbolUtilities.isNumber(scale)) {
+                symbol.setScale(Double.parseDouble(scale));
+                //symbol.setUnitSize(0);
+            }
+
+            //keep unit size relative to other symbols//////////////////////
+            if (keepUnitRatio != null) {
+                symbol.setKeepUnitRatio(Boolean.parseBoolean(keepUnitRatio));
+            } else {
+                //will make sure the units keep size relative to each other
+                //assuming google earth doesn't resize them.
+                symbol.setKeepUnitRatio(Boolean.TRUE);
+            }
+
+            if (lineColor != null) {
+
+                try {
+                    Color lc = SymbolUtilities.getColorFromHexString(lineColor);
+                    symbol.setLineColor(lc);
+                } catch (Exception ex) {
+                    logger.error("error parsing line color: {}", lineColor, ex);
+                }
+            }
+
+            if (fillColor != null) {
+                try {
+                    Color fc = SymbolUtilities.getColorFromHexString(fillColor);
+                    symbol.setFillColor(fc);
+                } catch (Exception ex) {
+                    logger.error("error parsing fill color: {}", fillColor, ex);
+                }
+            }
+
+            if (textColor != null) {
+                try {
+                    Color tc = SymbolUtilities.getColorFromHexString(textColor);
+                    symbol.setTextColor(tc);
+                } catch (Exception ex) {
+                    logger.error("error parsing text color: {}", textColor, ex);
+                }
+            }
+
+            if (iconColor != null) {
+                try {
+                    Color ic = SymbolUtilities.getColorFromHexString(iconColor);
+                    symbol.setIconColor(ic);
+                } catch (Exception ex) {
+                    logger.error("error parsing icon color: {}", iconColor, ex);
+                }
+            }
+
+            if (textBackgroundColor != null) {
+                try {
+                    Color tbc = SymbolUtilities.getColorFromHexString(textBackgroundColor);
+                    symbol.setTextBackgroundColor(tbc);
+                } catch (Exception ex) {
+                    logger.error("error parsing text bg color: {}", textColor, ex);
+                }
+            }
+
+            if (alpha != null) {
+                Color temp1 = symbol.getLineColor();
+                Color temp2 = symbol.getFillColor();
+                if (SymbolUtilities.isNumber(alpha)) {
+
+                    int A = Integer.parseInt(alpha);
+                    if (A < 0 || A > 255) {
+                        A = 255;
+                    }
+
+                    symbol.setLineColor(new Color(temp1.getRed(), temp1.getGreen(), temp1.getBlue(), A));
+                    symbol.setFillColor(new Color(temp2.getRed(), temp2.getGreen(), temp2.getBlue(), A));
+                }
+            }
+
+            //outline single point symbols
+            if (symbolOutlineWidth != null) {
+                int width = 0;
+                try {
+                    width = Integer.parseInt(symbolOutlineWidth);
+                    if (width > 0) {
+                        symbol.setOutlineEnabled(true, width);
+                    } else {
+                        symbol.setOutlineEnabled(false, 0);
+                    }
+                } catch (NumberFormatException nfe) {
+                    //do nothing
+                }
+            }
+
+            if (symbol.getOutlineEnabled());
+            {
+                if (symbolOutlineColor != null) {
+                    symbol.setOutlineColor(SymbolUtilities.getColorFromHexString(symbolOutlineColor));
+
+                }
+            }
+
+        } catch (Exception ex) {
+            logger.error("error building symbol", ex);
+        }
+
+        return symbol;
     }
 
     /**
@@ -414,7 +703,7 @@ public class JavaRenderer implements IJavaRenderer {
                 sd = SymbolDefTable.getInstance().getSymbolDef(SymbolUtilities.getBasicSymbolID(symbolID), symStd);
                 if (sd != null && (sd.getDrawCategory() != SymbolDef.DRAW_CATEGORY_POINT)) {
                     //call TG icon renderer for multipoints
-                    ii = _TGIR.getIcon(symbolID, iconSize, null, symbol.getSymbologyStandard());
+                    ii = tacticalGraphicsRenderer.getIcon(symbolID, iconSize, null, symbol.getSymbologyStandard());
                 } else {
                     ii = RenderSinglePointAsImageInfo(symbolID, Modifiers, iconSize, false);
                 }
@@ -663,22 +952,22 @@ public class JavaRenderer implements IJavaRenderer {
     }
 
     public int getSinglePointTGSymbolSize() {
-        return _SPR.getSinglePointTGSymbolSize();
+        return singlePointRenderer.getSinglePointTGSymbolSize();
     }
 
     @Override
     public int getUnitSymbolSize() {
-        return _SPR.getUnitSymbolSize();
+        return singlePointRenderer.getUnitSymbolSize();
     }
 
     @Override
     public void setSinglePointTGSymbolSize(int size) {
-        _SPR.setSinglePointTGSymbolSize(size);
+        singlePointRenderer.setSinglePointTGSymbolSize(size);
     }
 
     @Override
     public void setUnitSymbolSize(int size) {
-        _SPR.setUnitSymbolSize(size);
+        singlePointRenderer.setUnitSymbolSize(size);
     }
 
     /**
@@ -692,7 +981,7 @@ public class JavaRenderer implements IJavaRenderer {
     @Override
     public void setModifierFont(String name, int type, int size) {
         RendererSettings.getInstance().setLabelFont(name, type, size);
-        _SPR.RefreshModifierFont();
+        singlePointRenderer.RefreshModifierFont();
     }
 
     /**
@@ -707,7 +996,7 @@ public class JavaRenderer implements IJavaRenderer {
     @Override
     public void setModifierFont(String name, int type, int size, float tracking, Boolean kerning) {
         RendererSettings.getInstance().setLabelFont(name, type, size, kerning, tracking);
-        _SPR.RefreshModifierFont();
+        singlePointRenderer.RefreshModifierFont();
     }
 
     /**
@@ -785,7 +1074,7 @@ public class JavaRenderer implements IJavaRenderer {
 
                     if (symbolDef != null) {
                         if (symbolDef.getDrawCategory() == SymbolDef.DRAW_CATEGORY_POINT) {
-                            _SPR.ProcessSPSymbol(symbol, converter);
+                            singlePointRenderer.ProcessSPSymbol(symbol, converter);
                         } else {
                             //send to multipointRendering
 //                            _MPR.render(symbol, converter, clipBounds);
@@ -798,7 +1087,7 @@ public class JavaRenderer implements IJavaRenderer {
                 } else// if(SymbolUtilities.isWarfighting(symbol.getSymbolID()))
                 {
                     //Pass to Unit rendering
-                    _SPR.ProcessUnitSymbol(symbol, converter);
+                    singlePointRenderer.ProcessUnitSymbol(symbol, converter);
                 }
             }
         } catch (RendererException exc) {

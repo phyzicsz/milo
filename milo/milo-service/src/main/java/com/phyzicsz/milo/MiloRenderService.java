@@ -17,8 +17,6 @@ package com.phyzicsz.milo;
 
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import com.phyzicsz.milo.renderer.plugin.ISinglePointInfo;
-import com.phyzicsz.milo.renderer.IJavaRenderer;
-import com.phyzicsz.milo.renderer.JavaRenderer;
 import java.util.Map;
 import javax.print.DocFlavor.BYTE_ARRAY;
 import com.phyzicsz.milo.renderer.SinglePointRendererService;
@@ -35,13 +33,8 @@ public class MiloRenderService {
 
     private static final Logger logger = LoggerFactory.getLogger(MiloRenderService.class);
 
-    private SinglePointRendererService renderService = null;
-    private IJavaRenderer javaRenderer = null;
+    private final SinglePointRendererService renderService = new SinglePointRendererService();
 
-    public MiloRenderService() {
-        javaRenderer = JavaRenderer.getInstance();
-        renderService = SinglePointRendererService.getInstance();
-    }
 
     public void setDefaultSymbologyStandard(int symStd) {
         RendererSettings.getInstance().setSymbologyStandard(symStd);
@@ -53,7 +46,7 @@ public class MiloRenderService {
      * @param size default 50
      */
     public void setSinglePointUnitsFontSize(int size) {
-        javaRenderer.setUnitSymbolSize(size);
+        renderService.setSinglePointUnitsFontSize(size);
     }
 
     /**
@@ -62,7 +55,7 @@ public class MiloRenderService {
      * @param size default 60
      */
     public void setSinglePointTacticalGraphicFontSize(int size) {
-        javaRenderer.setSinglePointTGSymbolSize(size);
+        renderService.setSinglePointTacticalGraphicFontSize(size);
     }
 
     /**

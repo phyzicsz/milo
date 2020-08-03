@@ -27,8 +27,6 @@ public interface IJavaRenderer {
     /**
      * The Interface to the Render
      *
-     * usage: IJavaRenderer foo = (IJavaRenderer)JavaRenderer.getInstance();
-     *
      * @author michael.spinelli
      */
     /**

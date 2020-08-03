@@ -9,7 +9,6 @@ import com.phyzicsz.milo.renderer.common.MilStdAttributes;
 import com.phyzicsz.milo.renderer.common.MilStdSymbol;
 import com.phyzicsz.milo.renderer.common.ModifiersTG;
 import com.phyzicsz.milo.renderer.common.ModifiersUnits;
-import com.phyzicsz.milo.renderer.common.PointConversion;
 import com.phyzicsz.milo.renderer.common.RendererException;
 import com.phyzicsz.milo.renderer.common.RendererSettings;
 import com.phyzicsz.milo.renderer.common.ShapeInfo;
@@ -57,7 +56,7 @@ public class SinglePointRenderer {
     private static final Logger logger = LoggerFactory.getLogger(SinglePointRenderer.class);
 
     
-    private static SinglePointRenderer _instance = null;
+//    private static SinglePointRenderer _instance = null;
 
     private static String _className = "SinglePointRenderer";
 
@@ -67,7 +66,6 @@ public class SinglePointRenderer {
     private BufferedImage _buffer = null;
     private FontRenderContext _fontRenderContext = null;
 
-    PointConversion _PointConverter = null;
     //private static ArrayList<String> _ModifierNamesUnit = null;
     private static ArrayList<String> _ModifierNamesTG = null;
 
@@ -91,7 +89,7 @@ public class SinglePointRenderer {
     public static final int SymbolSizeLarge = 100;
     public static final int SymbolSizeXL = 120;
 
-    private SinglePointRenderer() {
+    public SinglePointRenderer() {
         try {
             _RendererSettings = RendererSettings.getInstance();
             _SinglePointFont = SinglePointFont.getInstance().getSPFont(SymbolSizeSmall);
@@ -129,13 +127,13 @@ public class SinglePointRenderer {
      *
      * @return the instance
      */
-    public static synchronized SinglePointRenderer getInstance() {
-        if (_instance == null) {
-            _instance = new SinglePointRenderer();
-        }
-
-        return _instance;
-    }
+//    public static synchronized SinglePointRenderer getInstance() {
+//        if (_instance == null) {
+//            _instance = new SinglePointRenderer();
+//        }
+//
+//        return _instance;
+//    }
 
     /**
      * given a MilStdSymbol, creates the shapes for the symbol and the shapes
