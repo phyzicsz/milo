@@ -281,9 +281,9 @@ public class JavaRendererUtilities {
             //Set Symbology Standard////////////////////////////////////////
             if (symbologyStandard != null) {
                 if (symbologyStandard.equalsIgnoreCase("2525B")) {
-                    symbol.setSymbologyStandard(RendererSettings.Symbology_2525B);
+                    symbol.setSymbologyStandard(RendererSettings.SYMBOLOGY_2525B);
                 } else {
-                    symbol.setSymbologyStandard(RendererSettings.Symbology_2525C);
+                    symbol.setSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
                 }
             }
 

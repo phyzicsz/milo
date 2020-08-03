@@ -185,7 +185,7 @@ public final class CELineArray {
             //added this section so the SEC tester can test from generic names
             //these strings will not be used by the CPOF client            
             if (strLine.length() < 15) {
-                if (rev == RendererSettings.Symbology_2525C) {
+                if (rev == RendererSettings.SYMBOLOGY_2525C) {
                     if (strLine.equalsIgnoreCase("SCREEN")) {
                         return TacticalLines.SCREEN_REVC;
                     }
@@ -2610,7 +2610,7 @@ public final class CELineArray {
             }
             //COVER
             if (str2.equals("UC") && c0.equals("G") && c2.equals("T")) {
-                if (rev == RendererSettings.Symbology_2525C) {
+                if (rev == RendererSettings.SYMBOLOGY_2525C) {
                     return TacticalLines.COVER_REVC;
                 } else {
                     return TacticalLines.COVER;
@@ -2618,7 +2618,7 @@ public final class CELineArray {
             }
             //SCREEN
             if (str2.equals("US") && c0.equals("G") && c2.equals("T")) {
-                if (rev == RendererSettings.Symbology_2525C) {
+                if (rev == RendererSettings.SYMBOLOGY_2525C) {
                     return TacticalLines.SCREEN_REVC;
                 } else {
                     return TacticalLines.SCREEN;
@@ -2626,7 +2626,7 @@ public final class CELineArray {
             }
             //GUARD
             if (str2.equals("UG") && c0.equals("G") && c2.equals("T")) {
-                if (rev == RendererSettings.Symbology_2525C) {
+                if (rev == RendererSettings.SYMBOLOGY_2525C) {
                     return TacticalLines.GUARD_REVC;
                 } else {
                     return TacticalLines.GUARD;
@@ -2730,7 +2730,7 @@ public final class CELineArray {
             //SEIZE
             if (str1.equals("Z") && c0.equals("G") && c2.equals("T")) {
                 //return TacticalLines.SEIZE;
-                if (rev == RendererSettings.Symbology_2525C) {
+                if (rev == RendererSettings.SYMBOLOGY_2525C) {
                     return TacticalLines.SEIZE_REVC;
                 } else {
                     return TacticalLines.SEIZE;

@@ -230,17 +230,17 @@ public class SymbolDraw {
             for (int i = 0; i < tempSize; i++) {
                 temp = alTemp.get(i);
                 if (temp != null) {
-                    if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TextBackgroundMethod_COLORFILL) {
+                    if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TEXT_BACKGROUND_METHOD_COLOR_FILL) {
                         background = SymbolDraw.createTextBackgroundFill(temp);
                         if (background != null) {
                             modifierShapes.add(background);
                         }
-                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TextBackgroundMethod_OUTLINE) {
+                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TEXT_BACKGROUND_METHOD_OUTLINE) {
                         outline = SymbolDraw.createTextOutline(temp);
                         if (outline != null) {
                             modifierShapes.add(outline);
                         }
-                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TextBackgroundMethod_OUTLINE_QUICK) {
+                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TEXT_BACKGROUND_METHOD_OUTLINE_QUICK) {
                         Collection<ShapeInfo> outlines = SymbolDraw.createTextOutlineQuick(temp);
                         if (outlines != null) {
                             modifierShapes.addAll(outlines);
@@ -891,13 +891,13 @@ public class SymbolDraw {
 
             AffineTransform at = null;//new AffineTransform();
 
-            if (textRenderMethod == RendererSettings.RenderMethod_SHAPES) {
+            if (textRenderMethod == RendererSettings.RENDER_METHOD_SHAPES) {
                 at = new AffineTransform();
                 at.translate(x, y);
                 Shape label = text.getOutline(at);
                 si = new ShapeInfo(label);
                 si.setFillColor(textColor);
-            } else if (textRenderMethod == RendererSettings.RenderMethod_NATIVE) {
+            } else if (textRenderMethod == RendererSettings.RENDER_METHOD_NATIVE) {
                 si = new ShapeInfo(text, new Point((int) x, (int) y));
                 si.setLineColor(textColor);
             }

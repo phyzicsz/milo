@@ -22,26 +22,25 @@ public class RendererSettings {
 
     private static final Logger logger = LoggerFactory.getLogger(RendererSettings.class);
 
-    private static RendererSettings _instance = null;
+    private static RendererSettings INSTANCE = null;
 
-    //outline approach.  none, filled rectangle, outline (default),
-    //outline quick (outline will not exceed 1 pixels).
-    private static int _TextBackgroundMethod = 3;
+    //public CONSTANTS
+    //--------------------------------------------------------------------------
     /**
      * There will be no background for text
      */
-    public static final int TextBackgroundMethod_NONE = 0;
+    public static final int TEXT_BACKGROUND_METHOD_NONE = 0;
 
     /**
      * There will be a colored box behind the text
      */
-    public static final int TextBackgroundMethod_COLORFILL = 1;
+    public static final int TEXT_BACKGROUND_METHOD_COLOR_FILL = 1;
 
     /**
      * There will be an adjustable outline around the text (expensive) Outline
      * width of 4 is recommended.
      */
-    public static final int TextBackgroundMethod_OUTLINE = 2;
+    public static final int TEXT_BACKGROUND_METHOD_OUTLINE = 2;
 
     /**
      * A different approach for outline which is quicker and seems to use less
@@ -49,173 +48,120 @@ public class RendererSettings {
      * compared to the regular outlining approach. Outline Width of 2 is
      * recommended. Only works with RenderMethod_NATIVE.
      */
-    public static final int TextBackgroundMethod_OUTLINE_QUICK = 3;
-
-    /**
-     * Value from 0 to 255. The closer to 0 the lighter the text color has to be
-     * to have the outline be black. Default value is 160.
-     */
-    private static int _TextBackgroundAutoColorThreshold = 160;
-
-    //if TextBackgroundMethod_OUTLINE is set, This value determnies the width of that outline.
-    private static int _TextOutlineWidth = 2;
-
-    //label foreground color, uses line color of symbol if null.
-    private static Color _ColorLabelForeground = null; //Color.BLACK;
-    //label background color, used if TextBackGroundMethod = TextBackgroundMethod_COLORFILL && not null
-    private static Color _ColorLabelBackground = Color.WHITE;
-
-    private static int _SymbolRenderMethod = 1;
-    private static int _UnitRenderMethod = 1;
-    private static int _TextRenderMethod = 1;
-    /**
-     * Collapse labels for fire support areas when the symbol isn't large enough
-     * to show all the labels.
-     */
-    private static boolean _AutoCollapseModifiers = true;
-
-    private static int _SymbolOutlineWidth = 1;
-
-    /**
-     * If true (default), when HQ Staff is present, location will be indicated
-     * by the free end of the staff
-     */
-    private static Boolean _CenterOnHQStaff = true;
+    public static final int TEXT_BACKGROUND_METHOD_OUTLINE_QUICK = 3;
 
     /**
      * Everything that comes back from the Renderer is a Java Shape. Simpler,
      * but can be slower when rendering modifiers or a large number of single
      * point symbols. Not recommended
      */
-    public static final int RenderMethod_SHAPES = 0;
+    public static final int RENDER_METHOD_SHAPES = 0;
     /**
      * Adds a level of complexity to the rendering but is much faster for
      * certain objects. Modifiers and single point graphics will render faster.
      * MultiPoints will still be shapes. Recommended
      */
-    public static final int RenderMethod_NATIVE = 1;
+    public static final int RENDER_METHOD_NATIVE = 1;
 
     /**
      * 2525Bch2 and USAS 11-12 symbology
      */
-    public static final int Symbology_2525B = 0;
+    public static final int SYMBOLOGY_2525B = 0;
 
     /**
      * 2525C, which includes 2525Bch2 & USAS 13/14
      */
-    public static final int Symbology_2525C = 1;
+    public static final int SYMBOLOGY_2525C = 1;
     /**
      * 2525D, not support yet so defaults to 2525C is selected
      */
-    public static final int Symbology_2525D = 1;
+    public static final int SYMBOLOGY_2525D = 1;
 
-    private static int _SymbologyStandard = 0;
+    public static int OPERATIONAL_CONDITION_MODIFIER_TYPE_BAR = 1;
 
-    public static int OperationalConditionModifierType_SLASH = 0;
-    public static int OperationalConditionModifierType_BAR = 1;
-    private static int _OCMType = 1;
+    //private fields
+    //--------------------------------------------------------------------------
+    //outline approach.  none, filled rectangle, outline (default),
+    //outline quick (outline will not exceed 1 pixels).
+    private static int textBackgroundMethod = 3;
 
-    private static boolean _UseLineInterpolation = true;
-
-    //private static Font _ModifierFont = new Font("arial", Font.TRUETYPE_FONT, 12);
-    private static String _ModifierFontName = "arial";
-    //private static int _ModifierFontType = Font.TRUETYPE_FONT;
-    private static int _ModifierFontType = Font.BOLD;
-    private static int _ModifierFontSize = 12;
-    private static int _ModifierFontKerning = 0;//0=off, 1=on (TextAttribute.KERNING_ON)
-    private static float _ModifierFontTracking = 0;//TextAttribute.TRACKING_LOOSE;//loose=0.4f;
-    private boolean _scaleEchelon = false;
-    private boolean _DrawAffiliationModifierAsLabel = true;
-
-
-    private static int _DPI = 90;
-
-    //acevedo - 11/29/2017 - adding option to render only 2 labels.
-    private boolean _TwoLabelOnly = true;
-
-    //acevedo - 12/8/17 - allow the setting of affiliation colors.
-    private Color _friendlyUnitFillColor = AffiliationColors.FriendlyUnitFillColor;
-    /// <summary>
-    /// Friendly Unit Fill Color.
-    /// </summary>
-    private Color _hostileUnitFillColor = AffiliationColors.HostileUnitFillColor;//new Color(255,130,132);//Color.RED;
-    /// <summary>
-    /// Hostile Unit Fill Color.
-    /// </summary>
-    private Color _neutralUnitFillColor = AffiliationColors.NeutralUnitFillColor;//new Color(144,238,144);//Color.GREEN;//new Color(0,255,0);//new Color(144,238,144);//light green//Color.GREEN;new Color(0,226,0);
-    /// <summary>
-    /// Neutral Unit Fill Color.
-    /// </summary>
-    private Color _unknownUnitFillColor = AffiliationColors.UnknownUnitFillColor;// new Color(255,255,128);//Color.YELLOW;
-    /// <summary>
-    /// UnknownUn Graphic Fill Color.
-    /// </summary>
-    private Color _friendlyGraphicFillColor = AffiliationColors.FriendlyGraphicFillColor;//Crystal Blue //Color.CYAN;
-    /// <summary>
-    /// Friendly Graphic Fill Color.
-    /// </summary>
-    private Color _hostileGraphicFillColor = AffiliationColors.HostileGraphicFillColor;//salmon
-    /// <summary>
-    /// Hostile Graphic Fill Color.
-    /// </summary>
-    private Color _neutralGraphicFillColor = AffiliationColors.NeutralGraphicFillColor;//Bamboo Green //new Color(144,238,144);//light green
-    /// <summary>
-    /// Neutral Graphic Fill Color.
-    /// </summary>
-    private Color _unknownGraphicFillColor = AffiliationColors.UnknownGraphicFillColor;//light yellow  new Color(255,255,224);//light yellow
-    /// <summary>
-    /// Unknown Unit Line Color.
-    /// </summary>
-    private Color _friendlyUnitLineColor = AffiliationColors.FriendlyUnitLineColor;
-    /// <summary>
-    /// Friendly Unit Line Color.
-    /// </summary>
-    private Color _hostileUnitLineColor = AffiliationColors.HostileUnitLineColor;
-    /// <summary>
-    /// Hostile Unit Line Color.
-    /// </summary>
-    private Color _neutralUnitLineColor = AffiliationColors.NeutralUnitLineColor;
-    /// <summary>
-    /// Neutral Unit Line Color.
-    /// </summary>
-    private Color _unknownUnitLineColor = AffiliationColors.UnknownUnitLineColor;
-    /// <summary>
-    /// Unknown Graphic Line Color.
-    /// </summary>
-    private Color _friendlyGraphicLineColor = AffiliationColors.FriendlyGraphicLineColor;
-    /// <summary>
-    /// Friend Graphic Line Color.
-    /// </summary>
-    private Color _hostileGraphicLineColor = AffiliationColors.HostileGraphicLineColor;
-    /// <summary>
-    /// Hostile Graphic Line Color.
-    /// </summary>
-    private Color _neutralGraphicLineColor = AffiliationColors.NeutralGraphicLineColor;
-    /// <summary>
-    /// Neutral Graphic Line Color.
-    /// </summary>
-    private Color _unknownGraphicLineColor = AffiliationColors.UnknownGraphicLineColor;
-
-    /*private   Color WeatherRed = new Color(198,16,33);//0xC61021;// 198,16,33
-    private   Color WeatherBlue = new Color(0,0,255);//0x0000FF;// 0,0,255
-
-    private   Color WeatherPurpleDark = new Color(128,0,128);//0x800080;// 128,0,128 Plum Red
-    private   Color WeatherPurpleLight = new Color(226,159,255);//0xE29FFF;// 226,159,255 Light Orchid
-
-    private   Color WeatherBrownDark = new Color(128,98,16);//0x806210;// 128,98,16 Safari
-    private   Color WeatherBrownLight = new Color(210,176,106);//0xD2B06A;// 210,176,106 Khaki
+    /**
+     * Value from 0 to 255. The closer to 0 the lighter the text color has to be
+     * to have the outline be black. Default value is 160.
      */
+    private static int textBackgroundAutoColorThreshold = 160;
+
+    //if TextBackgroundMethod_OUTLINE is set, This value determnies the width of that outline.
+    private static int textOutlineWidth = 2;
+
+    //label foreground color, uses line color of symbol if null.
+    private static Color colorLabelForeground = null; //Color.BLACK;
+    //label background color, used if TextBackGroundMethod = TextBackgroundMethod_COLORFILL && not null
+    private static Color colorLabelBackground = Color.WHITE;
+
+    private static int symbolRenderMethod = 1;
+    private static int unitRenderMethod = 1;
+    private static int textRenderMethod = 1;
+    /**
+     * Collapse labels for fire support areas when the symbol isn't large enough
+     * to show all the labels.
+     */
+    private static boolean autoCollpaseModifiers = true;
+
+    private static int symbolOutlineWidth = 1;
+
+    /**
+     * If true (default), when HQ Staff is present, location will be indicated
+     * by the free end of the staff
+     */
+    private static Boolean centerOnHQStaff = true;
+
+    private static int symbologyStandard = 0;
+
+    private static int ocmType = 1;
+
+    private static boolean useLineInterpolation = true;
+
+    private static String modifierFontName = "arial";
+    private static int modifierFontType = Font.BOLD;
+    private static int modifierFontSize = 12;
+    private static int modifierFontKerning = 0;//0=off, 1=on (TextAttribute.KERNING_ON)
+    private static float modifierFontTracking = 0;
+    private boolean scaleEchelon = false;
+    private boolean drawAffiliationModifierAsLabel = true;
+
+    private static int DPI = 90;
+
+    private boolean twoLabelOnly = true;
+
+    private Color friendlyUnitFillColor = AffiliationColors.FriendlyUnitFillColor;
+    private Color hostileUnitFillColor = AffiliationColors.HostileUnitFillColor;
+    private Color neutralUnitFillColor = AffiliationColors.NeutralUnitFillColor;
+    private Color unknownUnitFillColor = AffiliationColors.UnknownUnitFillColor;
+    private Color friendlyGraphicFillColor = AffiliationColors.FriendlyGraphicFillColor;
+    private Color hostileGraphicFillColor = AffiliationColors.HostileGraphicFillColor;
+    private Color neutralGraphicFillColor = AffiliationColors.NeutralGraphicFillColor;
+    private Color unknownGraphicFillColor = AffiliationColors.UnknownGraphicFillColor;
+    private Color friendlyUnitLineColor = AffiliationColors.FriendlyUnitLineColor;
+    private Color hostileUnitLineColor = AffiliationColors.HostileUnitLineColor;
+    private Color neutralUnitLineColor = AffiliationColors.NeutralUnitLineColor;
+    private Color unknownUnitLineColor = AffiliationColors.UnknownUnitLineColor;
+    private Color friendlyGraphicLineColor = AffiliationColors.FriendlyGraphicLineColor;
+    private Color hostileGraphicLineColor = AffiliationColors.HostileGraphicLineColor;
+    private Color neutralGraphicLineColor = AffiliationColors.NeutralGraphicLineColor;
+    private Color unknownGraphicLineColor = AffiliationColors.UnknownGraphicLineColor;
+
     private RendererSettings() {
         Init();
 
     }
 
     public static synchronized RendererSettings getInstance() {
-        if (_instance == null) {
-            _instance = new RendererSettings();
+        if (INSTANCE == null) {
+            INSTANCE = new RendererSettings();
         }
 
-        return _instance;
+        return INSTANCE;
     }
 
     private void Init() {
@@ -223,19 +169,19 @@ public class RendererSettings {
     }
 
     /**
-     * None, outline (default), or filled background. If set to OUTLINE,
-     * TextOutlineWidth changed to default of 4. If set to OUTLINE_QUICK,
+     * None, outline (default), or filled background.If set to OUTLINE,
+     * TextOutlineWidth changed to default of 4.If set to OUTLINE_QUICK,
      * TextOutlineWidth changed to default of 2. Use setTextOutlineWidth if
      * you'd like a different value.
      *
-     * @param method like RenderSettings.TextBackgroundMethod_NONE
+     * @param textBackgroundMethod
      */
     synchronized public void setTextBackgroundMethod(int textBackgroundMethod) {
-        _TextBackgroundMethod = textBackgroundMethod;
-        if (_TextBackgroundMethod == TextBackgroundMethod_OUTLINE) {
-            _TextOutlineWidth = 4;
-        } else if (_TextBackgroundMethod == TextBackgroundMethod_OUTLINE_QUICK) {
-            _TextOutlineWidth = 2;
+        RendererSettings.textBackgroundMethod = textBackgroundMethod;
+        if (textBackgroundMethod == TEXT_BACKGROUND_METHOD_OUTLINE) {
+            textOutlineWidth = 4;
+        } else if (textBackgroundMethod == TEXT_BACKGROUND_METHOD_OUTLINE_QUICK) {
+            textOutlineWidth = 2;
         }
     }
 
@@ -245,19 +191,19 @@ public class RendererSettings {
      * @return method like RenderSettings.TextBackgroundMethod_NONE
      */
     synchronized public int getTextBackgroundMethod() {
-        return _TextBackgroundMethod;
+        return textBackgroundMethod;
     }
 
     /**
      * determines what kind of java objects will be generated when processing a
-     * symbol. RenderMethod_SHAPES is simpler as everything is treated the same.
-     * RenderMethod_NATIVE is faster but, in addition to shapes, uses
+     * symbol.RenderMethod_SHAPES is simpler as everything is treated the
+     * same.RenderMethod_NATIVE is faster but, in addition to shapes, uses
      * GlyphVectors and TextLayouts.
      *
-     * @param method like RendererSetting.RenderMethod_NATIVE
+     * @param symbolRenderMethod
      */
     public void setSymbolRenderMethod(int symbolRenderMethod) {
-        _SymbolRenderMethod = symbolRenderMethod;
+        RendererSettings.symbolRenderMethod = symbolRenderMethod;
     }
 
     /**
@@ -267,18 +213,16 @@ public class RendererSettings {
      * @return method like RendererSetting.RenderMethod_NATIVE
      */
     public int getSymbolRenderMethod() {
-        return _SymbolRenderMethod;
+        return symbolRenderMethod;
     }
 
     /**
-     * Controls what symbols are supported. Set this before loading the
-     * renderer.
+     * Controls what symbols are supported.Set this before loading the renderer.
      *
-     * @param symbologyStandard Like
-     * RendererSettings.Symbology_2525Bch2_USAS_13_14
+     * @param standard
      */
     public void setSymbologyStandard(int standard) {
-        _SymbologyStandard = standard;
+        symbologyStandard = standard;
     }
 
     /**
@@ -288,7 +232,7 @@ public class RendererSettings {
      * RendererSettings.Symbology_2525Bch2_USAS_13_14
      */
     public int getSymbologyStandard() {
-        return _SymbologyStandard;
+        return symbologyStandard;
     }
 
     /**
@@ -297,11 +241,11 @@ public class RendererSettings {
      * @param value like RendererSettings.OperationalConditionModifierType_SLASH
      */
     public void setOperationalConditionModifierType(int value) {
-        _OCMType = value;
+        ocmType = value;
     }
 
     public int getOperationalConditionModifierType() {
-        return _OCMType;
+        return ocmType;
     }
 
     /**
@@ -315,7 +259,7 @@ public class RendererSettings {
      * @param value
      */
     public void setUseLineInterpolation(boolean value) {
-        _UseLineInterpolation = value;
+        useLineInterpolation = value;
     }
 
     /**
@@ -324,7 +268,7 @@ public class RendererSettings {
      * @return
      */
     public boolean getUseLineInterpolation() {
-        return _UseLineInterpolation;
+        return useLineInterpolation;
     }
 
     /**
@@ -334,11 +278,11 @@ public class RendererSettings {
      * @param value
      */
     public void setDeviceDPI(int value) {
-        _DPI = value;
+        DPI = value;
     }
 
     public int getDeviceDPI() {
-        return _DPI;
+        return DPI;
     }
 
     /**
@@ -350,11 +294,11 @@ public class RendererSettings {
      * @param value
      */
     public void setAutoCollapseModifiers(boolean value) {
-        _AutoCollapseModifiers = value;
+        autoCollpaseModifiers = value;
     }
 
     public boolean getAutoCollapseModifiers() {
-        return _AutoCollapseModifiers;
+        return autoCollpaseModifiers;
     }
 
     /**
@@ -367,14 +311,14 @@ public class RendererSettings {
      */
     /**
      * determines what kind of java objects will be generated when processing a
-     * symbol. RenderMethod_SHAPES is simpler as everything is treated the same.
-     * RenderMethod_NATIVE is faster but, in addition to shapes, uses
+     * symbol.RenderMethod_SHAPES is simpler as everything is treated the
+     * same.RenderMethod_NATIVE is faster but, in addition to shapes, uses
      * GlyphVectors and TextLayouts.
      *
-     * @param method like RendererSetting.RenderMethod_SHAPES
+     * @param symbolRenderMethod
      */
     public void setUnitRenderMethod(int symbolRenderMethod) {
-        _UnitRenderMethod = symbolRenderMethod;
+        unitRenderMethod = symbolRenderMethod;
     }
 
     /**
@@ -384,7 +328,7 @@ public class RendererSettings {
      * @return method like RendererSetting.RenderMethod_NATIVE
      */
     public int getUnitRenderMethod() {
-        return _UnitRenderMethod;
+        return unitRenderMethod;
     }
 
     /**
@@ -394,30 +338,30 @@ public class RendererSettings {
      * @param value
      */
     public void setCenterOnHQStaff(Boolean value) {
-        _CenterOnHQStaff = value;
+        centerOnHQStaff = value;
     }
 
     /**
      * if true (default), when HQ Staff is present, location will be indicated
      * by the free end of the staff
      *
-     * @param value
+     * @return
      */
     public Boolean getCenterOnHQStaff() {
-        return _CenterOnHQStaff;
+        return centerOnHQStaff;
     }
 
     /**
      * determines what kind of java objects will be generated when processing a
-     * symbol. RenderMethod_SHAPES is simpler as everything is treated the same.
-     * RenderMethod_NATIVE is faster but, in addition to shapes, uses
+     * symbol.RenderMethod_SHAPES is simpler as everything is treated the
+     * same.RenderMethod_NATIVE is faster but, in addition to shapes, uses
      * GlyphVectors and TextLayouts. In the case of text, NATIVE tends to render
      * sharper and clearer text.
      *
-     * @param method like RendererSetting.RenderMethod_SHAPES
+     * @param symbolRenderMethod
      */
     public void setTextRenderMethod(int symbolRenderMethod) {
-        _TextRenderMethod = symbolRenderMethod;
+        textRenderMethod = symbolRenderMethod;
     }
 
     /**
@@ -427,28 +371,27 @@ public class RendererSettings {
      * @return
      */
     public int getTextRenderMethod() {
-        return _TextRenderMethod;
+        return textRenderMethod;
     }
 
     /**
      * if RenderSettings.TextBackgroundMethod_OUTLINE is used, the outline will
      * be this many pixels wide.
      *
-     * @param method
+     * @param width
      */
     synchronized public void setTextOutlineWidth(int width) {
-        _TextOutlineWidth = width;
+        textOutlineWidth = width;
     }
 
     /**
      * if RenderSettings.TextBackgroundMethod_OUTLINE is used, the outline will
      * be this many pixels wide.
      *
-     * @param method
      * @return
      */
     synchronized public int getTextOutlineWidth() {
-        return _TextOutlineWidth;
+        return textOutlineWidth;
     }
 
     /**
@@ -458,7 +401,7 @@ public class RendererSettings {
      *
      */
     public Color getLabelForegroundColor() {
-        return _ColorLabelForeground;
+        return colorLabelForeground;
     }
 
     /**
@@ -469,7 +412,7 @@ public class RendererSettings {
      *
      */
     synchronized public void setLabelForegroundColor(Color value) {
-        _ColorLabelForeground = value;
+        colorLabelForeground = value;
     }
 
     /**
@@ -479,7 +422,7 @@ public class RendererSettings {
      *
      */
     public Color getLabelBackgroundColor() {
-        return _ColorLabelBackground;
+        return colorLabelBackground;
     }
 
     /**
@@ -491,7 +434,7 @@ public class RendererSettings {
      *
      */
     synchronized public void setLabelBackgroundColor(Color value) {
-        _ColorLabelBackground = value;
+        colorLabelBackground = value;
     }
 
     /**
@@ -501,7 +444,7 @@ public class RendererSettings {
      * @param value
      */
     public void setTextBackgroundAutoColorThreshold(int value) {
-        _TextBackgroundAutoColorThreshold = value;
+        textBackgroundAutoColorThreshold = value;
     }
 
     /**
@@ -511,7 +454,7 @@ public class RendererSettings {
      * @return
      */
     public int getTextBackgroundAutoColorThreshold() {
-        return _TextBackgroundAutoColorThreshold;
+        return textBackgroundAutoColorThreshold;
     }
 
     /**
@@ -523,7 +466,7 @@ public class RendererSettings {
      * @param width
      */
     synchronized public void setSinglePointSymbolOutlineWidth(int width) {
-        _SymbolOutlineWidth = width;
+        symbolOutlineWidth = width;
     }
 
     /**
@@ -532,7 +475,7 @@ public class RendererSettings {
      * @return
      */
     synchronized public int getSinglePointSymbolOutlineWidth() {
-        return _SymbolOutlineWidth;
+        return symbolOutlineWidth;
     }
 
     /**
@@ -542,7 +485,7 @@ public class RendererSettings {
      * @param value
      */
     public void setScaleEchelon(boolean value) {
-        _scaleEchelon = value;
+        scaleEchelon = value;
     }
 
     /**
@@ -552,24 +495,28 @@ public class RendererSettings {
      * @return true or false
      */
     public boolean getScaleEchelon() {
-        return _scaleEchelon;
+        return scaleEchelon;
     }
 
     /**
-     * Determines how to draw the Affiliation modifier. True to draw as modifier
+     * Determines how to draw the Affiliation modifier.True to draw as modifier
      * label in the "E/F" location. False to draw at the top right corner of the
      * symbol
+     *
+     * @param value
      */
     public void setDrawAffiliationModifierAsLabel(boolean value) {
-        _DrawAffiliationModifierAsLabel = value;
+        drawAffiliationModifierAsLabel = value;
     }
 
     /**
-     * True to draw as modifier label in the "E/F" location. False to draw at
-     * the top right corner of the symbol
+     * True to draw as modifier label in the "E/F" location.False to draw at the
+     * top right corner of the symbol
+     *
+     * @return
      */
     public boolean getDrawAffiliationModifierAsLabel() {
-        return _DrawAffiliationModifierAsLabel;
+        return drawAffiliationModifierAsLabel;
     }
 
     /**
@@ -580,16 +527,12 @@ public class RendererSettings {
      * @param size Like 12
      */
     public void setLabelFont(String name, int type, int size) {
-        _ModifierFontName = name;
-        _ModifierFontType = type;
-        _ModifierFontSize = size;
-        _ModifierFontKerning = 0;
-        _ModifierFontTracking = TextAttribute.TRACKING_LOOSE;
+        modifierFontName = name;
+        modifierFontType = type;
+        modifierFontSize = size;
+        modifierFontKerning = 0;
+        modifierFontTracking = TextAttribute.TRACKING_LOOSE;
     }
-
-   
-
-  
 
     /**
      *
@@ -601,23 +544,18 @@ public class RendererSettings {
      * "AWAY". Without kerning the adjacent characters appear to be separated by
      * too much space. Kerning causes selected sequences of characters to be
      * spaced differently for a more pleasing visual appearance.
-     * @param Tracking - default 0.04 (TextAttribute.TRACKING_LOOSE). The
-     * tracking value is multiplied by the font point size and passed through
-     * the font transform to determine an additional amount to add to the
-     * advance of each glyph cluster. Positive tracking values will inhibit
-     * formation of optional ligatures. Tracking values are typically between
-     * -0.1 and 0.3 values outside this range are generally not desirable.
+     * @param tracking
      */
     public void setLabelFont(String name, int type, int size, Boolean kerning, float tracking) {
-        _ModifierFontName = name;
-        _ModifierFontType = type;
-        _ModifierFontSize = size;
+        modifierFontName = name;
+        modifierFontType = type;
+        modifierFontSize = size;
         if (kerning == false) {
-            _ModifierFontKerning = 0;
+            modifierFontKerning = 0;
         } else {
-            _ModifierFontKerning = TextAttribute.KERNING_ON;
+            modifierFontKerning = TextAttribute.KERNING_ON;
         }
-        _ModifierFontTracking = tracking;
+        modifierFontTracking = tracking;
     }
 
     /**
@@ -626,7 +564,7 @@ public class RendererSettings {
      * @return name of the label font
      */
     public String getLabelFontName() {
-        return _ModifierFontName;
+        return modifierFontName;
     }
 
     /**
@@ -635,7 +573,7 @@ public class RendererSettings {
      * @return type of the label font
      */
     public int getLabelFontType() {
-        return _ModifierFontType;
+        return modifierFontType;
     }
 
     /**
@@ -644,7 +582,7 @@ public class RendererSettings {
      * @return size of the label font
      */
     public int getLabelFontSize() {
-        return _ModifierFontSize;
+        return modifierFontSize;
     }
 
     /**
@@ -652,7 +590,7 @@ public class RendererSettings {
      * @return 0=off, 1=on.
      */
     public int getLabelFontKerning() {
-        return _ModifierFontKerning;
+        return modifierFontKerning;
     }
 
     /**
@@ -660,7 +598,7 @@ public class RendererSettings {
      * @return
      */
     public float getLabelFontTracking() {
-        return _ModifierFontTracking;
+        return modifierFontTracking;
     }
 
     /**
@@ -670,33 +608,29 @@ public class RendererSettings {
      */
     public Font getLabelFont() {
         try {
-            Map<TextAttribute, Object> map = new HashMap<TextAttribute, Object>();
-//            map.put(TextAttribute.FONT, _ModifierFontName);
-//            map.put(TextAttribute.SIZE, _ModifierFontSize);
-//            map.put(TextAttribute.WEIGHT, _ModifierFontType);
-            map.put(TextAttribute.KERNING, _ModifierFontKerning);
-            map.put(TextAttribute.TRACKING, _ModifierFontTracking);
+            Map<TextAttribute, Object> map = new HashMap<>();
+            map.put(TextAttribute.KERNING, modifierFontKerning);
+            map.put(TextAttribute.TRACKING, modifierFontTracking);
 
-            Font temp = new Font(_ModifierFontName, _ModifierFontType, _ModifierFontSize);
+            Font temp = new Font(modifierFontName, modifierFontType, modifierFontSize);
 
             return temp.deriveFont(map);
         } catch (Exception ex) {
-            String message = "font creation error, returning \"" + _ModifierFontName + "\" font, " + _ModifierFontSize + "pt. Check font name and type.";
+            String message = "font creation error, returning \"" + modifierFontName + "\" font, " + modifierFontSize + "pt. Check font name and type.";
             logger.error(message, ex);
             return new Font("arial", Font.BOLD, 12);
         }
     }
 
-   
     /**
      ** Get a boolean indicating between the use of ENY labels in all segments
      * (false) or to only set 2 labels one at the north and the other one at the
      * south of the graphic (true).
      *
-     * @returns {boolean}
+     * @return {boolean}
      */
     public boolean getTwoLabelOnly() {
-        return _TwoLabelOnly;
+        return twoLabelOnly;
     }
 
     /**
@@ -707,7 +641,7 @@ public class RendererSettings {
      * @param TwoLabelOnly
      */
     public void setTwoLabelOnly(boolean TwoLabelOnly) {
-        _TwoLabelOnly = TwoLabelOnly;
+        twoLabelOnly = TwoLabelOnly;
     }
 
     /**
@@ -718,7 +652,7 @@ public class RendererSettings {
      *
      */
     public Color getFriendlyUnitFillColor() {
-        return _friendlyUnitFillColor;
+        return friendlyUnitFillColor;
     }
 
     /**
@@ -730,7 +664,7 @@ public class RendererSettings {
      */
     public void setFriendlyUnitFillColor(Color friendlyUnitFillColor) {
         if (friendlyUnitFillColor != null) {
-            _friendlyUnitFillColor = friendlyUnitFillColor;
+            this.friendlyUnitFillColor = friendlyUnitFillColor;
         }
     }
 
@@ -742,7 +676,7 @@ public class RendererSettings {
      *
      */
     public Color getHostileUnitFillColor() {
-        return _hostileUnitFillColor;
+        return hostileUnitFillColor;
     }
 
     /**
@@ -754,7 +688,7 @@ public class RendererSettings {
      */
     public void setHostileUnitFillColor(Color hostileUnitFillColor) {
         if (hostileUnitFillColor != null) {
-            _hostileUnitFillColor = hostileUnitFillColor;
+            this.hostileUnitFillColor = hostileUnitFillColor;
         }
     }
 
@@ -766,7 +700,7 @@ public class RendererSettings {
      *
      */
     public Color getNeutralUnitFillColor() {
-        return _neutralUnitFillColor;
+        return neutralUnitFillColor;
     }
 
     /**
@@ -778,7 +712,7 @@ public class RendererSettings {
      */
     public void setNeutralUnitFillColor(Color neutralUnitFillColor) {
         if (neutralUnitFillColor != null) {
-            _neutralUnitFillColor = neutralUnitFillColor;
+            this.neutralUnitFillColor = neutralUnitFillColor;
         }
     }
 
@@ -790,7 +724,7 @@ public class RendererSettings {
      *
      */
     public Color getUnknownUnitFillColor() {
-        return _unknownUnitFillColor;
+        return unknownUnitFillColor;
     }
 
     /**
@@ -802,7 +736,7 @@ public class RendererSettings {
      */
     public void setUnknownUnitFillColor(Color unknownUnitFillColor) {
         if (unknownUnitFillColor != null) {
-            _unknownUnitFillColor = unknownUnitFillColor;
+            this.unknownUnitFillColor = unknownUnitFillColor;
         }
     }
 
@@ -814,7 +748,7 @@ public class RendererSettings {
      *
      */
     public Color getHostileGraphicFillColor() {
-        return _hostileGraphicFillColor;
+        return hostileGraphicFillColor;
     }
 
     /**
@@ -826,7 +760,7 @@ public class RendererSettings {
      */
     public void setHostileGraphicFillColor(Color hostileGraphicFillColor) {
         if (hostileGraphicFillColor != null) {
-            _hostileGraphicFillColor = hostileGraphicFillColor;
+            this.hostileGraphicFillColor = hostileGraphicFillColor;
         }
     }
 
@@ -838,7 +772,7 @@ public class RendererSettings {
      *
      */
     public Color getFriendlyGraphicFillColor() {
-        return _friendlyGraphicFillColor;
+        return friendlyGraphicFillColor;
     }
 
     /**
@@ -850,7 +784,7 @@ public class RendererSettings {
      */
     public void setFriendlyGraphicFillColor(Color friendlyGraphicFillColor) {
         if (friendlyGraphicFillColor != null) {
-            _friendlyGraphicFillColor = friendlyGraphicFillColor;
+            this.friendlyGraphicFillColor = friendlyGraphicFillColor;
         }
     }
 
@@ -862,7 +796,7 @@ public class RendererSettings {
      *
      */
     public Color getNeutralGraphicFillColor() {
-        return _neutralGraphicFillColor;
+        return neutralGraphicFillColor;
     }
 
     /**
@@ -874,7 +808,7 @@ public class RendererSettings {
      */
     public void setNeutralGraphicFillColor(Color neutralGraphicFillColor) {
         if (neutralGraphicFillColor != null) {
-            _neutralGraphicFillColor = neutralGraphicFillColor;
+            this.neutralGraphicFillColor = neutralGraphicFillColor;
         }
     }
 
@@ -886,7 +820,7 @@ public class RendererSettings {
      *
      */
     public Color getUnknownGraphicFillColor() {
-        return _unknownGraphicFillColor;
+        return unknownGraphicFillColor;
     }
 
     /**
@@ -898,7 +832,7 @@ public class RendererSettings {
      */
     public void setUnknownGraphicFillColor(Color unknownGraphicFillColor) {
         if (unknownGraphicFillColor != null) {
-            _unknownGraphicFillColor = unknownGraphicFillColor;
+            this.unknownGraphicFillColor = unknownGraphicFillColor;
         }
     }
 
@@ -910,7 +844,7 @@ public class RendererSettings {
      *
      */
     public Color getFriendlyUnitLineColor() {
-        return _friendlyUnitLineColor;
+        return friendlyUnitLineColor;
     }
 
     /**
@@ -922,7 +856,7 @@ public class RendererSettings {
      */
     public void setFriendlyUnitLineColor(Color friendlyUnitLineColor) {
         if (friendlyUnitLineColor != null) {
-            this._friendlyUnitLineColor = friendlyUnitLineColor;
+            this.friendlyUnitLineColor = friendlyUnitLineColor;
         }
     }
 
@@ -934,7 +868,7 @@ public class RendererSettings {
      *
      */
     public Color getHostileUnitLineColor() {
-        return _hostileUnitLineColor;
+        return hostileUnitLineColor;
     }
 
     /**
@@ -946,7 +880,7 @@ public class RendererSettings {
      */
     public void setHostileUnitLineColor(Color hostileUnitLineColor) {
         if (hostileUnitLineColor != null) {
-            this._hostileUnitLineColor = hostileUnitLineColor;
+            this.hostileUnitLineColor = hostileUnitLineColor;
         }
     }
 
@@ -958,7 +892,7 @@ public class RendererSettings {
      *
      */
     public Color getNeutralUnitLineColor() {
-        return _neutralUnitLineColor;
+        return neutralUnitLineColor;
     }
 
     /**
@@ -970,7 +904,7 @@ public class RendererSettings {
      */
     public void setNeutralUnitLineColor(Color neutralUnitLineColor) {
         if (neutralUnitLineColor != null) {
-            this._neutralUnitLineColor = neutralUnitLineColor;
+            this.neutralUnitLineColor = neutralUnitLineColor;
         }
     }
 
@@ -982,7 +916,7 @@ public class RendererSettings {
      *
      */
     public Color getUnknownUnitLineColor() {
-        return _unknownUnitLineColor;
+        return unknownUnitLineColor;
     }
 
     /**
@@ -994,7 +928,7 @@ public class RendererSettings {
      */
     public void setUnknownUnitLineColor(Color unknownUnitLineColor) {
         if (unknownUnitLineColor != null) {
-            this._unknownUnitLineColor = unknownUnitLineColor;
+            this.unknownUnitLineColor = unknownUnitLineColor;
         }
     }
 
@@ -1006,7 +940,7 @@ public class RendererSettings {
      *
      */
     public Color getFriendlyGraphicLineColor() {
-        return _friendlyGraphicLineColor;
+        return friendlyGraphicLineColor;
     }
 
     /**
@@ -1018,7 +952,7 @@ public class RendererSettings {
      */
     public void setFriendlyGraphicLineColor(Color friendlyGraphicLineColor) {
         if (friendlyGraphicLineColor != null) {
-            this._friendlyGraphicLineColor = friendlyGraphicLineColor;
+            this.friendlyGraphicLineColor = friendlyGraphicLineColor;
         }
     }
 
@@ -1030,7 +964,7 @@ public class RendererSettings {
      *
      */
     public Color getHostileGraphicLineColor() {
-        return _hostileGraphicLineColor;
+        return hostileGraphicLineColor;
     }
 
     /**
@@ -1042,7 +976,7 @@ public class RendererSettings {
      */
     public void setHostileGraphicLineColor(Color hostileGraphicLineColor) {
         if (hostileGraphicLineColor != null) {
-            this._hostileGraphicLineColor = hostileGraphicLineColor;
+            this.hostileGraphicLineColor = hostileGraphicLineColor;
         }
     }
 
@@ -1054,7 +988,7 @@ public class RendererSettings {
      *
      */
     public Color getNeutralGraphicLineColor() {
-        return _neutralGraphicLineColor;
+        return neutralGraphicLineColor;
     }
 
     /**
@@ -1066,7 +1000,7 @@ public class RendererSettings {
      */
     public void setNeutralGraphicLineColor(Color neutralGraphicLineColor) {
         if (neutralGraphicLineColor != null) {
-            this._neutralGraphicLineColor = neutralGraphicLineColor;
+            this.neutralGraphicLineColor = neutralGraphicLineColor;
         }
     }
 
@@ -1078,7 +1012,7 @@ public class RendererSettings {
      *
      */
     public Color getUnknownGraphicLineColor() {
-        return _unknownGraphicLineColor;
+        return unknownGraphicLineColor;
     }
 
     /**
@@ -1090,7 +1024,7 @@ public class RendererSettings {
      */
     public void setUnknownGraphicLineColor(Color unknownGraphicLineColor) {
         if (unknownGraphicLineColor != null) {
-            this._unknownGraphicLineColor = unknownGraphicLineColor;
+            this.unknownGraphicLineColor = unknownGraphicLineColor;
         }
     }
 

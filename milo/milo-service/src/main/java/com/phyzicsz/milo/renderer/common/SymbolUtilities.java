@@ -3298,7 +3298,7 @@ public class SymbolUtilities {
                 textChar = null;
             } else if (affiliation == ('A')
                     || affiliation == ('S')) {
-                if (symStd == RendererSettings.Symbology_2525B) {
+                if (symStd == RendererSettings.SYMBOLOGY_2525B) {
                     textChar = "?";
                 } else {
                     textChar = null;
@@ -3313,7 +3313,7 @@ public class SymbolUtilities {
                     || affiliation == ('W')) {
                 textChar = "X";
             } else if (affiliation == ('M')) {
-                if (symStd == RendererSettings.Symbology_2525B) {
+                if (symStd == RendererSettings.SYMBOLOGY_2525B) {
                     textChar = "X?";
                 } else {
                     textChar = "X";
@@ -3321,7 +3321,7 @@ public class SymbolUtilities {
             }
 
             //check sea mine symbols
-            if (symStd == RendererSettings.Symbology_2525C) {
+            if (symStd == RendererSettings.SYMBOLOGY_2525C) {
                 if (symbolID.charAt(0) == 'S' && symbolID.indexOf("WM") == 4) {//variuos sea mine exercises
                     if (symbolID.indexOf("GX") == 6
                             || symbolID.indexOf("MX") == 6

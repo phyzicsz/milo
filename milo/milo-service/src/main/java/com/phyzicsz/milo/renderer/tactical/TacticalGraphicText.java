@@ -213,7 +213,7 @@ public class TacticalGraphicText {
                     label = "MRR";
                     break;
                 case TacticalLines.UAV:
-                    if (tg.getSymbologyStandard() == RendererSettings.Symbology_2525C) {
+                    if (tg.getSymbologyStandard() == RendererSettings.SYMBOLOGY_2525C) {
                         label = "UA";
                     } else {
                         label = "UAV";
@@ -230,7 +230,7 @@ public class TacticalGraphicText {
                     break;
                 case TacticalLines.FAADZ:
                     //label = "FAADEZ";
-                    if (tg.getSymbologyStandard() == RendererSettings.Symbology_2525C) {
+                    if (tg.getSymbologyStandard() == RendererSettings.SYMBOLOGY_2525C) {
                         label = "SHORADEZ";
                     } else {
                         label = "FAADEZ";
@@ -3434,7 +3434,7 @@ public class TacticalGraphicText {
                     pt0 = new POINT2(tg.Pixels.get(middleSegment));
                     dist = pt0.style / tg.get_Font().getSize();
                     dist /= 2;
-                    if (tg.getSymbologyStandard() == RendererSettings.Symbology_2525C) {
+                    if (tg.getSymbologyStandard() == RendererSettings.SYMBOLOGY_2525C) {
                         AddIntegralModifier(tg, "SAAFR " + tg.get_Name(), aboveMiddle, 0, middleSegment, middleSegment + 1, false);
                         AddIntegralModifier(tg, "Max Alt: " + tg.get_H1(), aboveMiddle, -4 * csFactor - dist, middleSegment, middleSegment + 1, false);
                         AddIntegralModifier(tg, "Min Alt: " + tg.get_H(), aboveMiddle, -5 * csFactor - dist, middleSegment, middleSegment + 1, false);
@@ -3454,7 +3454,7 @@ public class TacticalGraphicText {
                     pt0 = new POINT2(tg.Pixels.get(middleSegment));
                     dist = pt0.style / tg.get_Font().getSize();
                     dist /= 2;
-                    if (tg.getSymbologyStandard() == RendererSettings.Symbology_2525C) {
+                    if (tg.getSymbologyStandard() == RendererSettings.SYMBOLOGY_2525C) {
                         AddIntegralModifier(tg, label + " " + tg.get_Name(), aboveMiddle, 0, middleSegment, middleSegment + 1, false);
                         AddIntegralModifier(tg, "Max Alt: " + tg.get_H1(), aboveMiddle, -4 * csFactor - dist, middleSegment, middleSegment + 1, false);
                         AddIntegralModifier(tg, "Min Alt: " + tg.get_H(), aboveMiddle, -5 * csFactor - dist, middleSegment, middleSegment + 1, false);
@@ -3474,7 +3474,7 @@ public class TacticalGraphicText {
                 case TacticalLines.MRR:
                 case TacticalLines.UAV:
                 case TacticalLines.LLTR:
-                    if (tg.getSymbologyStandard() == RendererSettings.Symbology_2525C) {
+                    if (tg.getSymbologyStandard() == RendererSettings.SYMBOLOGY_2525C) {
                         AddIntegralModifier(tg, label + " " + tg.get_Name(), aboveMiddle, 0, middleSegment, middleSegment + 1, false);
 
                         pt0 = new POINT2(tg.Pixels.get(middleSegment));
@@ -4095,7 +4095,7 @@ public class TacticalGraphicText {
                     break;
                 default:
                     int saveStd = tg.getSymbologyStandard();
-                    tg.setSymbologyStandard(RendererSettings.Symbology_2525C);
+                    tg.setSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
                     AddModifiers2(tg);
                     tg.setSymbologyStandard(saveStd);
                     break;
@@ -4242,7 +4242,7 @@ public class TacticalGraphicText {
             shiftModifierPath(tg, pt0, pt1, ptLast, ptNextToLast);
             //added section 3-12-12
             //if(tg.get_Revision().equalsIgnoreCase("C"))
-            if (tg.getSymbologyStandard() == RendererSettings.Symbology_2525C) {
+            if (tg.getSymbologyStandard() == RendererSettings.SYMBOLOGY_2525C) {
                 switch (linetype) {
                     case TacticalLines.BS_RECTANGLE:
                     case TacticalLines.BBS_RECTANGLE:

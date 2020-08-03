@@ -98,8 +98,8 @@ public class UnitFontLookup {
         String lookupXmlB = FileHandler.InputStreamToString(xmlStreamB);
         String lookupXmlC = FileHandler.InputStreamToString(xmlStreamC);
 
-        populateLookup(lookupXmlB, RendererSettings.Symbology_2525B);
-        populateLookup(lookupXmlC, RendererSettings.Symbology_2525C);
+        populateLookup(lookupXmlB, RendererSettings.SYMBOLOGY_2525B);
+        populateLookup(lookupXmlC, RendererSettings.SYMBOLOGY_2525C);
     }
 
     private void populateLookup(String xml, int SymbologyStandard) {
@@ -130,9 +130,9 @@ public class UnitFontLookup {
             uflTemp = new UnitFontLookupInfo(ID, description, m1u, m1f, m1n, m1h, c1, m2, c2);
 
             if (uflTemp != null) {
-                if (SymbologyStandard == RendererSettings.Symbology_2525B) {
+                if (SymbologyStandard == RendererSettings.SYMBOLOGY_2525B) {
                     hashMapB.put(ID, uflTemp);
-                } else if (SymbologyStandard == RendererSettings.Symbology_2525C) {
+                } else if (SymbologyStandard == RendererSettings.SYMBOLOGY_2525C) {
                     hashMapC.put(ID, uflTemp);
                 }
             }
@@ -573,7 +573,7 @@ public class UnitFontLookup {
             returnVal = FillCode + 1;
         }
 
-        if (symStd > RendererSettings.Symbology_2525B && status != 'A') {
+        if (symStd > RendererSettings.SYMBOLOGY_2525B && status != 'A') {
             char affiliation = SymbolID.charAt(1);
             switch (affiliation) {
                 case 'P':
@@ -680,7 +680,7 @@ public class UnitFontLookup {
 
             //Special check for sea mine graphics
             //2525C///////////////////////////////////////////////////////////////
-            if (symStd == RendererSettings.Symbology_2525C) {
+            if (symStd == RendererSettings.SYMBOLOGY_2525C) {
                 if (SymbolID.indexOf("WM") == 4
                         || //Sea Mine
                         SymbolID.indexOf("WDM") == 4
@@ -759,7 +759,7 @@ public class UnitFontLookup {
             //Special check for sea mine graphics
             //2525C///////////////////////////////////////////////////////////////
             if (RendererSettings.getInstance().getSymbologyStandard()
-                    == RendererSettings.Symbology_2525C) {
+                    == RendererSettings.SYMBOLOGY_2525C) {
                 if (SymbolID.indexOf("WM") == 4
                         || //Sea Mine
                         SymbolID.indexOf("WDM") == 4
@@ -818,7 +818,7 @@ public class UnitFontLookup {
             String code = SymbolUtilities.getBasicSymbolIDStrict(SymbolID);
 
             UnitFontLookupInfo data = null;
-            if (symbologyStandard == RendererSettings.Symbology_2525B) {
+            if (symbologyStandard == RendererSettings.SYMBOLOGY_2525B) {
                 data = hashMapB.get(code);
             } else {
                 data = hashMapC.get(code);

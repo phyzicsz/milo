@@ -74,17 +74,16 @@ public class MiloRenderServiceTest {
     public void testSetDefaultSymbologyStandard() throws IOException {
         logger.info("testSetDefaultSymbologyStandard");
         MiloRenderService service = new MiloRenderService();
-        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setDefaultSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
         service.setSinglePointUnitsFontSize(24);
 
         Map<String, String> params = new HashMap<>();
 
         params.put(MilStdAttributes.PixelSize, "50");
         params.put(MilStdAttributes.KeepUnitRatio, "true");//default is true
-        params.put(MilStdAttributes.Renderer, SinglePoint2525Renderer.RENDERER_ID);
 
         String symbolCode = "SFUPSK----*****";
-        PNGInfo pi = service.getSymbolImage(symbolCode, params);
+        PNGInfo pi = service.getMilStdSymbolImage(symbolCode, params);
 
         byte[] expected = getClass().getClassLoader().getResourceAsStream(symbolCode + ".png").readAllBytes();
         byte[] actual = pi.getImageAsByteArray();
@@ -113,7 +112,7 @@ public class MiloRenderServiceTest {
                 "SUGPUUSO--*****");
 
         MiloRenderService service = new MiloRenderService();
-        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setDefaultSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
         service.setSinglePointUnitsFontSize(24);
 
         Map<String, String> params = new HashMap<>();
@@ -151,7 +150,7 @@ public class MiloRenderServiceTest {
                 "SNGPUUSO--*****");
 
         MiloRenderService service = new MiloRenderService();
-        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setDefaultSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
         service.setSinglePointUnitsFontSize(24);
 
         Map<String, String> params = new HashMap<>();
@@ -190,7 +189,7 @@ public class MiloRenderServiceTest {
                 "SHGPUUSO--*****");
 
         MiloRenderService service = new MiloRenderService();
-        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setDefaultSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
         service.setSinglePointUnitsFontSize(24);
 
         Map<String, String> params = new HashMap<>();
@@ -229,7 +228,7 @@ public class MiloRenderServiceTest {
                 "SFGPUUSO--*****");
 
         MiloRenderService service = new MiloRenderService();
-        service.setDefaultSymbologyStandard(RendererSettings.Symbology_2525C);
+        service.setDefaultSymbologyStandard(RendererSettings.SYMBOLOGY_2525C);
         service.setSinglePointUnitsFontSize(24);
 
         Map<String, String> params = new HashMap<>();

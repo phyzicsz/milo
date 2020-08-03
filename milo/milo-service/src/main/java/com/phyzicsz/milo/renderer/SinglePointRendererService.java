@@ -35,19 +35,19 @@ public class SinglePointRendererService {
 
     private static SinglePointRendererService service;
 //    private static ServiceLoader<ISinglePointRenderer> loader;
-    private static Map<String, ISinglePointRenderer> spRenderers = new HashMap<String, ISinglePointRenderer>();
-
-    private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock(true);
+//    private static Map<String, ISinglePointRenderer> spRenderers = new HashMap<String, ISinglePointRenderer>();
+    private static ISinglePointRenderer renderer = new SinglePoint2525Renderer();
+//    private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock(true);
 
     private SinglePointRendererService() {
-        try {
-            SinglePoint2525Renderer renderer = new SinglePoint2525Renderer();
-            spRenderers.put(SinglePoint2525Renderer.RENDERER_ID, renderer);
-//            loader = ServiceLoader.load(com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer.class);
-        } catch (Exception ex) {
-            logger.error("error creating rendering serice", ex);
-
-        }
+//        try {
+//            SinglePoint2525Renderer renderer = new SinglePoint2525Renderer();
+//            spRenderers.put(SinglePoint2525Renderer.RENDERER_ID, renderer);
+////            loader = ServiceLoader.load(com.phyzicsz.milo.renderer.plugin.ISinglePointRenderer.class);
+//        } catch (Exception ex) {
+//            logger.error("error creating rendering serice", ex);
+//
+//        }
     }
 
     public static synchronized SinglePointRendererService getInstance() {
@@ -57,47 +57,47 @@ public class SinglePointRendererService {
         return service;
     }
 
-    public ISinglePointInfo render(String rendererID, String symbolID, Map<String, String> params) {
+    public ISinglePointInfo render(String symbolID, Map<String, String> params) {
         ISinglePointInfo returnVal = null;
         try {
-            rwl.readLock().lock();
-            ISinglePointRenderer renderer = spRenderers.get(rendererID);
+//            rwl.readLock().lock();
+//            ISinglePointRenderer renderer = spRenderers.get(rendererID);
 
-            if (renderer != null) {  
+//            if (renderer != null) {  
                 try {
                     returnVal = renderer.render(symbolID, params);
                 } catch (Exception ex) {
                     //using Level.FINER because a null value will cause the
                     //milstd2525 renderer to draw an unknown symbol.
                     String message = "Plugin \""
-                            + rendererID
+//                            + rendererID
                             + "\" failed to produce an image for symboldID \""
                             + symbolID + "\"";
                     logger.error("render error: {}", message,ex);
                 }
-            } else {
-                return null;
-            }
+//            } else {
+//                return null;
+//            }
         } catch (Exception ex) {
             logger.error("render error", ex);
         } finally {
-            rwl.readLock().unlock();
+//            rwl.readLock().unlock();
             return returnVal;
         }
 
     }
 
 
-    public Boolean hasRenderer(String rendererID) {
-        try {
-            if (spRenderers != null && spRenderers.containsKey(rendererID)) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception ex) {
-            logger.error("error checking renderer", ex);
-        }
-        return false;
-    }
+//    public Boolean hasRenderer(String rendererID) {
+//        try {
+//            if (spRenderers != null && spRenderers.containsKey(rendererID)) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } catch (Exception ex) {
+//            logger.error("error checking renderer", ex);
+//        }
+//        return false;
+//    }
 }

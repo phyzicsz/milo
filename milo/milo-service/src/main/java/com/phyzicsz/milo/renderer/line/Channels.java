@@ -1500,7 +1500,7 @@ public final class Channels {
                     //AAFNT, MAIN, SPT, and CHANNEL_FLARED have flared first segment
                     //AAFNT_STRAIGHT, MAIN_STRAIGHT, SPT_STRAIGHT, and CHANNEL
                     //do not have flared first segment (except 2525 rev C has straight 1st segment)
-                    if (rev != RendererSettings.Symbology_2525C) {
+                    if (rev != RendererSettings.SYMBOLOGY_2525C) {
                         if (vbiDrawThis == TacticalLines.AAFNT
                                 || vbiDrawThis == TacticalLines.MAIN
                                 || vbiDrawThis == TacticalLines.SPT

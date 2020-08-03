@@ -307,7 +307,7 @@ public final class countsupport
                 case TacticalLines.UAV:
                 case TacticalLines.MRR:
                     //count = 6;
-                    if(rev==RendererSettings.Symbology_2525C)
+                    if(rev==RendererSettings.SYMBOLOGY_2525C)
                     {
                         vblCounter = 6 * (vblSaveCounter - 1);	//6 per segment
                         count = vblCounter + 26 * vblSaveCounter*2;	//26 for each circle and potentially two circles at each endpoint                        

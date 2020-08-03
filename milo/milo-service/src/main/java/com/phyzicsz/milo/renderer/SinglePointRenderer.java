@@ -166,7 +166,7 @@ public class SinglePointRenderer {
             int charFrameIndex = UnitFontLookup.getFrameCode(symbolID, charFillIndex, symStd);
 
             int charFrameAssumedIndex = -1;
-            if (symStd == RendererSettings.Symbology_2525C) {
+            if (symStd == RendererSettings.SYMBOLOGY_2525C) {
                 char affiliation = symbol.getSymbolID().charAt(1);
                 switch (affiliation) {
                     case 'P':
@@ -376,7 +376,7 @@ public class SinglePointRenderer {
             Shape shapeFill = null;
             Shape shapeSymbol1 = null;
             Shape shapeSymbol2 = null;
-            if (renderMethod == RendererSettings.RenderMethod_SHAPES) {
+            if (renderMethod == RendererSettings.RENDER_METHOD_SHAPES) {
                 if (gvFrameAssumed != null) {
                     shapeFrameAssumed = gvFrameAssumed.getGlyphOutline(0, (int) pixel.getX(), (int) pixel.getY());
                 }
@@ -400,7 +400,7 @@ public class SinglePointRenderer {
             ShapeInfo siFill = null;
             ShapeInfo siSymbol1 = null;
             ShapeInfo siSymbol2 = null;
-            if (renderMethod == RendererSettings.RenderMethod_SHAPES) {
+            if (renderMethod == RendererSettings.RENDER_METHOD_SHAPES) {
                 if (shapeFrameAssumed != null) {
                     siFrameAssumed = new ShapeInfo(shapeFrameAssumed);
                 }
@@ -446,7 +446,7 @@ public class SinglePointRenderer {
                     siSymbol2.setFillColor(new Color(c2.getRed(), c2.getGreen(),
                             c2.getBlue(), symbol.getLineColor().getAlpha()));
                 }
-            } else if (renderMethod == RendererSettings.RenderMethod_NATIVE) {
+            } else if (renderMethod == RendererSettings.RENDER_METHOD_NATIVE) {
                 if (gvFrameAssumed != null) {
                     siFrameAssumed = new ShapeInfo(gvFrameAssumed, pixel);
                 }
@@ -502,10 +502,10 @@ public class SinglePointRenderer {
                 //Just for sea mines
                 if (symbol.getSymbolID().charAt(2) == 'U'
                         && symbol.getSymbolID().substring(4, 6).equals("WM")) {
-                    if (symStd == RendererSettings.Symbology_2525B) {
+                    if (symStd == RendererSettings.SYMBOLOGY_2525B) {
                         siFill.setLineColor(symbol.getFillColor());
                         siSymbol1.setLineColor(symbol.getLineColor());
-                    } else if (symStd == RendererSettings.Symbology_2525C) {
+                    } else if (symStd == RendererSettings.SYMBOLOGY_2525C) {
                         //siFill.setLineColor(symbol.getLineColor());
                     }
 
@@ -774,7 +774,7 @@ public class SinglePointRenderer {
                 textChar = null;
             } else if (affiliation == ('A')
                     || affiliation == ('S')) {
-                if (symStd == RendererSettings.Symbology_2525B) {
+                if (symStd == RendererSettings.SYMBOLOGY_2525B) {
                     textChar = "?";
                 } else {
                     textChar = null;
@@ -789,7 +789,7 @@ public class SinglePointRenderer {
                     || affiliation == ('W')) {
                 textChar = "X";
             } else if (affiliation == ('M')) {
-                if (symStd == RendererSettings.Symbology_2525B) {
+                if (symStd == RendererSettings.SYMBOLOGY_2525B) {
                     textChar = "X?";
                 } else {
                     textChar = "X";
@@ -797,7 +797,7 @@ public class SinglePointRenderer {
             }
 
             //check sea mine symbols
-            if (symStd == RendererSettings.Symbology_2525C) {
+            if (symStd == RendererSettings.SYMBOLOGY_2525C) {
                 if (SymbolID.charAt(0) == 'S' && SymbolID.indexOf("WM") == 4) {//variuos sea mine exercises
                     if (SymbolID.indexOf("GX") == 6
                             || SymbolID.indexOf("MX") == 6
@@ -833,7 +833,7 @@ public class SinglePointRenderer {
             siAffiliation.setShapeType(ShapeInfo.SHAPE_TYPE_UNIT_AFFILIATION_MODIFIER);
 
             if (RendererSettings.getInstance().getTextBackgroundMethod()
-                    != RendererSettings.TextBackgroundMethod_NONE) {
+                    != RendererSettings.TEXT_BACKGROUND_METHOD_NONE) {
                 ArrayList<ShapeInfo> affiliationParts = new ArrayList<ShapeInfo>();
                 affiliationParts.add(siAffiliation);
                 affiliationParts = SymbolDraw.ProcessModifierBackgrounds(affiliationParts);
@@ -1232,7 +1232,7 @@ public class SinglePointRenderer {
 
         try {
             status = SymbolID.charAt(3);
-            if (RendererSettings.getInstance().getOperationalConditionModifierType() == RendererSettings.OperationalConditionModifierType_BAR) {
+            if (RendererSettings.getInstance().getOperationalConditionModifierType() == RendererSettings.OPERATIONAL_CONDITION_MODIFIER_TYPE_BAR) {
                 //set color
                 if (symbolBounds != null && SymbolID.length() > 4) {
                     bars = new ArrayList<ShapeInfo>();
@@ -1283,7 +1283,7 @@ public class SinglePointRenderer {
                 if (status == 'D' || status == 'X') {
                     bars = new ArrayList<ShapeInfo>();
                     path = new GeneralPath();
-                    int fillCode = UnitFontLookup.getFillCode(SymbolID, RendererSettings.Symbology_2525C);
+                    int fillCode = UnitFontLookup.getFillCode(SymbolID, RendererSettings.SYMBOLOGY_2525C);
                     double widthRatio = UnitFontLookup.getUnitRatioWidth(fillCode);
                     double heightRatio = UnitFontLookup.getUnitRatioHeight(fillCode);
 
@@ -1358,11 +1358,11 @@ public class SinglePointRenderer {
                     x = bounds.x + (bounds.width / 2) - (labelBounds.width / 2);
                     y = bounds.y - descent.intValue();// - bufferY;
 
-                    if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TextBackgroundMethod_OUTLINE) {
+                    if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TEXT_BACKGROUND_METHOD_OUTLINE) {
                         y = y - (RendererSettings.getInstance().getTextOutlineWidth() / 2);
-                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TextBackgroundMethod_OUTLINE_QUICK) {
+                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TEXT_BACKGROUND_METHOD_OUTLINE_QUICK) {
                         y = y - RendererSettings.getInstance().getTextOutlineWidth();
-                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TextBackgroundMethod_COLORFILL) {
+                    } else if (RendererSettings.getInstance().getTextBackgroundMethod() == RendererSettings.TEXT_BACKGROUND_METHOD_COLOR_FILL) {
                         y = y - 1;
                     }
 
@@ -1781,7 +1781,7 @@ public class SinglePointRenderer {
             //get shapes based on coordinates
             Shape shapeFill = null;
             Shape shapeFrame = null;
-            if (tgRenderMethod == RendererSettings.RenderMethod_SHAPES) {
+            if (tgRenderMethod == RendererSettings.RENDER_METHOD_SHAPES) {
                 if (gvFill != null) {
                     shapeFill = gvFill.getGlyphOutline(0, (int) pixel.getX(), (int) pixel.getY());
                 }
@@ -1799,7 +1799,7 @@ public class SinglePointRenderer {
             //Can potentially delete later when fill supported.
             strokeWidth = 0.5f;
 
-            if (tgRenderMethod == RendererSettings.RenderMethod_SHAPES) {
+            if (tgRenderMethod == RendererSettings.RENDER_METHOD_SHAPES) {
                 if (shapeFill != null)// && symbol.getFillColor() != null)
                 {
                     siFill = new ShapeInfo(shapeFill);
@@ -1813,7 +1813,7 @@ public class SinglePointRenderer {
                 siFrame.setFillColor(symbol.getLineColor());//AffiliationColors.FriendlyUnitLineColor);
                 siFrame.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 3));
                 siFrame.setGlyphPosition(pixel);//need as anchor point for cpof
-            } else if (tgRenderMethod == RendererSettings.RenderMethod_NATIVE) {
+            } else if (tgRenderMethod == RendererSettings.RENDER_METHOD_NATIVE) {
                 if (gvFill != null && symbol.getFillColor() != null) {
                     siFill = new ShapeInfo(gvFill, pixel);
                     siFill.setLineColor(symbol.getFillColor());
@@ -3355,7 +3355,7 @@ public class SinglePointRenderer {
                 //gvText1 = labelFont.createGlyphVector(frc, "D");
                 descent = text1.getDescent();
                 labelBounds1 = text1.getPixelBounds(null, 0, 0);
-                if (symStd == RendererSettings.Symbology_2525B) {
+                if (symStd == RendererSettings.SYMBOLOGY_2525B) {
                     y = symbolBounds.getY() + symbolBounds.getHeight();
                     x = symbolBounds.getX() - labelBounds1.getWidth() - bufferXL;
                 } else//2525C built in

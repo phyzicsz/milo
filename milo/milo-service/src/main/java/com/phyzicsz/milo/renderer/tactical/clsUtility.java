@@ -2326,7 +2326,7 @@ public final class clsUtility {
             linetypes.put("G*OPBO----****X", TacticalLines.OPTICAL);
             linetypes.put("GENERIC---****X", TacticalLines.GENERIC);
             linetypes.put("G*FPLCM---****X", TacticalLines.MFP);
-            if(rev==RendererSettings.Symbology_2525C)
+            if(rev==RendererSettings.SYMBOLOGY_2525C)
             {
                 linetypes.put("G*TPUS----****X", TacticalLines.SCREEN_REVC);
                 linetypes.put("G*TPUC----****X", TacticalLines.COVER_REVC);
@@ -2628,7 +2628,7 @@ public final class clsUtility {
                 //return;
             
             int rev=tg.getSymbologyStandard();
-            if(rev==RendererSettings.Symbology_2525B)
+            if(rev==RendererSettings.SYMBOLOGY_2525B)
             {
                 switch(tg.get_LineType())
                 {
@@ -2645,7 +2645,7 @@ public final class clsUtility {
                 }
             }
             //should be rev C at this point
-            if(rev==RendererSettings.Symbology_2525C)
+            if(rev==RendererSettings.SYMBOLOGY_2525C)
             {
                 switch(tg.get_LineType())
                 {

@@ -3079,7 +3079,7 @@ public final class arraysupport {
                     break;
                 case TacticalLines.UAV:
                 case TacticalLines.MRR:
-                    if (rev == RendererSettings.Symbology_2525B) {
+                    if (rev == RendererSettings.SYMBOLOGY_2525B) {
                         dMRR = pOriginalLinePoints[0].style;
                         if (dMRR <= 0) {
                             dMRR = 1;//was 14
@@ -3087,7 +3087,7 @@ public final class arraysupport {
                         lineutility.GetSAAFRSegment(pLinePoints, lineType, dMRR, rev);
                         acCounter = 6;
                     }
-                    if (rev == RendererSettings.Symbology_2525C) {
+                    if (rev == RendererSettings.SYMBOLOGY_2525C) {
                         return GetLineArray2Double(TacticalLines.SAAFR, pLinePoints, vblCounter, vblSaveCounter, shapes, clipBounds, rev, converter);
                     }
                     break;
@@ -3188,7 +3188,7 @@ public final class arraysupport {
                             lastCirclePoint = pOriginalLinePoints[j];
                         }
                         //get the middle line for Rev B AC, MRR, UAV, and LLTR
-                        if(rev == RendererSettings.Symbology_2525B && lineType != TacticalLines.SAAFR)
+                        if(rev == RendererSettings.SYMBOLOGY_2525B && lineType != TacticalLines.SAAFR)
                         {
                             pts=lineutility.GetSAAFRMiddleLine(pOriginalLinePoints);
                             for(j=0;j<pts.length;j++)
@@ -4602,7 +4602,7 @@ public final class arraysupport {
                     break;
                 case TacticalLines.SEIZE_REVC:  //works for 3 or 4 points
                     double radius = 0;
-                    if (rev == RendererSettings.Symbology_2525C) {
+                    if (rev == RendererSettings.SYMBOLOGY_2525C) {
                         radius = lineutility.CalcDistanceDouble(pLinePoints[0], pLinePoints[1]);
                         pLinePoints[1] = new POINT2(pLinePoints[3]);
                         pLinePoints[2] = new POINT2(pLinePoints[2]);
